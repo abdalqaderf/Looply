@@ -1,0 +1,56 @@
+
+/*navbar*/
+nav {
+    background-color: var(--nav-color);
+    height: 60px;
+    border-bottom: 1px solid var(--border);
+}
+
+.nav-bar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 65px;
+}
+.nav-btn{
+    width: 85px;
+    height: 40px;
+}
+
+/* hero */
+.hero-sec{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+}
+
+.logo-hero{
+    width: 30%;
+
+}
+
+.title-hero{
+    margin: 15px 0;
+    font-family: var(--font-title);
+    font-size: 3rem;
+}
+
+.hero-sec p{
+    color: var(--sec-text);
+
+
+}
+.sub-hero{
+    margin-top: 15px ;
+}
+
+.hero-sec .hero-btn{
+    margin-top: 60px;
+    width: 25%;
+
+}
+
+
