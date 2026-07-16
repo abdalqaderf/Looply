@@ -1,0 +1,601 @@
+:root {
+    --student-topbar-height: 72px;
+    --student-sidebar-width: 250px;
+}
+
+/* ======================================
+   Student Page Layout
+====================================== */
+
+.student-page {
+    min-height: 100vh;
+    background-color: var(--bg);
+}
+
+.student-main {
+    min-height: 100vh;
+
+    margin-left: var(--student-sidebar-width);
+
+    padding:
+        calc(var(--student-topbar-height) + 2rem)
+        var(--page-gutter)
+        3rem;
+
+    transition:
+        margin-left var(--transition-normal);
+}
+
+
+/* ======================================
+   Student Topbar
+====================================== */
+
+.student-topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 1200;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    height: var(--student-topbar-height);
+    padding-inline: 1.5rem;
+
+    background-color: rgba(13, 6, 20, 0.96);
+
+    border-bottom: 1px solid var(--border);
+
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18);
+
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
+.student-topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.student-topbar-logo {
+    display: inline-flex;
+    align-items: center;
+}
+
+.student-topbar-logo img {
+    display: block;
+
+    width: auto;
+    height: 31px;
+
+    object-fit: contain;
+}
+
+
+/* ======================================
+   Sidebar Toggle
+====================================== */
+
+.student-sidebar-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    color: var(--text);
+    background-color: var(--box);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+
+    font-size: 1.35rem;
+    cursor: pointer;
+
+    transition:
+        color var(--transition-normal),
+        background-color var(--transition-normal),
+        border-color var(--transition-normal);
+}
+
+.student-sidebar-toggle:hover,
+.student-sidebar-toggle.is-active {
+    color: var(--primary);
+    background-color: var(--in-box);
+    border-color: rgba(241, 117, 34, 0.45);
+}
+
+
+/* ======================================
+   Student User Card
+====================================== */
+
+.student-user-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    min-width: 170px;
+    padding: 0.45rem 0.7rem;
+
+    color: var(--text);
+    background-color: rgba(20, 4, 34, 0.72);
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    transition:
+        background-color var(--transition-normal),
+        border-color var(--transition-normal),
+        transform var(--transition-normal);
+}
+
+.student-user-card:hover {
+    background-color: rgba(44, 3, 69, 0.7);
+    border-color: var(--border-hover);
+
+    transform: translateY(-1px);
+}
+
+.student-user-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 38px;
+    height: 38px;
+
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-hover)
+        );
+
+    border-radius: 10px;
+
+    font-size: 0.75rem;
+    font-weight: 700;
+
+    box-shadow:
+        0 8px 18px rgba(241, 117, 34, 0.2);
+}
+
+.student-user-info {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.12rem;
+
+    min-width: 0;
+}
+
+.student-user-info strong {
+    overflow: hidden;
+
+    color: var(--text);
+
+    font-size: 0.72rem;
+    line-height: 1.3;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.student-user-info small {
+    color: var(--sec-text);
+    font-size: 0.62rem;
+}
+
+.student-user-arrow {
+    color: var(--sec-text);
+    font-size: 0.72rem;
+}
+
+
+/* ======================================
+   Student Sidebar
+====================================== */
+
+.student-sidebar {
+    position: fixed;
+    top: var(--student-topbar-height);
+    bottom: 0;
+    left: 0;
+    z-index: 1100;
+
+    display: flex;
+    flex-direction: column;
+
+    width: var(--student-sidebar-width);
+    height:
+        calc(100vh - var(--student-topbar-height));
+
+    padding: 1.5rem 1rem;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(65, 36, 130, 0.16),
+            transparent 35%
+        ),
+        var(--box);
+
+    border-right: 1px solid var(--border);
+
+    box-shadow:
+        10px 0 30px rgba(0, 0, 0, 0.16);
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    transition:
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+.student-sidebar-content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.student-sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+
+/* ======================================
+   Sidebar Labels
+====================================== */
+
+.student-sidebar-label {
+    margin: 0;
+    padding-inline: 0.75rem;
+
+    color: var(--sec-text);
+
+    font-size: 0.66rem;
+    font-weight: 600;
+
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+
+    opacity: 0.78;
+}
+
+
+/* ======================================
+   Sidebar Navigation
+====================================== */
+
+.student-side-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.student-side-link {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    width: 100%;
+    min-height: 46px;
+    padding: 0.7rem 0.85rem;
+
+    color: var(--sec-text);
+    background-color: transparent;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-md);
+
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1;
+
+    text-decoration: none;
+
+    transition:
+        color var(--transition-normal),
+        background-color var(--transition-normal),
+        border-color var(--transition-normal),
+        transform var(--transition-normal),
+        box-shadow var(--transition-normal);
+}
+
+.student-side-link i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 1.25rem;
+    font-size: 0.95rem;
+}
+
+.student-side-link span {
+    white-space: nowrap;
+}
+
+.student-side-link:hover {
+    color: var(--text);
+    background-color: rgba(44, 3, 69, 0.62);
+
+    border-color: rgba(178, 135, 255, 0.24);
+
+    transform: translateX(3px);
+}
+
+.student-side-link:hover i {
+    color: var(--primary);
+}
+
+
+/* ======================================
+   Active Link
+====================================== */
+
+.student-side-link.active {
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(65, 36, 130, 0.75),
+            rgba(44, 3, 69, 0.8)
+        );
+
+    border-color: rgba(178, 135, 255, 0.55);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 8px 20px rgba(0, 0, 0, 0.14);
+}
+
+.student-side-link.active::before {
+    content: "";
+
+    position: absolute;
+    top: 50%;
+    left: -1px;
+
+    width: 3px;
+    height: 55%;
+
+    background-color: var(--primary);
+    border-radius: 0 5px 5px 0;
+
+    box-shadow:
+        0 0 12px rgba(241, 117, 34, 0.55);
+
+    transform: translateY(-50%);
+}
+
+.student-side-link.active i {
+    color: var(--primary);
+}
+
+
+/* ======================================
+   Logout
+====================================== */
+
+.student-logout-link:hover {
+    color: var(--danger);
+
+    background-color: rgba(251, 113, 133, 0.08);
+    border-color: rgba(251, 113, 133, 0.24);
+}
+
+.student-logout-link:hover i {
+    color: var(--danger);
+}
+
+
+/* ======================================
+   Sidebar Footer
+====================================== */
+
+.student-sidebar-footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    margin-top: 2rem;
+    padding: 0.9rem;
+
+    background-color: rgba(44, 3, 69, 0.48);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+}
+
+.student-sidebar-footer-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 36px;
+    height: 36px;
+
+    color: var(--primary);
+    background-color: rgba(241, 117, 34, 0.1);
+
+    border: 1px solid rgba(241, 117, 34, 0.24);
+    border-radius: 9px;
+}
+
+.student-sidebar-footer strong,
+.student-sidebar-footer small {
+    display: block;
+}
+
+.student-sidebar-footer strong {
+    color: var(--text);
+    font-size: 0.67rem;
+}
+
+.student-sidebar-footer small {
+    margin-top: 0.15rem;
+
+    color: var(--sec-text);
+
+    font-size: 0.56rem;
+    line-height: 1.4;
+}
+
+
+/* ======================================
+   Overlay
+====================================== */
+
+.student-sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+
+    visibility: hidden;
+
+    background-color: rgba(11, 7, 24, 0.76);
+
+    opacity: 0;
+
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+
+    transition:
+        opacity var(--transition-normal),
+        visibility var(--transition-normal);
+}
+
+.student-sidebar-overlay.is-visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+/* ======================================
+   Scrollbar
+====================================== */
+
+.student-sidebar {
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(178, 135, 255, 0.3)
+        transparent;
+}
+
+.student-sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.student-sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.student-sidebar::-webkit-scrollbar-thumb {
+    background-color: rgba(178, 135, 255, 0.28);
+    border-radius: 999px;
+}
+
+
+/* ======================================
+   Responsive
+====================================== */
+
+@media (max-width: 992px) {
+    .student-sidebar-toggle {
+        display: inline-flex;
+    }
+
+    .student-sidebar {
+        transform: translateX(-100%);
+
+        box-shadow:
+            16px 0 40px rgba(0, 0, 0, 0.42);
+    }
+
+    .student-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    .student-main {
+        margin-left: 0;
+    }
+
+    body.student-sidebar-open {
+        overflow: hidden;
+    }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --student-sidebar-width: min(280px, 86vw);
+        --student-topbar-height: 64px;
+    }
+
+    .student-topbar {
+        padding-inline: 1rem;
+    }
+
+    .student-topbar-logo img {
+        height: 28px;
+    }
+
+    .student-user-card {
+        min-width: 0;
+        padding: 0.35rem;
+    }
+
+    .student-user-info,
+    .student-user-arrow {
+        display: none;
+    }
+
+    .student-user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .student-sidebar {
+        padding: 1.2rem 0.8rem;
+    }
+
+    .student-main {
+        padding:
+            calc(var(--student-topbar-height) + 1.5rem)
+            1rem
+            2rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .student-sidebar,
+    .student-main,
+    .student-sidebar-overlay,
+    .student-side-link,
+    .student-user-card {
+        transition: none;
+    }
+}
