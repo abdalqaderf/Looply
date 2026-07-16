@@ -48,7 +48,7 @@ body::before {
     content: "";
     position: fixed;
     left: 50%;
-    bottom: -280px;
+    top: -16%;
     z-index: -1;
 
     width: 850px;
@@ -125,7 +125,7 @@ svg {
     font-size: var(--font-size-lg);
     border: 1px solid var(--primary);
     transition: transform 0.25s ease-out, box-shadow 0.25s ease-out, background-color 0.25s ease-out, color 0.25s ease-out, border-color 0.25s ease-out;
-    box-shadow: 0 2px 41px -4px var(--primary-hover);
+    box-shadow: 0 16px 100px -7px var(--primary-hover);
     background: linear-gradient(135deg, var(--primary), var(--primary-dark));
     font-weight: 600;
 }
