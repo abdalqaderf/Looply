@@ -1,0 +1,333 @@
+/* ==========================================================================
+   1. المتغيرات والتهيئة الأساسية لصفحة المعلم (Layout & Variables)
+   ========================================================================== */
+:root {
+    --teacher-topbar-height: 72px;
+    --teacher-sidebar-width: 250px;
+}
+
+/* تخطيط خلفية الصفحة */
+.teacher-page {
+    min-height: 100vh;
+    background-color: var(--bg);
+}
+
+/* منطقة المحتوى الرئيسي للمدرس */
+.teacher-main {
+    min-height: 100vh;
+    margin-left: var(--teacher-sidebar-width);
+    padding: calc(var(--teacher-topbar-height) + 2rem) var(--page-gutter, 2rem) 3rem;
+    transition: margin-left var(--transition-normal, 0.2s ease);
+}
+
+
+/* ==========================================================================
+   2. كروت الإحصائيات وعناوين صفحة الامتحانات (Page Header & Stats)
+   ========================================================================== */
+
+/* عنوان الصفحة الرئيسي بخط Karantina الكبير */
+.t-ex-page-title {
+    font-family: var(--font-title); /* Karantina */
+    font-size: 4.8rem;
+    font-weight: 700;
+    line-height: 0.9;
+    color: var(--text);
+    letter-spacing: 0.015em;
+}
+
+.t-ex-page-subtitle {
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    color: var(--sec-text);
+}
+
+/* زر إنشاء امتحان البنفسجي */
+.t-ex-btn-primary {
+    font-family: var(--font-main);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+    background-color: #7c5dfa; /* البنفسجي الزاهي المطابق للزر في الصورة */
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 0.75rem 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    transition: background-color var(--transition-normal, 180ms ease), transform var(--transition-normal, 180ms ease);
+    box-shadow: 0 4px 15px rgba(124, 93, 250, 0.25);
+    cursor: pointer;
+}
+
+.t-ex-btn-primary:hover {
+    background-color: #9075ff;
+    transform: translateY(-2px);
+}
+
+/* كروت الإحصائيات الثلاثة */
+.t-ex-stat-card {
+    background-color: rgba(20, 4, 34, 0.5);
+    border: 1.5px solid rgba(178, 135, 255, 0.15);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    transition: border-color var(--transition-normal, 180ms ease);
+}
+
+.t-ex-stat-card:hover {
+    border-color: rgba(178, 135, 255, 0.35);
+}
+
+.t-ex-stat-label {
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    color: var(--sec-text);
+    font-weight: 500;
+}
+
+.t-ex-stat-value {
+    font-family: var(--font-title); /* Karantina للقيم الرقمية الكبيرة */
+    font-size: 3.2rem;
+    font-weight: 700;
+    color: var(--text);
+    margin: 0;
+    line-height: 1;
+}
+
+.t-ex-stat-sub {
+    font-family: var(--font-main);
+    font-size: 0.72rem;
+    color: var(--third-text);
+}
+
+
+/* ==========================================================================
+   3. الحاوية الرئيسية للمكتبة (Exam Library Panel & Search)
+   ========================================================================== */
+
+.t-ex-panel {
+    background-color: var(--box);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: 0 16px 38px rgba(0, 0, 0, 0.25);
+}
+
+.t-ex-panel-title {
+    font-family: var(--font-main);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+}
+
+.t-ex-panel-subtitle {
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    color: var(--third-text);
+}
+
+/* شريط البحث */
+.t-ex-search-wrapper {
+    position: relative;
+    width: 280px;
+}
+
+.t-ex-search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--third-text);
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.t-ex-search-input {
+    width: 100%;
+    font-family: var(--font-main);
+    font-size: 0.8rem;
+    color: var(--text);
+    background-color: rgba(11, 7, 24, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 999px; /* حواف دائرية كاملة كبسولة مثل الصورة */
+    padding: 0.65rem 1rem 0.65rem 2.5rem;
+    transition: border-color var(--transition-normal, 180ms ease), box-shadow var(--transition-normal, 180ms ease);
+}
+
+.t-ex-search-input:focus {
+    outline: none;
+    border-color: var(--border-strong);
+    box-shadow: 0 0 10px rgba(178, 135, 255, 0.15);
+}
+
+
+/* ==========================================================================
+   4. جدول الامتحانات وتأثيرات التوهج (Glowing Table Rows)
+   ========================================================================== */
+
+.t-ex-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 8px; /* يعطي تباعد رأسي دقيق لتنفيذ الـ Glow بنجاح */
+    margin-top: -8px;
+}
+
+/* تصميم الهيدر ذو الخلفية البنفسجية الداكنة كالصورة تماماً */
+.t-ex-table th {
+    font-family: var(--font-main);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--sec-text);
+    padding: 1rem 1.2rem;
+    background-color: rgba(44, 3, 69, 0.45); /* خلفية الهيدر البنفسجية الداكنة */
+    border: none;
+    letter-spacing: 0.05em;
+}
+
+/* تحديد حواف الهيدر الدائرية */
+.t-ex-table th:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.t-ex-table th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* صفوف الجدول الافتراضية */
+.t-ex-table-row {
+    position: relative;
+    transition: transform var(--transition-normal, 180ms ease);
+}
+
+.t-ex-table-row td {
+    font-family: var(--font-main);
+    font-size: 0.82rem;
+    color: var(--text);
+    padding: 1.2rem;
+    background-color: rgba(20, 4, 34, 0.45); /* متناسقة مع تصميم الصفحة */
+    border-top: 1px solid rgba(178, 135, 255, 0.08);
+    border-bottom: 1px solid rgba(178, 135, 255, 0.08);
+    vertical-align: middle;
+    transition: background-color var(--transition-normal, 180ms ease), 
+                border-color var(--transition-normal, 180ms ease), 
+                box-shadow var(--transition-normal, 180ms ease);
+}
+
+/* حواف دائرية لأطراف صفوف الداتا */
+.t-ex-table-row td:first-child {
+    border-left: 1px solid rgba(178, 135, 255, 0.08);
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.t-ex-table-row td:last-child {
+    border-right: 1px solid rgba(178, 135, 255, 0.08);
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* === تأثير تمرير الماوس المضيء والناعم كالصورة تماماً === */
+.t-ex-table-row:hover td {
+    background-color: rgba(44, 3, 69, 0.6) !important; /* خلفية تفاعلية أفتح قليلاً */
+    border-color: var(--border-strong) !important; /* إطار بنفسجي مضيء بالكامل */
+}
+
+/* التوهج الممتد بسلاسة من الأطراف الجانبية */
+.t-ex-table-row:hover td:first-child {
+    box-shadow: -8px 0px 15px -5px rgba(178, 135, 255, 0.3);
+}
+
+.t-ex-table-row:hover td:last-child {
+    box-shadow: 8px 0px 15px -5px rgba(178, 135, 255, 0.3);
+}
+
+
+/* ==========================================================================
+   5. تنسيق محتويات خلايا الجدول (Badges & Actions)
+   ========================================================================== */
+
+/* خلية اسم الاختبار (سطر رئيسي وسطر فرعي) */
+.t-ex-title-cell {
+    display: flex;
+    flex-direction: column;
+}
+
+.t-ex-name-main {
+    font-weight: 600;
+    color: var(--text);
+}
+
+.t-ex-name-sub {
+    font-size: 0.72rem;
+    color: var(--sec-text);
+}
+
+.t-ex-date, .t-ex-numeric {
+    color: var(--sec-text);
+}
+
+/* بادج الحالة Active اللامع كالصورة تماماً */
+.t-ex-status-badge.active {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #a7f3d0; /* لون أخضر فاتح مريح بلس */
+    background-color: rgba(52, 211, 153, 0.1);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.15); /* وهج أخضر خفيف */
+}
+
+/* أزرار الإجراءات (العين، القلم، الإيقاف المؤقت، السلة) */
+.t-ex-actions {
+    display: flex;
+    gap: 0.65rem;
+}
+
+.t-ex-action-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--sec-text);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: color var(--transition-normal, 180ms ease), transform var(--transition-normal, 180ms ease);
+    padding: 0;
+}
+
+.t-ex-action-btn:hover {
+    color: var(--border-strong);
+    transform: scale(1.15);
+}
+
+.t-ex-action-btn.delete:hover {
+    color: var(--danger);
+}
+
+
+/* ==========================================================================
+   6. شاشات العرض المتجاوبة (Responsive)
+   ========================================================================== */
+@media (max-width: 992px) {
+    .teacher-main {
+        margin-left: 0; /* تناسق التباعد عند إخفاء الـ Sidebar على الأجهزة اللوحية */
+    }
+}
+
+@media (max-width: 768px) {
+    .t-ex-page-title {
+        font-size: 3.5rem;
+    }
+    .t-ex-btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+    .t-ex-search-wrapper {
+        width: 100%;
+    }
+}
