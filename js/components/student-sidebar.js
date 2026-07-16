@@ -46,7 +46,7 @@ if (!studentSidebarRoot) {
         {
             label: "Profile",
             icon: "bi-person",
-            href: "../profile.html",
+            href: "profile.html",
             activePages: ["profile.html"]
         },
         {
