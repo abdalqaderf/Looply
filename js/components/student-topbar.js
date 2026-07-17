@@ -1,20 +1,42 @@
-const studentTopbarRoot = document.getElementById(
-    "student-topbar-root"
-);
+import {
+    ROUTES,
+    USER_ROLES
+} from "../core/config.js";
 
-if (!studentTopbarRoot) {
-    console.error("Element #student-topbar-root was not found.");
-} else {
-    const student = {
-        name: "Omar Ahmad",
-        role: "Student"
-    };
+import { getCurrentUser } from "../core/auth.js";
+import { getInitials, normalizeText } from "../core/utils.js";
 
-    studentTopbarRoot.innerHTML = createStudentTopbar(student);
+const LOGO_URL = new URL(
+    "../../icons/logo.svg",
+    import.meta.url
+).href;
+
+function escapeHtml(value) {
+    return String(value ?? "").replace(
+        /[&<>"]/g,
+        (character) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;"
+        })[character]
+    );
 }
 
-function createStudentTopbar(student) {
-    const initials = getStudentInitials(student.name);
+function normalizeStudent(user = {}) {
+    const fullName = normalizeText(
+        user.fullName ?? user.name
+    ) || "Student";
+
+    return {
+        fullName,
+        initials: getInitials(fullName) || "ST",
+        roleLabel: "Student"
+    };
+}
+
+export function createStudentTopbar(user) {
+    const student = normalizeStudent(user);
 
     return `
         <nav
@@ -22,7 +44,6 @@ function createStudentTopbar(student) {
             aria-label="Student top navigation"
         >
             <div class="student-topbar-left">
-
                 <button
                     type="button"
                     id="student-sidebar-toggle"
@@ -31,34 +52,36 @@ function createStudentTopbar(student) {
                     aria-controls="student-sidebar-root"
                     aria-expanded="false"
                 >
-                    <i class="bi bi-list"></i>
+                    <i class="bi bi-list" aria-hidden="true"></i>
                 </button>
 
                 <a
-                    href="dashboard.html"
+                    href="${ROUTES.STUDENT_DASHBOARD}"
                     class="student-topbar-logo"
                     aria-label="Looply student dashboard"
                 >
                     <img
-                        src="../../icons/logo.svg"
+                        src="${LOGO_URL}"
                         alt="Looply logo"
                     >
                 </a>
-
             </div>
 
             <a
-                href="../../html/student/profile.html"
+                href="${ROUTES.STUDENT_PROFILE}"
                 class="student-user-card"
                 aria-label="Open student profile"
             >
-                <span class="student-user-avatar">
-                    ${initials}
+                <span
+                    class="student-user-avatar"
+                    aria-hidden="true"
+                >
+                    ${escapeHtml(student.initials)}
                 </span>
 
                 <span class="student-user-info">
-                    <strong>${student.name}</strong>
-                    <small>${student.role}</small>
+                    <strong>${escapeHtml(student.fullName)}</strong>
+                    <small>${student.roleLabel}</small>
                 </span>
 
                 <i
@@ -70,13 +93,52 @@ function createStudentTopbar(student) {
     `;
 }
 
-function getStudentInitials(name) {
-    return name
-        .trim()
-        .split(/\s+/)
-        .slice(0, 2)
-        .map(function (word) {
-            return word.charAt(0).toUpperCase();
-        })
-        .join("");
+export function renderStudentTopbar(user, options = {}) {
+    const {
+        rootSelector = "#student-topbar-root"
+    } = options;
+
+    const topbarRoot = document.querySelector(rootSelector);
+
+    if (!topbarRoot) {
+        console.warn(
+            `Student topbar root was not found: ${rootSelector}`
+        );
+
+        return false;
+    }
+
+    if (!user || user.role !== USER_ROLES.STUDENT) {
+        console.warn(
+            "A valid student user is required to render the topbar."
+        );
+
+        return false;
+    }
+
+    topbarRoot.innerHTML = createStudentTopbar(user);
+    topbarRoot.dataset.topbarInitialized = "true";
+
+    return true;
 }
+
+export function initializeStudentTopbar() {
+    const user = getCurrentUser();
+
+    if (!user || user.role !== USER_ROLES.STUDENT) {
+        return false;
+    }
+
+    return renderStudentTopbar(user);
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener(
+        "DOMContentLoaded",
+        initializeStudentTopbar,
+        { once: true }
+    );
+} else {
+    initializeStudentTopbar();
+}
+
