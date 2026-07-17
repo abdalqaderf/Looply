@@ -1,97 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/base.css">
-    <link rel="stylesheet" href="../css/public.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/public.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
 
     <title>Looply- Login</title>
-</head>
+  </head>
 
-<body class="login-page">
+  <body class="login-page">
     <header id="navbar-root"></header>
 
     <main class="login-main">
-        <section class="login-layout">
-            <!-- Image side -->
-            <div class="login-visual">
-                <img src="../images/ChatGPT Image Jul 16, 2026, 03_24_42 PM.png"
-                    alt="Student working on a programming exam" class="login-image">
-                <div class="login-visual-overlay"></div>
-                <div class="login-visual-content">
-                    <img src="../icons/logo.svg" alt="Looply logo" class="login-visual-logo">
-                    <h1>
-                        Build skills through focused assessments.
-                    </h1>
-                    <p>
-                        Create programming exams, track performance, and review
-                        every result from one organized workspace.
-                    </p>
-                </div>
+      <section class="login-layout">
+        <!-- Image side -->
+        <div class="login-visual">
+          <img
+            src="../images/ChatGPT Image Jul 16, 2026, 03_24_42 PM.png"
+            alt="Student working on a programming exam"
+            class="login-image"
+          />
+          <div class="login-visual-overlay"></div>
+          <div class="login-visual-content">
+            <img
+              src="../icons/logo.svg"
+              alt="Looply logo"
+              class="login-visual-logo"
+            />
+            <h1>Build skills through focused assessments.</h1>
+            <p>
+              Create programming exams, track performance, and review every
+              result from one organized workspace.
+            </p>
+          </div>
+        </div>
+        <!-- Form side -->
+        <div class="login-form-side">
+          <div class="login-form-wrapper">
+            <div class="login-heading">
+              <span class="login-label">Welcome back</span>
+              <h2>Login to your account</h2>
+              <p>
+                Enter your account information to continue to your dashboard.
+              </p>
             </div>
-            <!-- Form side -->
-            <div class="login-form-side">
-                <div class="login-form-wrapper">
-                    <div class="login-heading">
-                        <span class="login-label">Welcome back</span>
-                        <h2>Login to your account</h2>
-                        <p>
-                            Enter your account information to continue to your
-                            dashboard.
-                        </p>
-                    </div>
-                    <form class="login-form" id="login-form">
-                        <div class="form-group">
-                            <label for="username" class="form-label">
-                                Username
-                            </label>
-                            <div class="input-wrapper">
-                                <i class="bi bi-person input-icon"></i>
-                                <input type="text" id="username" name="username" class="form-control login-input"
-                                    placeholder="Enter your username" autocomplete="username">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="form-label">
-                                Password
-                            </label>
-                            <div class="input-wrapper">
-                                <i class="bi bi-lock input-icon"></i>
-                                <input type="password" id="password" name="password"
-                                    class="form-control login-input password-input" placeholder="Enter your password"
-                                    autocomplete="current-password">
-                                <button type="button" class="password-toggle" aria-label="Show password">
-                                    <i class="bi bi-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="login-options">
-                            <label class="remember-option">
-                                <input type="checkbox" name="remember">
-                                <span>Remember me</span>
-                            </label>
-                        </div>
-                        <div class="login-message" id="login-message" aria-live="polite"></div>
-                        <button type="submit" class="primary-btn login-submit">
-                            Login
-                            <i class="bi bi-arrow-right"></i>
-                        </button>
-                    </form>
-                    <p class="login-note">
-                        Student accounts are created by the teacher.
-                    </p>
+            <form class="login-form" id="login-form">
+              <div class="form-group">
+                <label for="username" class="form-label"> Username </label>
+                <div class="input-wrapper">
+                  <i class="bi bi-person input-icon"></i>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    class="form-control login-input"
+                    placeholder="Enter your username"
+                    autocomplete="username"
+                  />
                 </div>
-            </div>
-        </section>
+              </div>
+              <div class="form-group">
+                <label for="password" class="form-label"> Password </label>
+                <div class="input-wrapper">
+                  <i class="bi bi-lock input-icon"></i>
+                  <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control login-input password-input"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                  />
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    aria-label="Show password"
+                  >
+                    <i class="bi bi-eye"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="login-options">
+                <label class="remember-option">
+                  <input type="checkbox" name="remember" />
+                  <span>Remember me</span>
+                </label>
+              </div>
+              <div
+                class="login-message"
+                id="login-message"
+                aria-live="polite"
+              ></div>
+              <button type="submit" class="primary-btn login-submit">
+                Login
+                <i class="bi bi-arrow-right"></i>
+              </button>
+            </form>
+            <p class="login-note">
+              Student accounts are created by the teacher.
+            </p>
+          </div>
+        </div>
+      </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <script type="module" src="../js/public/login.js">
-    </script>
-    <script src="../js/components/navbar-home.js"></script>
-</body>
 
+    <script type="module" src="../js/components/navbar-home.js"></script>
+
+    <script type="module" src="../js/public/login.js"></script>
+  </body>
 </html>

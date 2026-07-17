@@ -1,197 +1,281 @@
-/**
- * js/core/alerts.js
- * Cycle 2 - Belal's Task (SweetAlert2 Production Implementation)
- * Provides premium, unified, promise-based overlays, confirmation prompts,
- * and sliding toast alerts using SweetAlert2 tailored to Looply's aesthetic.
- */
+const ALERT_CLASSES = Object.freeze({
+    popup: "looply-alert",
+    title: "looply-alert__title",
+    htmlContainer: "looply-alert__text",
+    actions: "looply-alert__actions",
+    confirmButton:
+        "looply-alert__button looply-alert__button--confirm",
+    cancelButton:
+        "looply-alert__button looply-alert__button--cancel",
+    icon: "looply-alert__icon"
+});
 
-let sweetAlertLoaded = null;
+const TOAST_CLASSES = Object.freeze({
+    popup: "looply-toast",
+    title: "looply-toast__title",
+    icon: "looply-toast__icon"
+});
 
-function loadDependencies() {
-    if (sweetAlertLoaded) return sweetAlertLoaded;
+const ICON_COLORS = Object.freeze({
+    success: "#34d399",
+    error: "#fb7185",
+    warning: "#fbbf24",
+    info: "#60a5fa",
+    question: "#b287ff"
+});
 
-    sweetAlertLoaded = new Promise((resolve, reject) => {
-        if (window.Swal) {
-            injectCustomStyles();
-            resolve(window.Swal);
-            return;
-        }
+function getSweetAlert() {
+    if (!window.Swal) {
+        throw new Error(
+            "SweetAlert2 is not loaded. Add its CDN script before the page module."
+        );
+    }
 
-        const script = document.createElement("script");
-        script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
-        script.async = true;
-
-        script.onload = () => {
-            injectCustomStyles();
-            resolve(window.Swal);
-        };
-
-        script.onerror = () => {
-            sweetAlertLoaded = null; // Reset on failure
-            reject(new Error("Failed to load SweetAlert2 libraries. Please verify network access."));
-        };
-
-        document.head.appendChild(script);
-    });
-
-    return sweetAlertLoaded;
+    return window.Swal;
 }
 
-function injectCustomStyles() {
-    if (document.getElementById("looply-swal-styles")) return;
+function fireAlert(options = {}) {
+    const Swal = getSweetAlert();
 
-    const styles = document.createElement("style");
-    styles.id = "looply-swal-styles";
-    styles.textContent = `
-        /* Main dialogue card override */
-        .looply-swal-popup {
-            background: linear-gradient(145deg, rgba(178, 135, 255, 0.04), transparent 48%), #140422 !important;
-            border: 1px solid rgba(178, 135, 255, 0.2) !important;
-            border-radius: var(--radius-lg, 16px) !important;
-            box-shadow: 0 24px 64px rgba(0, 0, 0, 0.65), 0 0 30px rgba(178, 135, 255, 0.05) !important;
-            padding: 2.25rem 2rem !important;
-        }
+    const {
+        customClass = {},
+        ...alertOptions
+    } = options;
 
-        /* Dialog titles mapped to Karantina typography */
-        .looply-swal-title {
-            font-family: var(--font-title, "Karantina"), sans-serif !important;
-            font-size: 2.5rem !important;
-            font-weight: 700 !important;
-            color: var(--text, #f5f1ff) !important;
-            letter-spacing: 0.02em !important;
-            padding-top: 1rem !important;
-        }
-
-        /* Body and HTML text mapped to standard mono font */
-        .looply-swal-html {
-            font-family: var(--font-main, "IBM Plex Mono"), monospace !important;
-            font-size: 0.85rem !important;
-            line-height: 1.6 !important;
-            color: var(--sec-text, #a99dc2) !important;
-        }
-
-        /* Integration with teammate's button styles */
-        .looply-swal-confirm-btn {
-            background: linear-gradient(135deg, var(--primary, #f17522), var(--primary-dark, #c9570d)) !important;
-            color: #fff !important;
-            border: none !important;
-            border-radius: var(--radius-md, 10px) !important;
-            padding: 0.75rem 1.75rem !important;
-            font-family: var(--font-main, "IBM Plex Mono"), monospace !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            box-shadow: 0 4px 12px rgba(241, 117, 34, 0.2) !important;
-            transition: all 0.2s ease !important;
-        }
-
-        .looply-swal-confirm-btn:hover {
-            transform: translateY(-1px) !important;
-            box-shadow: 0 6px 16px rgba(241, 117, 34, 0.35) !important;
-        }
-
-        .looply-swal-cancel-btn {
-            background: transparent !important;
-            color: var(--sec-text, #a99dc2) !important;
-            border: 1px solid var(--border, rgba(178, 135, 255, 0.2)) !important;
-            border-radius: var(--radius-md, 10px) !important;
-            padding: 0.75rem 1.75rem !important;
-            font-family: var(--font-main, "IBM Plex Mono"), monospace !important;
-            font-size: 0.85rem !important;
-            font-weight: 600 !important;
-            cursor: pointer !important;
-            margin-right: 0.5rem !important;
-            transition: all 0.2s ease !important;
-        }
-
-        .looply-swal-cancel-btn:hover {
-            color: var(--text, #f5f1ff) !important;
-            border-color: var(--border-hover, rgba(178, 135, 255, 0.55)) !important;
-            background: rgba(178, 135, 255, 0.05) !important;
-        }
-
-        /* Styled sliding toast alerts in the top-right corner */
-        .looply-swal-toast {
-            background: #140422 !important;
-            border: 1px solid rgba(178, 135, 255, 0.25) !important;
-            border-radius: var(--radius-md, 12px) !important;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
-        }
-
-        .looply-swal-toast-title {
-            font-family: var(--font-main, "IBM Plex Mono"), monospace !important;
-            font-size: 0.85rem !important;
-            font-weight: 500 !important;
-            color: var(--text, #f5f1ff) !important;
-        }
-    `;
-    document.head.appendChild(styles);
-}
-
-export async function showAlert(title, message, type = "info") {
-    const swal = await loadDependencies();
-
-    return swal.fire({
-        title: title,
-        text: message,
-        icon: type,
+    return Swal.fire({
+        background: "var(--box)",
+        color: "var(--text)",
         buttonsStyling: false,
+        heightAuto: false,
+        scrollbarPadding: false,
+        ...alertOptions,
         customClass: {
-            popup: "looply-swal-popup",
-            title: "looply-swal-title",
-            htmlContainer: "looply-swal-html",
-            confirmButton: "looply-swal-confirm-btn"
-        },
-        background: "#140422"
+            ...ALERT_CLASSES,
+            ...customClass
+        }
     });
 }
 
-export async function showConfirm(title, message, confirmText = "Confirm", cancelText = "Cancel") {
-    const swal = await loadDependencies();
+function showToast(
+    icon,
+    message,
+    options = {}
+) {
+    const Swal = getSweetAlert();
 
-    const result = await swal.fire({
-        title: title,
-        text: message,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: confirmText,
-        cancelButtonText: cancelText,
-        buttonsStyling: false,
-        customClass: {
-            popup: "looply-swal-popup",
-            title: "looply-swal-title",
-            htmlContainer: "looply-swal-html",
-            confirmButton: "looply-swal-confirm-btn",
-            cancelButton: "looply-swal-cancel-btn"
-        },
-        background: "#140422"
-    });
-
-    return !!result.isConfirmed;
-}
-
-export async function showToast(message, type = "success", duration = 3500) {
-    const swal = await loadDependencies();
-
-    const toastMixin = swal.mixin({
+    return Swal.fire({
         toast: true,
-        position: "top-end",
+        position: options.position ?? "top-end",
+        icon,
+        iconColor:
+            options.iconColor ??
+            ICON_COLORS[icon],
+        title: message,
+        background: "var(--box)",
+        color: "var(--text)",
         showConfirmButton: false,
-        timer: duration,
+        timer: options.timer ?? 2800,
         timerProgressBar: true,
+        heightAuto: false,
+        customClass: TOAST_CLASSES,
+
         didOpen: (toast) => {
-            toast.addEventListener("mouseenter", swal.stopTimer);
-            toast.addEventListener("mouseleave", swal.resumeTimer);
+            toast.addEventListener(
+                "mouseenter",
+                Swal.stopTimer
+            );
+
+            toast.addEventListener(
+                "mouseleave",
+                Swal.resumeTimer
+            );
         }
     });
+}
 
-    toastMixin.fire({
-        title: message,
-        icon: type,
-        customClass: {
-            popup: "looply-swal-toast",
-            title: "looply-swal-toast-title"
-        },
-        background: "#140422"
+export function showSuccessToast(
+    message = "Operation completed successfully."
+) {
+    return showToast(
+        "success",
+        message
+    );
+}
+
+export function showErrorToast(
+    message = "Something went wrong."
+) {
+    return showToast(
+        "error",
+        message,
+        {
+            timer: 3800
+        }
+    );
+}
+
+export function showInfoToast(message) {
+    return showToast(
+        "info",
+        message
+    );
+}
+
+export function showWarningToast(message) {
+    return showToast(
+        "warning",
+        message,
+        {
+            timer: 3500
+        }
+    );
+}
+
+export function showSuccess(
+    title = "Success",
+    text = ""
+) {
+    return fireAlert({
+        icon: "success",
+        iconColor: ICON_COLORS.success,
+        title,
+        text,
+        confirmButtonText: "OK"
     });
+}
+
+export function showError(
+    title = "Error",
+    text = ""
+) {
+    return fireAlert({
+        icon: "error",
+        iconColor: ICON_COLORS.error,
+        title,
+        text,
+        confirmButtonText: "OK"
+    });
+}
+
+export function showWarning(
+    title = "Warning",
+    text = ""
+) {
+    return fireAlert({
+        icon: "warning",
+        iconColor: ICON_COLORS.warning,
+        title,
+        text,
+        confirmButtonText: "OK"
+    });
+}
+
+export function showInfo(
+    title = "Information",
+    text = ""
+) {
+    return fireAlert({
+        icon: "info",
+        iconColor: ICON_COLORS.info,
+        title,
+        text,
+        confirmButtonText: "OK"
+    });
+}
+
+export async function confirmAction(
+    options = {}
+) {
+    const icon =
+        options.icon ?? "warning";
+
+    const result = await fireAlert({
+        icon,
+        iconColor:
+            options.iconColor ??
+            ICON_COLORS[icon],
+
+        title:
+            options.title ??
+            "Are you sure?",
+
+        text:
+            options.text ?? "",
+
+        showCancelButton: true,
+
+        confirmButtonText:
+            options.confirmText ??
+            "Confirm",
+
+        cancelButtonText:
+            options.cancelText ??
+            "Cancel",
+
+        reverseButtons: true,
+        focusCancel: true,
+        allowOutsideClick: false,
+        allowEscapeKey: true
+    });
+
+    return result.isConfirmed;
+}
+
+export function confirmDelete(
+    itemName = "this item"
+) {
+    return confirmAction({
+        title: "Delete item?",
+        text:
+            `Are you sure you want to remove ${itemName}? ` +
+            "The information will remain stored.",
+        confirmText: "Delete",
+        cancelText: "Cancel",
+        icon: "warning"
+    });
+}
+
+export function confirmLogout() {
+    return confirmAction({
+        title: "Log out?",
+        text:
+            "Your current session will be closed.",
+        confirmText: "Log out",
+        cancelText: "Stay",
+        icon: "question"
+    });
+}
+
+export function confirmExamSubmission() {
+    return confirmAction({
+        title: "Submit exam?",
+        text:
+            "You cannot change your answers after submission.",
+        confirmText: "Submit exam",
+        cancelText: "Review answers",
+        icon: "question"
+    });
+}
+
+export function showLoading(
+    title = "Please wait...",
+    text = ""
+) {
+    const Swal = getSweetAlert();
+
+    return fireAlert({
+        title,
+        text,
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+export function closeAlert() {
+    getSweetAlert().close();
 }
