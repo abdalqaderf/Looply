@@ -60,9 +60,10 @@
                         Student Dashboard
                     </span>
 
-                    <h1 class="student-dashboard-title">
-                        Welcome back, Omar.
-                    </h1>
+                <h1 class="student-dashboard-title" id="welcome-message">
+                        Welcome back...
+                </h1>
+
 
                     <p class="student-dashboard-description">
                         View your available exams and review your latest
@@ -91,43 +92,25 @@
                 aria-label="Exam statistics"
             >
 
-                <article class="student-stat-card">
-
-                    <span class="student-stat-icon">
-                        <i
-                            class="bi bi-file-earmark-code"
-                            aria-hidden="true"
-                        ></i>
-                    </span>
-
-                    <div class="student-stat-content">
-
-                        <p>Available Exams</p>
-
-                        <strong>2</strong>
-
-                    </div>
-
-                </article>
-
-                <article class="student-stat-card">
-
-                    <span class="student-stat-icon">
-                        <i
-                            class="bi bi-check-circle"
-                            aria-hidden="true"
-                        ></i>
-                    </span>
-
-                    <div class="student-stat-content">
-
-                        <p>Completed Exams</p>
-
-                        <strong>8</strong>
-
-                    </div>
-
-                </article>
+            <article class="student-stat-card">
+                <span class="student-stat-icon">
+                    <i class="bi bi-file-earmark-code" aria-hidden="true"></i>
+                </span>
+                <div class="student-stat-content">
+                    <p>Available Exams</p>
+                    <strong id="stat-available-count">--</strong>
+                </div>
+            </article>
+            
+            <article class="student-stat-card">
+                <span class="student-stat-icon">
+                    <i class="bi bi-check-circle" aria-hidden="true"></i>
+                </span>
+                <div class="student-stat-content">
+                    <p>Completed Exams</p>
+                    <strong id="stat-completed-count">--</strong>
+                </div>
+            </article>
 
             </section>
 
@@ -163,143 +146,10 @@
 
                     </div>
 
-                    <div class="student-available-exams">
-
-                        <!-- Exam 1 -->
-                        <article class="student-available-exam">
-
-                            <div class="student-exam-identity">
-
-                                <span class="student-exam-icon">
-                                    <i
-                                        class="bi bi-braces"
-                                        aria-hidden="true"
-                                    ></i>
-                                </span>
-
-                                <div class="student-exam-copy">
-
-                                    <h3>
-                                        JavaScript Fundamentals
-                                    </h3>
-
-                                    <div class="student-exam-meta">
-
-                                        <span>
-                                            <i
-                                                class="bi bi-list-ol"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            15 questions
-                                        </span>
-
-                                        <span>
-                                            <i
-                                                class="bi bi-clock"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            60 minutes
-                                        </span>
-
-                                        <span>
-                                            <i
-                                                class="bi bi-calendar-event"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            Ends Jul 18, 2026
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <a
-                                href="take-exam.html"
-                                class="student-start-exam-btn"
-                            >
-                                <span>Start Exam</span>
-
-                                <i
-                                    class="bi bi-arrow-right"
-                                    aria-hidden="true"
-                                ></i>
-                            </a>
-
-                        </article>
-
-                        <!-- Exam 2 -->
-                        <article class="student-available-exam">
-
-                            <div class="student-exam-identity">
-
-                                <span class="student-exam-icon">
-                                    <i
-                                        class="bi bi-filetype-html"
-                                        aria-hidden="true"
-                                    ></i>
-                                </span>
-
-                                <div class="student-exam-copy">
-
-                                    <h3>
-                                        HTML &amp; CSS Essentials
-                                    </h3>
-
-                                    <div class="student-exam-meta">
-
-                                        <span>
-                                            <i
-                                                class="bi bi-list-ol"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            20 questions
-                                        </span>
-
-                                        <span>
-                                            <i
-                                                class="bi bi-clock"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            75 minutes
-                                        </span>
-
-                                        <span>
-                                            <i
-                                                class="bi bi-calendar-event"
-                                                aria-hidden="true"
-                                            ></i>
-
-                                            Ends Jul 22, 2026
-                                        </span>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                            <a
-                                href="take-exam.html"
-                                class="student-start-exam-btn"
-                            >
-                                <span>Start Exam</span>
-
-                                <i
-                                    class="bi bi-arrow-right"
-                                    aria-hidden="true"
-                                ></i>
-                            </a>
-
-                        </article>
-
+                    <div class="student-available-exams" id="available-exams-container">
+                        <!-- Dynamic available exams will be rendered here by student/dashboard.js -->
                     </div>
+
 
                 </section>
 
@@ -332,78 +182,41 @@
 
                     </div>
 
-                    <div class="student-latest-result">
-
+                    <div class="student-latest-result d-none" id="latest-result-container">
                         <div class="student-result-exam">
-
-                            <span class="student-result-icon">
-                                <i
-                                    class="bi bi-filetype-html"
-                                    aria-hidden="true"
-                                ></i>
+                            <span class="student-result-icon" id="latest-result-icon-container">
+                                <i class="bi bi-journal-check" aria-hidden="true"></i>
                             </span>
-
                             <div>
-
-                                <h3>
-                                    HTML &amp; CSS Essentials
-                                </h3>
-
-                                <p>
-                                    Completed on July 14, 2026
-                                </p>
-
+                                <h3 id="latest-result-title">Loading...</h3>
+                                <p id="latest-result-date">Please wait</p>
                             </div>
-
                         </div>
-
                         <div class="student-result-score">
-
                             <span>Score</span>
-
                             <div>
-                                <strong>84</strong>
-                                <small>/ 100</small>
+                                <strong id="latest-result-score">--</strong>
+                                <small>/ <span id="latest-result-max">--</span></small>
                             </div>
-
                         </div>
-
                         <div class="student-result-details">
-
                             <div>
-
                                 <span>Correct Answers</span>
-
-                                <strong>17 / 20</strong>
-
+                                <strong id="latest-result-fraction">-- / --</strong>
                             </div>
-
                             <div>
-
                                 <span>Result</span>
-
-                                <strong class="student-result-passed">
-                                    Passed
-                                </strong>
-
+                                <strong class="student-result-passed" id="latest-result-status">--</strong>
                             </div>
-
                         </div>
-
-                        <a
-                            href="exam-result.html"
-                            class="student-review-result-btn"
-                        >
-                            <i
-                                class="bi bi-eye"
-                                aria-hidden="true"
-                            ></i>
-
+                        <a href="exam-result.html" class="student-review-result-btn" id="latest-result-review-link">
+                            <i class="bi bi-eye" aria-hidden="true"></i>
                             <span>Review Result</span>
                         </a>
-
                     </div>
-
+                    <div class="student-latest-result text-center py-4" id="latest-result-empty-container">
+                        <p class="text-muted m-0">No recent exam attempts found.</p>
+                    </div>
                 </section>
 
             </div>
