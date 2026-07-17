@@ -160,11 +160,42 @@
         </div>
     </div>
 </section>
+<section class="quote-card">
+    <h2>Quote of the Day</h2>
+
+    <blockquote
+        id="quoteText"
+        aria-live="polite"
+    >
+        Loading quote...
+    </blockquote>
+
+    <p id="quoteAuthor"></p>
+
+    <button
+        type="button"
+        id="newQuoteBtn"
+    >
+        New Quote
+    </button>
+
+    <p
+        id="quoteError"
+        role="alert"
+        hidden
+    >
+        Unable to load a quote.
+    </p>
+</section>
     </main>
     <footer id="footer-root"></footer>
 
     <script src="../js/components/navbar-home.js"></script>
     <script src="../js/components/footer.js"></script>
+    <script
+    type="module"
+    src="../js/core/api.js">
+</script>
 
 </body>
 </html>

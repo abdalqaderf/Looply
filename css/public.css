@@ -1980,3 +1980,143 @@
         width: 100%;
     }
 }
+
+/* =========================
+   Quote of the Day
+========================= */
+
+.quote-card {
+    width: min(100%, 760px);
+    margin: 48px auto;
+    padding: 36px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(124, 92, 255, 0.14),
+            rgba(20, 22, 32, 0.96)
+        );
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+    text-align: center;
+}
+
+.quote-card h2 {
+    margin: 0 0 24px;
+    color: #ffffff;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.quote-card blockquote {
+    min-height: 90px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #f4f4f7;
+    font-size: clamp(1.1rem, 2.2vw, 1.4rem);
+    font-weight: 500;
+    line-height: 1.8;
+    font-style: italic;
+}
+
+#quoteAuthor {
+    min-height: 28px;
+    margin: 18px 0 26px;
+    color: #b9b5c9;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+#newQuoteBtn {
+    min-width: 150px;
+    padding: 12px 24px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: #7c5cff;
+    color: #ffffff;
+    font: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+#newQuoteBtn:hover:not(:disabled) {
+    background: #6b4cf0;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(124, 92, 255, 0.3);
+}
+
+#newQuoteBtn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+#newQuoteBtn:focus-visible {
+    outline: 3px solid rgba(124, 92, 255, 0.4);
+    outline-offset: 3px;
+}
+
+#newQuoteBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#quoteError {
+    margin: 20px 0 0;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 107, 107, 0.35);
+    border-radius: 10px;
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff8d8d;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+#quoteError[hidden] {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .quote-card {
+        margin: 32px auto;
+        padding: 28px 22px;
+        border-radius: 16px;
+    }
+
+    .quote-card blockquote {
+        min-height: 110px;
+        line-height: 1.7;
+    }
+
+    #newQuoteBtn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .quote-card {
+        margin: 24px auto;
+        padding: 24px 18px;
+    }
+
+    .quote-card h2 {
+        margin-bottom: 18px;
+    }
+
+    #quoteAuthor {
+        margin-bottom: 22px;
+    }
+}
+.quote-card {
+    max-width: calc(100% - 32px);
+}
