@@ -46,7 +46,7 @@ function createTeacherTopbar(teacher) {
             </div>
 
             <a
-                href="profile.html"
+                href="../../html/teacher/profile.html"
                 class="teacher-user-card"
                 aria-label="Open teacher profile"
             >
