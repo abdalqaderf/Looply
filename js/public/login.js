@@ -1,255 +1,180 @@
 import {
-    getRoleHomeRoute,
-    login,
-    redirectAuthenticatedUser
+  getRoleHomeRoute,
+  login,
+  redirectAuthenticatedUser,
 } from "../core/auth.js";
 
 import { initPublicPage } from "../core/app.js";
 
-import {
-    showError,
-    showSuccessToast
-} from "../core/alerts.js";
+import { showError, showSuccessToast } from "../core/alerts.js";
 
-import {
-    getFirstError,
-    validateLoginForm
-} from "../core/validation.js";
+import { getFirstError, validateLoginForm } from "../core/validation.js";
 
 const LOGIN_FORM_SELECTOR = "#login-form";
 
 function setLoginMessage(messageElement, message = "") {
-    if (!messageElement) {
-        return;
-    }
+  if (!messageElement) {
+    return;
+  }
 
-    messageElement.textContent = message;
-    messageElement.hidden = message === "";
+  messageElement.textContent = message;
+  messageElement.hidden = message === "";
 }
 
 function setFieldValidity(field, isValid) {
-    if (!field) {
-        return;
-    }
+  if (!field) {
+    return;
+  }
 
-    field.setAttribute(
-        "aria-invalid",
-        String(!isValid)
-    );
+  field.setAttribute("aria-invalid", String(!isValid));
 
-    field.classList.toggle(
-        "is-invalid",
-        !isValid
-    );
+  field.classList.toggle("is-invalid", !isValid);
 }
 
 function setSubmittingState(button, isSubmitting) {
-    if (!button) {
-        return;
-    }
+  if (!button) {
+    return;
+  }
 
-    button.disabled = isSubmitting;
-    button.setAttribute(
-        "aria-busy",
-        String(isSubmitting)
-    );
+  button.disabled = isSubmitting;
+  button.setAttribute("aria-busy", String(isSubmitting));
 
-    const textNode = [...button.childNodes].find(
-        (node) => node.nodeType === Node.TEXT_NODE
-    );
+  const textNode = [...button.childNodes].find(
+    (node) => node.nodeType === Node.TEXT_NODE,
+  );
 
-    if (textNode) {
-        textNode.textContent = isSubmitting
-            ? " Signing in "
-            : " Login ";
-    }
+  if (textNode) {
+    textNode.textContent = isSubmitting ? " Signing in " : " Login ";
+  }
 }
 
 function initializePasswordToggle(form) {
-    const passwordInput = form.querySelector("#password");
-    const toggleButton = form.querySelector(".password-toggle");
-    const icon = toggleButton?.querySelector("i");
+  const passwordInput = form.querySelector("#password");
+  const toggleButton = form.querySelector(".password-toggle");
+  const icon = toggleButton?.querySelector("i");
 
-    if (!passwordInput || !toggleButton) {
-        return;
-    }
+  if (!passwordInput || !toggleButton) {
+    return;
+  }
 
-    toggleButton.addEventListener("click", () => {
-        const passwordIsVisible =
-            passwordInput.type === "text";
+  toggleButton.addEventListener("click", () => {
+    const passwordIsVisible = passwordInput.type === "text";
 
-        passwordInput.type = passwordIsVisible
-            ? "password"
-            : "text";
+    passwordInput.type = passwordIsVisible ? "password" : "text";
 
-        toggleButton.setAttribute(
-            "aria-label",
-            passwordIsVisible
-                ? "Show password"
-                : "Hide password"
-        );
+    toggleButton.setAttribute(
+      "aria-label",
+      passwordIsVisible ? "Show password" : "Hide password",
+    );
 
-        icon?.classList.toggle(
-            "bi-eye",
-            passwordIsVisible
-        );
+    icon?.classList.toggle("bi-eye", passwordIsVisible);
 
-        icon?.classList.toggle(
-            "bi-eye-slash",
-            !passwordIsVisible
-        );
-    });
+    icon?.classList.toggle("bi-eye-slash", !passwordIsVisible);
+  });
 }
 
 async function displayLoginError(messageElement, message) {
-    setLoginMessage(messageElement, message);
+  setLoginMessage(messageElement, message);
 
-    if (window.Swal) {
-        await showError(
-            "Unable to log in",
-            message
-        );
-    }
+  await showError("Unable to log in", message);
 }
 
 function redirectToDashboard(user) {
-    window.location.replace(
-        getRoleHomeRoute(user.role)
-    );
+  window.location.replace(getRoleHomeRoute(user.role));
 }
 
 function initializeLoginPage() {
-    initPublicPage({
-        redirectAuthenticated: false
-    });
+  initPublicPage({
+    redirectAuthenticated: false,
+  });
 
-    if (redirectAuthenticatedUser()) {
-        return;
-    }
+  if (redirectAuthenticatedUser()) {
+    return;
+  }
 
-    const form = document.querySelector(
-        LOGIN_FORM_SELECTOR
-    );
+  const form = document.querySelector(LOGIN_FORM_SELECTOR);
 
-    if (!form) {
-        console.warn(
-            `Login form was not found: ${LOGIN_FORM_SELECTOR}`
-        );
-        return;
-    }
+  if (!form) {
+    console.warn(`Login form was not found: ${LOGIN_FORM_SELECTOR}`);
+    return;
+  }
 
-    const usernameInput = form.querySelector("#username");
-    const passwordInput = form.querySelector("#password");
-    const messageElement = form.querySelector("#login-message");
-    const submitButton = form.querySelector('[type="submit"]');
-    const rememberInput = form.querySelector('[name="remember"]');
+  const usernameInput = form.querySelector("#username");
+  const passwordInput = form.querySelector("#password");
+  const messageElement = form.querySelector("#login-message");
+  const submitButton = form.querySelector('[type="submit"]');
+  const rememberInput = form.querySelector('[name="remember"]');
 
-    
-    if (rememberInput) {
-        rememberInput.checked = false;
-        rememberInput.disabled = true;
-        rememberInput.title =
-            "Looply keeps login active only for the current browser tab.";
-    }
+  if (rememberInput) {
+    rememberInput.checked = false;
+    rememberInput.disabled = true;
+    rememberInput.title =
+      "Looply keeps login active only for the current browser tab.";
+  }
 
-    initializePasswordToggle(form);
-    setLoginMessage(messageElement);
+  initializePasswordToggle(form);
+  setLoginMessage(messageElement);
 
-    form.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const credentials = {
-        username: usernameInput?.value ?? "",
-        password: passwordInput?.value ?? ""
+      username: usernameInput?.value ?? "",
+      password: passwordInput?.value ?? "",
     };
 
-    const validation = validateLoginForm(
-        credentials
-    );
+    const validation = validateLoginForm(credentials);
 
-    setFieldValidity(
-        usernameInput,
-        !validation.errors.username
-    );
+    setFieldValidity(usernameInput, !validation.errors.username);
 
-    setFieldValidity(
-        passwordInput,
-        !validation.errors.password
-    );
+    setFieldValidity(passwordInput, !validation.errors.password);
 
     if (!validation.isValid) {
-        const message = getFirstError(
-            validation.errors
-        );
+      const message = getFirstError(validation.errors);
 
-        await displayLoginError(
-            messageElement,
-            message
-        );
+      await displayLoginError(messageElement, message);
 
-        if (validation.errors.username) {
-            usernameInput?.focus();
-        } else {
-            passwordInput?.focus();
-        }
+      if (validation.errors.username) {
+        usernameInput?.focus();
+      } else {
+        passwordInput?.focus();
+      }
 
-        return;
+      return;
     }
 
-    setSubmittingState(
-        submitButton,
-        true
-    );
+    setSubmittingState(submitButton, true);
 
     setLoginMessage(messageElement);
 
     try {
-        const user = login(
-            credentials.username,
-            credentials.password
-        );
+      const user = login(credentials.username, credentials.password);
 
-        if (window.Swal) {
-            showSuccessToast(
-                `Welcome back, ${user.fullName}.`
-            );
+      showSuccessToast(`Welcome back, ${user.fullName}.`);
 
-            await new Promise((resolve) => {
-                window.setTimeout(
-                    resolve,
-                    650
-                );
-            });
-        }
+      await new Promise((resolve) => {
+        window.setTimeout(resolve, 650);
+      });
 
-        redirectToDashboard(user);
+      redirectToDashboard(user);
     } catch (error) {
-        setSubmittingState(
-    submitButton,
-    false
-);
-        await displayLoginError(
-            messageElement,
-            error.message ||
-                "Invalid username or password."
-        );
+      setSubmittingState(submitButton, false);
+      await displayLoginError(
+        messageElement,
+        error.message || "Invalid username or password.",
+      );
 
-        passwordInput?.select();
+      passwordInput?.select();
     } finally {
-        setSubmittingState(
-            submitButton,
-            false
-        );
+      setSubmittingState(submitButton, false);
     }
-});
+  });
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeLoginPage,
-        { once: true }
-    );
+  document.addEventListener("DOMContentLoaded", initializeLoginPage, {
+    once: true,
+  });
 } else {
-    initializeLoginPage();
+  initializeLoginPage();
 }
