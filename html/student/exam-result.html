@@ -1,464 +1,153 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="Review a completed programming exam result in Looply."
+      name="description"
     />
-
     <title>Looply | Exam Result</title>
-
     <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="../../css/base.css" />
-
-    <link rel="stylesheet" href="../../css/dashboard-student.css" />
-
-    <link rel="stylesheet" href="../../css/student-exam.css" />
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="../../css/dashboard-student.css" rel="stylesheet" />
+    <link href="../../css/student-exam.css" rel="stylesheet" />
   </head>
-
-  <body class="student-page">
+  <body class="auth-pending student-page">
     <!-- Shared student topbar -->
     <header id="student-topbar-root"></header>
-
     <!-- Shared student sidebar -->
     <aside id="student-sidebar-root"></aside>
-
     <!-- Mobile sidebar overlay -->
-    <div id="student-sidebar-overlay" class="student-sidebar-overlay"></div>
-
+    <div class="student-sidebar-overlay" id="student-sidebar-overlay"></div>
     <main class="student-main">
       <div class="exam-result-page">
         <!-- Back link -->
-        <a href="history.html" class="exam-result-back-link">
-          <i class="bi bi-arrow-left" aria-hidden="true"></i>
-
+        <a class="exam-result-back-link" href="history.html">
+          <i aria-hidden="true" class="bi bi-arrow-left"></i>
           <span>Back to History</span>
         </a>
-
         <!-- Page header -->
         <section class="exam-result-header">
           <div class="exam-result-header-content">
             <span class="exam-result-page-label"> Exam Result </span>
-
             <div class="exam-result-title-row">
-              <h1 class="exam-result-title">HTML &amp; CSS Essentials</h1>
-
-              <span class="exam-result-status"> Passed </span>
+              <h1 class="exam-result-title">Loading result...</h1>
+              <span class="exam-result-status">Loading</span>
             </div>
-
             <p class="exam-result-description">
-              Completed on July 14, 2026 at 2:35 PM. Review your score, answers,
-              and corrections below.
+              Result information is loading.
             </p>
           </div>
-
-          <a href="exams.html" class="exam-result-view-exams-btn">
-            <i class="bi bi-journal-code" aria-hidden="true"></i>
-
+          <a class="exam-result-view-exams-btn" href="exams.html">
+            <i aria-hidden="true" class="bi bi-journal-code"></i>
             <span>View Exams</span>
           </a>
         </section>
-
         <!-- Result summary -->
-        <section class="exam-result-summary" aria-label="Exam result summary">
+        <section aria-label="Exam result summary" class="exam-result-summary">
           <div class="exam-result-score-card">
             <span class="exam-result-score-label"> Final Score </span>
-
             <div class="exam-result-score-value">
-              <strong>84</strong>
-
-              <span>/ 100</span>
+              <strong>--</strong>
+              <span>/ --</span>
             </div>
-
-            <p>You answered 17 of 20 questions correctly.</p>
+            <span class="exam-result-score-percentage">--%</span>
+            <p>Loading score summary...</p>
           </div>
-
           <div class="exam-result-stat-grid">
             <article class="exam-result-stat-card">
               <span
                 class="exam-result-stat-icon exam-result-stat-icon--correct"
               >
-                <i class="bi bi-check-lg" aria-hidden="true"></i>
+                <i aria-hidden="true" class="bi bi-check-lg"></i>
               </span>
-
               <div>
                 <small>Correct Answers</small>
-
-                <strong>17</strong>
-
-                <span>Out of 20 questions</span>
+                <strong>--</strong>
+                <span>Loading...</span>
               </div>
             </article>
-
             <article class="exam-result-stat-card">
               <span class="exam-result-stat-icon exam-result-stat-icon--wrong">
-                <i class="bi bi-x-lg" aria-hidden="true"></i>
+                <i aria-hidden="true" class="bi bi-x-lg"></i>
               </span>
-
               <div>
                 <small>Incorrect Answers</small>
-
-                <strong>3</strong>
-
-                <span>Review corrections below</span>
+                <strong>--</strong>
+                <span>Loading...</span>
               </div>
             </article>
-
             <article class="exam-result-stat-card">
               <span class="exam-result-stat-icon">
-                <i class="bi bi-calendar-check" aria-hidden="true"></i>
+                <i aria-hidden="true" class="bi bi-calendar-check"></i>
               </span>
-
               <div>
                 <small>Completed Date</small>
-
-                <strong>July 14</strong>
-
-                <span>2026 at 2:35 PM</span>
+                <strong>--</strong>
+                <span>Loading...</span>
               </div>
             </article>
-
             <article class="exam-result-stat-card">
               <span class="exam-result-stat-icon">
-                <i class="bi bi-clock" aria-hidden="true"></i>
+                <i aria-hidden="true" class="bi bi-clock"></i>
               </span>
-
               <div>
                 <small>Time Used</small>
-
-                <strong>52 min</strong>
-
-                <span>From 75 minutes</span>
+                <strong>--</strong>
+                <span>Loading...</span>
               </div>
             </article>
           </div>
         </section>
-
         <!-- Question review -->
         <section class="exam-result-review-panel">
           <div class="exam-result-panel-header">
             <div class="exam-result-panel-heading">
               <div class="exam-result-panel-title-row">
                 <h2>Answer Review</h2>
-
-                <span class="exam-result-question-count"> 20 questions </span>
+                <span class="exam-result-question-count">-- questions</span>
               </div>
-
               <p>Compare your submitted answers with the correct answers.</p>
             </div>
-
             <div class="exam-result-review-summary">
-              <span class="exam-result-review-correct">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                17 correct
-              </span>
-
-              <span class="exam-result-review-wrong">
-                <i class="bi bi-x-circle" aria-hidden="true"></i>
-
-                3 incorrect
-              </span>
+              <span class="exam-result-review-correct"
+                ><i aria-hidden="true" class="bi bi-check-circle"></i> --
+                correct</span
+              >
+              <span class="exam-result-review-wrong"
+                ><i aria-hidden="true" class="bi bi-x-circle"></i> --
+                incorrect</span
+              >
             </div>
           </div>
-
-          <div class="exam-result-question-list">
-            <!-- Question 1 -->
-            <article class="exam-result-question">
-              <div class="exam-result-question-header">
-                <div class="exam-result-question-number">
-                  <span>Question</span>
-
-                  <strong>01</strong>
-                </div>
-
-                <div class="exam-result-question-meta">
-                  <span class="exam-result-question-type">
-                    Multiple Choice
-                  </span>
-
-                  <span class="exam-result-question-points">
-                    5 / 5 points
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-result-question-body">
-                <h3>
-                  Which HTML element is used to define the main heading of a
-                  page?
-                </h3>
-
-                <div class="exam-result-options">
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> A </span>
-
-                    <span>&lt;header&gt;</span>
-                  </div>
-
-                  <div class="exam-result-option exam-result-option--correct">
-                    <span class="exam-result-option-letter"> B </span>
-
-                    <span>&lt;h1&gt;</span>
-
-                    <small>
-                      <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                      Your answer
-                    </small>
-                  </div>
-
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> C </span>
-
-                    <span>&lt;title&gt;</span>
-                  </div>
-
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> D </span>
-
-                    <span>&lt;main&gt;</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="exam-result-feedback exam-result-feedback--correct">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <p>Your answer is correct.</p>
-              </div>
-            </article>
-
-            <!-- Question 2 -->
-            <article class="exam-result-question">
-              <div class="exam-result-question-header">
-                <div class="exam-result-question-number">
-                  <span>Question</span>
-
-                  <strong>02</strong>
-                </div>
-
-                <div class="exam-result-question-meta">
-                  <span class="exam-result-question-type">
-                    Multiple Choice
-                  </span>
-
-                  <span
-                    class="exam-result-question-points exam-result-question-points--lost"
-                  >
-                    0 / 5 points
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-result-question-body">
-                <h3>
-                  Which CSS property controls the space inside an element's
-                  border?
-                </h3>
-
-                <div class="exam-result-options">
-                  <div class="exam-result-option exam-result-option--wrong">
-                    <span class="exam-result-option-letter"> A </span>
-
-                    <span>margin</span>
-
-                    <small>
-                      <i class="bi bi-x-circle" aria-hidden="true"></i>
-
-                      Your answer
-                    </small>
-                  </div>
-
-                  <div
-                    class="exam-result-option exam-result-option--correct-answer"
-                  >
-                    <span class="exam-result-option-letter"> B </span>
-
-                    <span>padding</span>
-
-                    <small>
-                      <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                      Correct answer
-                    </small>
-                  </div>
-
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> C </span>
-
-                    <span>spacing</span>
-                  </div>
-
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> D </span>
-
-                    <span>gap</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="exam-result-feedback exam-result-feedback--wrong">
-                <i class="bi bi-x-circle" aria-hidden="true"></i>
-
-                <p>
-                  Your answer was
-                  <strong>margin</strong>. The correct answer is
-                  <strong>padding</strong>.
-                </p>
-              </div>
-            </article>
-
-            <!-- Question 3 -->
-            <article class="exam-result-question">
-              <div class="exam-result-question-header">
-                <div class="exam-result-question-number">
-                  <span>Question</span>
-
-                  <strong>03</strong>
-                </div>
-
-                <div class="exam-result-question-meta">
-                  <span class="exam-result-question-type"> True or False </span>
-
-                  <span class="exam-result-question-points">
-                    5 / 5 points
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-result-question-body">
-                <h3>
-                  The CSS display property can be used to change an element into
-                  a flex container.
-                </h3>
-
-                <div class="exam-result-options exam-result-options--two">
-                  <div class="exam-result-option exam-result-option--correct">
-                    <span class="exam-result-option-letter"> A </span>
-
-                    <span>True</span>
-
-                    <small>
-                      <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                      Your answer
-                    </small>
-                  </div>
-
-                  <div class="exam-result-option">
-                    <span class="exam-result-option-letter"> B </span>
-
-                    <span>False</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="exam-result-feedback exam-result-feedback--correct">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <p>Your answer is correct.</p>
-              </div>
-            </article>
-
-            <!-- Question 4 -->
-            <article class="exam-result-question">
-              <div class="exam-result-question-header">
-                <div class="exam-result-question-number">
-                  <span>Question</span>
-
-                  <strong>04</strong>
-                </div>
-
-                <div class="exam-result-question-meta">
-                  <span class="exam-result-question-type"> Short Answer </span>
-
-                  <span
-                    class="exam-result-question-points exam-result-question-points--lost"
-                  >
-                    0 / 5 points
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-result-question-body">
-                <h3>
-                  What is the purpose of the HTML alt attribute on an image?
-                </h3>
-
-                <div class="exam-result-written-answers">
-                  <div
-                    class="exam-result-written-answer exam-result-written-answer--wrong"
-                  >
-                    <span>Your Answer</span>
-
-                    <p>
-                      It changes the image size when the screen becomes smaller.
-                    </p>
-                  </div>
-
-                  <div
-                    class="exam-result-written-answer exam-result-written-answer--correct"
-                  >
-                    <span>Expected Answer</span>
-
-                    <p>
-                      It provides alternative text describing the image when it
-                      cannot be displayed and supports accessibility.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              <div class="exam-result-feedback exam-result-feedback--wrong">
-                <i class="bi bi-x-circle" aria-hidden="true"></i>
-
-                <p>
-                  Your answer did not explain the purpose of alternative text.
-                </p>
-              </div>
-            </article>
-          </div>
-
+          <div class="exam-result-question-list"></div>
           <div class="exam-result-review-note">
-            <i class="bi bi-info-circle" aria-hidden="true"></i>
-
-            <p>
-              This static prototype shows four sample questions. The final page
-              will display all submitted questions.
-            </p>
+            <i aria-hidden="true" class="bi bi-info-circle"></i>
+            <p>Question review will appear here.</p>
           </div>
         </section>
-
         <!-- Page actions -->
         <div class="exam-result-actions">
-          <a href="dashboard.html" class="exam-result-secondary-btn">
-            <i class="bi bi-grid" aria-hidden="true"></i>
-
+          <a class="exam-result-secondary-btn" href="dashboard.html">
+            <i aria-hidden="true" class="bi bi-grid"></i>
             <span>Back to Dashboard</span>
           </a>
-
-          <a href="history.html" class="primary-btn exam-result-primary-btn">
-            <i class="bi bi-clock-history" aria-hidden="true"></i>
-
+          <a class="primary-btn exam-result-primary-btn" href="history.html">
+            <i aria-hidden="true" class="bi bi-clock-history"></i>
             <span>View Exam History</span>
           </a>
         </div>
       </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../../js/core/app.js"></script>
-    <script type="module" src="../../js/components/student-topbar.js"></script>
-    <script type="module" src="../../js/components/student-sidebar.js"></script>
-    <script type="module" src="../../js/student/exam-result.js"></script>
+    <script src="../../js/core/app.js" type="module"></script>
+    <script src="../../js/components/student-topbar.js" type="module"></script>
+    <script src="../../js/components/student-sidebar.js" type="module"></script>
+    <script src="../../js/student/exam-result.js" type="module"></script>
   </body>
 </html>

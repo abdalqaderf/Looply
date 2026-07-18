@@ -1,101 +1,105 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
 
-<head>
-  <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="View available programming exams in the Looply student dashboard."
+    />
 
-  <meta name="description" content="View available programming exams in the Looply student dashboard." />
+    <title>Looply | Available Exams</title>
 
-  <title>Looply | Available Exams</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="../../css/base.css" />
 
-  <link rel="stylesheet" href="../../css/base.css" />
+    <link rel="stylesheet" href="../../css/dashboard-student.css" />
 
-  <link rel="stylesheet" href="../../css/dashboard-student.css" />
+    <link rel="stylesheet" href="../../css/student-exam.css" />
+  </head>
 
-  <link rel="stylesheet" href="../../css/student-exam.css" />
-</head>
+  <body class="auth-pending student-page">
+    <!-- Shared student topbar -->
+    <header id="student-topbar-root"></header>
 
-<body class="student-page">
-  <!-- Shared student topbar -->
-  <header id="student-topbar-root"></header>
+    <!-- Shared student sidebar -->
+    <aside id="student-sidebar-root"></aside>
 
-  <!-- Shared student sidebar -->
-  <aside id="student-sidebar-root"></aside>
+    <!-- Mobile sidebar overlay -->
+    <div id="student-sidebar-overlay" class="student-sidebar-overlay"></div>
 
-  <!-- Mobile sidebar overlay -->
-  <div id="student-sidebar-overlay" class="student-sidebar-overlay"></div>
+    <main class="student-main">
+      <div class="student-exams-page">
+        <!-- Page header -->
+        <section class="student-exams-header">
+          <div class="student-exams-header-content">
+            <span class="student-exams-label"> Student Exams </span>
 
-  <main class="student-main">
-    <div class="student-exams-page">
-      <!-- Page header -->
-      <section class="student-exams-header">
-        <div class="student-exams-header-content">
-          <span class="student-exams-label"> Student Exams </span>
+            <h1 class="student-exams-title">Available Exams</h1>
 
-          <h1 class="student-exams-title">Available Exams</h1>
-
-          <p class="student-exams-description">
-            Review the exam information before starting. Each exam can only be
-            submitted once.
-          </p>
-        </div>
-
-        <a href="history.html" class="student-exams-history-btn">
-          <i class="bi bi-clock-history" aria-hidden="true"></i>
-
-          <span>Exam History</span>
-        </a>
-      </section>
-
-      <!-- Exams list panel -->
-      <section class="student-exams-panel">
-        <div class="student-exams-panel-header">
-          <div class="student-exams-panel-heading">
-            <div class="student-exams-heading-row">
-              <h2>Exams You Can Take</h2>
-
-              <span class="student-exams-count" id="student-exams-count">
-                -- exams
-              </span>
-            </div>
-
-            <p>
-              These exams are currently active and available for submission.
+            <p class="student-exams-description">
+              Review the exam information before starting. Each exam can only be
+              submitted once.
             </p>
           </div>
-        </div>
 
-        <div class="student-exams-list" id="student-exams-list">
-          <!-- Available exams are rendered by student/exams.js -->
-        </div>
-      </section>
-      <!-- Page note -->
-      <section class="student-exams-page-note">
-        <span>
-          <i class="bi bi-shield-check" aria-hidden="true"></i>
-        </span>
+          <a href="history.html" class="student-exams-history-btn">
+            <i class="bi bi-clock-history" aria-hidden="true"></i>
 
-        <div>
-          <h2>Before Starting an Exam</h2>
+            <span>Exam History</span>
+          </a>
+        </section>
 
-          <p>
-            Make sure you have enough time to complete the exam and a stable
-            internet connection before pressing Start Exam.
-          </p>
-        </div>
-      </section>
-    </div>
-  </main>
+        <!-- Exams list panel -->
+        <section class="student-exams-panel">
+          <div class="student-exams-panel-header">
+            <div class="student-exams-panel-heading">
+              <div class="student-exams-heading-row">
+                <h2>Exams You Can Take</h2>
 
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script type="module" src="../../js/core/app.js"></script>
-  <script type="module" src="../../js/components/student-topbar.js"></script>
-  <script type="module" src="../../js/components/student-sidebar.js"></script>
-  <script type="module" src="../../js/student/exams.js"></script>
-</body>
+                <span class="student-exams-count" id="student-exams-count">
+                  -- exams
+                </span>
+              </div>
 
+              <p>
+                These exams are currently active and available for submission.
+              </p>
+            </div>
+          </div>
+
+          <div class="student-exams-list" id="student-exams-list">
+            <!-- Available exams are rendered by student/exams.js -->
+          </div>
+        </section>
+        <!-- Page note -->
+        <section class="student-exams-page-note">
+          <span>
+            <i class="bi bi-shield-check" aria-hidden="true"></i>
+          </span>
+
+          <div>
+            <h2>Before Starting an Exam</h2>
+
+            <p>
+              Make sure you have enough time to complete the exam and a stable
+              internet connection before pressing Start Exam.
+            </p>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="module" src="../../js/core/app.js"></script>
+    <script type="module" src="../../js/components/student-topbar.js"></script>
+    <script type="module" src="../../js/components/student-sidebar.js"></script>
+    <script type="module" src="../../js/student/exams.js"></script>
+  </body>
 </html>
