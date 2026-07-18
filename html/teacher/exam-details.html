@@ -1,436 +1,183 @@
 <!doctype html>
+
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta
-      name="description"
       content="View programming exam information and questions in Looply."
+      name="description"
     />
-
     <title>Looply | Exam Details</title>
-
     <link
-      rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      rel="stylesheet"
     />
-
-    <link rel="stylesheet" href="../../css/base.css" />
-
-    <link rel="stylesheet" href="../../css/dashboard.css" />
-
-    <link rel="stylesheet" href="../../css/exam.css" />
+    <link href="../../css/base.css" rel="stylesheet" />
+    <link href="../../css/dashboard.css" rel="stylesheet" />
+    <link href="../../css/exam.css" rel="stylesheet" />
   </head>
-
-  <body class="teacher-page">
+  <body class="auth-pending teacher-page">
     <!-- Shared teacher topbar -->
     <header id="teacher-topbar-root"></header>
-
     <!-- Shared teacher sidebar -->
     <aside id="teacher-sidebar-root"></aside>
-
     <!-- Mobile sidebar overlay -->
-    <div id="teacher-sidebar-overlay" class="teacher-sidebar-overlay"></div>
-
+    <div class="teacher-sidebar-overlay" id="teacher-sidebar-overlay"></div>
     <main class="teacher-main">
       <div class="teacher-content exam-details-page">
         <!-- Back link -->
-        <a href="exams.html" class="exam-details-back-link">
-          <i class="bi bi-arrow-left" aria-hidden="true"></i>
-
+        <a class="exam-details-back-link" href="exams.html">
+          <i aria-hidden="true" class="bi bi-arrow-left"></i>
           <span>Back to Exams</span>
         </a>
-
         <!-- Page header -->
         <section class="exam-details-header">
           <div class="exam-details-header-content">
             <div class="exam-details-title-row">
-              <h1 class="dashboard-page-title">JavaScript Fundamentals</h1>
-
+              <h1 class="dashboard-page-title">Loading exam...</h1>
               <span
                 class="exam-details-status exam-details-status--active"
                 id="exam-details-status"
+                >Loading</span
               >
-                Active
-              </span>
             </div>
-
             <p class="dashboard-page-description">
-              A programming exam covering JavaScript variables, conditions,
-              functions, arrays, objects, and basic problem-solving concepts.
+              Exam information is loading.
             </p>
           </div>
-
           <div class="exam-details-header-actions">
-            <a href="exam-form.html" class="exam-details-action-btn">
-              <i class="bi bi-pencil" aria-hidden="true"></i>
-
+            <a class="exam-details-action-btn" href="exam-form.html">
+              <i aria-hidden="true" class="bi bi-pencil"></i>
               <span>Edit Exam</span>
             </a>
-
             <button
-              type="button"
               class="exam-details-action-btn exam-details-deactivate-btn"
-              id="exam-status-toggle"
-              data-exam-toggle
-              data-exam-id="exam-1"
               data-current-status="active"
+              data-exam-id="exam-1"
+              data-exam-toggle=""
               data-next-status="draft"
+              id="exam-status-toggle"
+              type="button"
             >
-              <i class="bi bi-pause-circle" aria-hidden="true"></i>
-
+              <i aria-hidden="true" class="bi bi-pause-circle"></i>
               <span>Deactivate</span>
             </button>
-
             <button
-              type="button"
               class="exam-details-action-btn exam-details-delete-btn"
-              data-delete-exam
+              data-delete-exam=""
               data-exam-id="exam-1"
+              type="button"
             >
-              <i class="bi bi-trash" aria-hidden="true"></i>
-
+              <i aria-hidden="true" class="bi bi-trash"></i>
               <span>Delete Exam</span>
             </button>
           </div>
         </section>
-
         <!-- Exam information -->
-        <section class="exam-information-grid" aria-label="Exam information">
+        <section aria-label="Exam information" class="exam-information-grid">
           <article class="exam-information-card">
             <span class="exam-information-card-icon">
-              <i class="bi bi-calendar-event" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-calendar-event"></i>
             </span>
-
             <div>
-              <small>Start Date</small>
-
-              <strong>July 16, 2026</strong>
-
+              <small>Loading...</small>
+              <strong>--</strong>
               <span>10:00 AM</span>
             </div>
           </article>
-
           <article class="exam-information-card">
             <span class="exam-information-card-icon">
-              <i class="bi bi-calendar-check" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-calendar-check"></i>
             </span>
-
             <div>
-              <small>End Date</small>
-
-              <strong>July 22, 2026</strong>
-
+              <small>Loading...</small>
+              <strong>--</strong>
               <span>4:00 PM</span>
             </div>
           </article>
-
           <article class="exam-information-card">
             <span class="exam-information-card-icon">
-              <i class="bi bi-clock" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-clock"></i>
             </span>
-
             <div>
-              <small>Duration</small>
-
-              <strong>60 minutes</strong>
-
+              <small>Loading...</small>
+              <strong>--</strong>
               <span>Exam time limit</span>
             </div>
           </article>
-
           <article class="exam-information-card">
             <span class="exam-information-card-icon">
-              <i class="bi bi-list-check" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-list-check"></i>
             </span>
-
             <div>
-              <small>Questions</small>
-
-              <strong>20 questions</strong>
-
+              <small>Loading...</small>
+              <strong>--</strong>
               <span>All questions required</span>
             </div>
           </article>
-
           <article class="exam-information-card">
             <span class="exam-information-card-icon">
-              <i class="bi bi-award" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-award"></i>
             </span>
-
             <div>
-              <small>Total Score</small>
-
-              <strong>100 points</strong>
-
+              <small>Loading...</small>
+              <strong>--</strong>
               <span>Maximum score</span>
             </div>
           </article>
         </section>
-
         <!-- Overview -->
         <section class="exam-details-panel">
           <div class="exam-details-panel-header">
             <div>
               <h2>Exam Overview</h2>
-
               <p>General description and instructions for students.</p>
             </div>
-
             <span class="exam-details-panel-icon">
-              <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+              <i aria-hidden="true" class="bi bi-file-earmark-text"></i>
             </span>
           </div>
-
           <div class="exam-details-overview-content">
             <div class="exam-details-text-block">
               <h3>Description</h3>
-
-              <p>
-                This exam evaluates the student's understanding of core
-                JavaScript concepts. Students are expected to read each question
-                carefully and select or provide the most accurate answer.
-              </p>
+              <p>Loading description...</p>
             </div>
-
             <div class="exam-details-text-block">
               <h3>Instructions</h3>
-
               <ul class="exam-details-instructions">
-                <li>Answer all questions before submitting the exam.</li>
-
-                <li>
-                  Review code snippets carefully before choosing an answer.
-                </li>
-
-                <li>The exam can only be submitted once.</li>
-
-                <li>Unanswered questions will receive zero points.</li>
+                <li>Loading instructions...</li>
               </ul>
             </div>
           </div>
         </section>
-
         <!-- Questions -->
         <section class="exam-details-panel exam-questions-panel">
           <div class="exam-details-panel-header">
             <div>
               <div class="exam-details-heading-row">
                 <h2>Questions</h2>
-
-                <span class="exam-details-count"> 20 questions </span>
+                <span class="exam-details-count">-- questions</span>
               </div>
-
               <p>Preview the questions included in this exam.</p>
             </div>
-
-            <a href="exam-form.html" class="exam-details-small-btn">
-              <i class="bi bi-pencil-square" aria-hidden="true"></i>
-
+            <a class="exam-details-small-btn" href="exam-form.html">
+              <i aria-hidden="true" class="bi bi-pencil-square"></i>
               <span>Edit Questions</span>
             </a>
           </div>
-
-          <div class="exam-questions-list">
-            <!-- Question 1 -->
-            <article class="exam-question-card">
-              <div class="exam-question-header">
-                <div class="exam-question-number">
-                  <span>Question</span>
-
-                  <strong>01</strong>
-                </div>
-
-                <div class="exam-question-tags">
-                  <span class="exam-question-type"> Multiple Choice </span>
-
-                  <span class="exam-question-points"> 5 points </span>
-                </div>
-              </div>
-
-              <div class="exam-question-body">
-                <h3>
-                  Which JavaScript keyword declares a block-scoped variable?
-                </h3>
-
-                <div class="exam-question-options">
-                  <span class="exam-question-option">
-                    <b>A</b>
-
-                    <span>var</span>
-                  </span>
-
-                  <span
-                    class="exam-question-option exam-question-option--correct"
-                  >
-                    <b>B</b>
-
-                    <span>let</span>
-                  </span>
-
-                  <span class="exam-question-option">
-                    <b>C</b>
-
-                    <span>define</span>
-                  </span>
-
-                  <span class="exam-question-option">
-                    <b>D</b>
-
-                    <span>static</span>
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-question-answer">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <span>
-                  Correct answer:
-                  <strong>let</strong>
-                </span>
-              </div>
-            </article>
-
-            <!-- Question 2 -->
-            <article class="exam-question-card">
-              <div class="exam-question-header">
-                <div class="exam-question-number">
-                  <span>Question</span>
-
-                  <strong>02</strong>
-                </div>
-
-                <div class="exam-question-tags">
-                  <span class="exam-question-type"> True or False </span>
-
-                  <span class="exam-question-points"> 5 points </span>
-                </div>
-              </div>
-
-              <div class="exam-question-body">
-                <h3>
-                  Properties inside an object declared using const can still be
-                  changed.
-                </h3>
-
-                <div class="exam-question-options">
-                  <span
-                    class="exam-question-option exam-question-option--correct"
-                  >
-                    <b>A</b>
-
-                    <span>True</span>
-                  </span>
-
-                  <span class="exam-question-option">
-                    <b>B</b>
-
-                    <span>False</span>
-                  </span>
-                </div>
-              </div>
-
-              <div class="exam-question-answer">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <span>
-                  Correct answer:
-                  <strong>True</strong>
-                </span>
-              </div>
-            </article>
-
-            <!-- Question 3 -->
-            <article class="exam-question-card">
-              <div class="exam-question-header">
-                <div class="exam-question-number">
-                  <span>Question</span>
-
-                  <strong>03</strong>
-                </div>
-
-                <div class="exam-question-tags">
-                  <span class="exam-question-type"> Code Output </span>
-
-                  <span class="exam-question-points"> 5 points </span>
-                </div>
-              </div>
-
-              <div class="exam-question-body">
-                <h3>What is the output of the following JavaScript code?</h3>
-
-                <pre class="exam-question-code"><code>const numbers = [1, 2, 3];
-
-const total = numbers.reduce(
-    (sum, number) => sum + number,
-    0
-);
-
-console.log(total);</code></pre>
-              </div>
-
-              <div class="exam-question-answer">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <span>
-                  Correct answer:
-                  <strong>6</strong>
-                </span>
-              </div>
-            </article>
-
-            <!-- Question 4 -->
-            <article class="exam-question-card">
-              <div class="exam-question-header">
-                <div class="exam-question-number">
-                  <span>Question</span>
-
-                  <strong>04</strong>
-                </div>
-
-                <div class="exam-question-tags">
-                  <span class="exam-question-type"> Short Answer </span>
-
-                  <span class="exam-question-points"> 5 points </span>
-                </div>
-              </div>
-
-              <div class="exam-question-body">
-                <h3>
-                  What does the strict equality operator compare in JavaScript?
-                </h3>
-              </div>
-
-              <div class="exam-question-answer">
-                <i class="bi bi-check-circle" aria-hidden="true"></i>
-
-                <span>
-                  Expected answer:
-                  <strong> It compares both value and data type. </strong>
-                </span>
-              </div>
-            </article>
-          </div>
-
+          <div class="exam-questions-list"></div>
           <div class="exam-questions-note">
-            <i class="bi bi-info-circle" aria-hidden="true"></i>
-
-            <p>
-              This page shows a preview of the first four questions. The exam
-              contains 20 questions.
-            </p>
+            <i aria-hidden="true" class="bi bi-info-circle"></i>
+            <p>Questions will appear here.</p>
           </div>
         </section>
       </div>
     </main>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../../js/core/app.js"></script>
-    <script type="module" src="../../js/components/teacher-topbar.js"></script>
-    <script type="module" src="../../js/components/teacher-sidebar.js"></script>
-    <script type="module" src="../../js/teacher/exam-details.js"></script>
+    <script src="../../js/core/app.js" type="module"></script>
+    <script src="../../js/components/teacher-topbar.js" type="module"></script>
+    <script src="../../js/components/teacher-sidebar.js" type="module"></script>
+    <script src="../../js/teacher/exam-details.js" type="module"></script>
   </body>
 </html>
