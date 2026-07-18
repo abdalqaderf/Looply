@@ -32,7 +32,9 @@
           <div class="dashboard-hero-copy">
             <span class="dashboard-page-label">Teacher Workspace</span>
 
-            <h1 class="dashboard-page-title">Good morning, Tariq.</h1>
+            <h1 class="dashboard-page-title" id="teacher-welcome-message">
+              Good morning, Teacher.
+            </h1>
 
             <p class="dashboard-page-description">
               Track student participation, exam progress, and the latest
@@ -61,7 +63,7 @@
 
             <div class="dashboard-stat-content">
               <p>Total Students</p>
-              <strong>48</strong>
+              <strong id="teacher-total-students">--</strong>
             </div>
           </article>
 
@@ -72,7 +74,7 @@
 
             <div class="dashboard-stat-content">
               <p>Total Exams</p>
-              <strong>12</strong>
+              <strong id="teacher-total-exams">--</strong>
             </div>
           </article>
         </section>
@@ -108,187 +110,7 @@
                 </tr>
               </thead>
 
-              <tbody>
-                <tr>
-                  <td>
-                    <div class="dashboard-exam-identity">
-                      <span class="dashboard-exam-icon">
-                        <i class="bi bi-braces" aria-hidden="true"></i>
-                      </span>
-
-                      <div>
-                        <strong>JavaScript Fundamentals</strong>
-                        <small>Web Development</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="exam-status-badge status-active">
-                      Active
-                    </span>
-                  </td>
-
-                  <td>20</td>
-
-                  <td>
-                    <div class="dashboard-submission-cell">
-                      <span>31 / 38</span>
-
-                      <div
-                        class="dashboard-progress"
-                        aria-label="31 of 38 submissions"
-                      >
-                        <span style="width: 82%"></span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="dashboard-date"> Jul 16, 4:00 PM </span>
-                  </td>
-
-                  <td>
-                    <a
-                      href="exam-details.html"
-                      class="dashboard-row-action"
-                      aria-label="View JavaScript Fundamentals exam"
-                    >
-                      <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="dashboard-exam-identity">
-                      <span class="dashboard-exam-icon">
-                        <i class="bi bi-filetype-html" aria-hidden="true"></i>
-                      </span>
-
-                      <div>
-                        <strong>HTML &amp; CSS Essentials</strong>
-                        <small>Frontend Basics</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="exam-status-badge status-scheduled">
-                      Scheduled
-                    </span>
-                  </td>
-
-                  <td>25</td>
-
-                  <td>
-                    <span class="dashboard-muted-value"> Not started </span>
-                  </td>
-
-                  <td>
-                    <span class="dashboard-date"> Jul 18, 10:00 AM </span>
-                  </td>
-
-                  <td>
-                    <a
-                      href="exam-details.html"
-                      class="dashboard-row-action"
-                      aria-label="View HTML and CSS Essentials exam"
-                    >
-                      <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="dashboard-exam-identity">
-                      <span class="dashboard-exam-icon">
-                        <i class="bi bi-code-square" aria-hidden="true"></i>
-                      </span>
-
-                      <div>
-                        <strong>Programming Basics</strong>
-                        <small>Core Programming</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="exam-status-badge status-completed">
-                      Completed
-                    </span>
-                  </td>
-
-                  <td>30</td>
-
-                  <td>
-                    <div class="dashboard-submission-cell">
-                      <span>38 / 38</span>
-
-                      <div
-                        class="dashboard-progress is-complete"
-                        aria-label="38 of 38 submissions"
-                      >
-                        <span style="width: 100%"></span>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="dashboard-date"> Jul 12, 2:30 PM </span>
-                  </td>
-
-                  <td>
-                    <a
-                      href="exam-details.html"
-                      class="dashboard-row-action"
-                      aria-label="View Programming Basics exam"
-                    >
-                      <i class="bi bi-arrow-up-right" aria-hidden="true"></i>
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>
-                    <div class="dashboard-exam-identity">
-                      <span class="dashboard-exam-icon">
-                        <i class="bi bi-database" aria-hidden="true"></i>
-                      </span>
-
-                      <div>
-                        <strong>Database Concepts</strong>
-                        <small>Data Fundamentals</small>
-                      </div>
-                    </div>
-                  </td>
-
-                  <td>
-                    <span class="exam-status-badge status-draft"> Draft </span>
-                  </td>
-
-                  <td>18</td>
-
-                  <td>
-                    <span class="dashboard-muted-value">—</span>
-                  </td>
-
-                  <td>
-                    <span class="dashboard-muted-value"> Not scheduled </span>
-                  </td>
-
-                  <td>
-                    <a
-                      href="exam-form.html"
-                      class="dashboard-row-action"
-                      aria-label="Edit Database Concepts exam"
-                    >
-                      <i class="bi bi-pencil" aria-hidden="true"></i>
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
+              <tbody id="teacher-recent-exams-body"></tbody>
             </table>
           </div>
         </section>
