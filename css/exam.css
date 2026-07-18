@@ -2521,3 +2521,30 @@
         transition: none;
     }
 }
+
+.exam-form-field input.is-invalid,
+.exam-form-field textarea.is-invalid,
+.exam-form-field select.is-invalid,
+.exam-answer-option-row input.is-invalid {
+    border-color: rgba(251, 113, 133, 0.65);
+    box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.08);
+}
+
+.exam-answer-options.is-invalid {
+    border-color: rgba(251, 113, 133, 0.65);
+}
+
+.exam-status-options.is-invalid .exam-status-option label {
+    border-color: rgba(251, 113, 133, 0.55);
+}
+
+#exam-status-closed:checked + label {
+    background-color: rgba(251, 113, 133, 0.07);
+    border-color: rgba(251, 113, 133, 0.32);
+}
+
+#exam-status-closed:checked + label .exam-status-option-icon {
+    color: var(--danger);
+    background-color: rgba(251, 113, 133, 0.08);
+    border-color: rgba(251, 113, 133, 0.28);
+}
