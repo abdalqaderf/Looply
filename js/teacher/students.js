@@ -1,10 +1,6 @@
-import {
-    USER_ROLES
-} from "../core/config.js";
+import { USER_ROLES } from "../core/config.js";
 
-import {
-    requireRole
-} from "../core/auth.js";
+import { requireRole } from "../core/auth.js";
 
 import {
     clearElement,
@@ -12,62 +8,48 @@ import {
     getElement,
     getOptionalElement,
     setDisabled,
-    setText
+    setText,
 } from "../core/dom.js";
 
 import {
     confirmDelete,
     showError,
     showErrorToast,
-    showSuccessToast
+    showSuccessToast,
 } from "../core/alerts.js";
 
-import {
-    getFirstError,
-    validateStudentForm
-} from "../core/validation.js";
+import { getFirstError, validateStudentForm } from "../core/validation.js";
 
-import {
-    getInitials,
-    normalizeText
-} from "../core/utils.js";
+import { getInitials, normalizeText } from "../core/utils.js";
 
 import {
     createStudent,
     getActiveStudents,
     softDeleteStudent,
-    updateStudent
+    updateStudent,
 } from "../services/users-service.js";
 
 const FILTERS = Object.freeze([
     {
         value: "all",
-        label: "All"
+        label: "All",
     },
     {
         value: "male",
-        label: "Male"
+        label: "Male",
     },
     {
         value: "female",
-        label: "Female"
-    }
+        label: "Female",
+    },
 ]);
 
 let students = [];
 let editingStudentId = null;
 let filterIndex = 0;
 
-function node(
-    tag,
-    options = {},
-    children = []
-) {
-    const element =
-        createElement(
-            tag,
-            options
-        );
+function node(tag, options = {}, children = []) {
+    const element = createElement(tag, options);
 
     element.append(...children);
 
@@ -79,174 +61,91 @@ function icon(name) {
         className: `bi ${name}`,
 
         attributes: {
-            "aria-hidden": "true"
-        }
+            "aria-hidden": "true",
+        },
     });
 }
 
 function getElements() {
     return {
-        badge:
-            getElement(
-                "#total-students-badge"
-            ),
+        badge: getElement("#total-students-badge"),
 
-        search:
-            getElement(
-                "#student-search"
-            ),
+        search: getElement("#student-search"),
 
-        filterButton:
-            getElement(
-                "#student-filter-button"
-            ),
+        filterButton: getElement("#student-filter-button"),
 
-        filterLabel:
-            getElement(
-                "#student-filter-label"
-            ),
+        filterLabel: getElement("#student-filter-label"),
 
-        tableBody:
-            getElement(
-                "#students-table-body"
-            ),
+        tableBody: getElement("#students-table-body"),
 
-        summary:
-            getElement(
-                "#students-summary"
-            ),
+        summary: getElement("#students-summary"),
 
-        addButton:
-            getElement(
-                "#add-student-button"
-            ),
+        addButton: getElement("#add-student-button"),
 
-        modal:
-            getElement(
-                "#addStudentModal"
-            ),
+        modal: getElement("#addStudentModal"),
 
-        modalTitle:
-            getElement(
-                "#addStudentModalTitle"
-            ),
+        modalTitle: getElement("#addStudentModalTitle"),
 
-        form:
-            getElement(
-                "#student-form"
-            ),
+        form: getElement("#student-form"),
 
-        saveButton:
-            getElement(
-                "#save-student-button"
-            ),
+        saveButton: getElement("#save-student-button"),
 
-        passwordToggle:
-            getElement(
-                "#student-password-toggle"
-            ),
+        passwordToggle: getElement("#student-password-toggle"),
 
         fields: {
-            fullName:
-                getElement(
-                    "#student-full-name"
-                ),
+            fullName: getElement("#student-full-name"),
 
-            gender:
-                getElement(
-                    "#student-gender"
-                ),
+            gender: getElement("#student-gender"),
 
-            nationalId:
-                getElement(
-                    "#student-national-id"
-                ),
+            nationalId: getElement("#student-national-id"),
 
-            phone:
-                getElement(
-                    "#student-phone"
-                ),
+            phone: getElement("#student-phone"),
 
-            username:
-                getElement(
-                    "#student-username"
-                ),
+            username: getElement("#student-username"),
 
-            password:
-                getElement(
-                    "#student-password"
-                )
-        }
+            password: getElement("#student-password"),
+        },
     };
 }
 
 function modalInstance(element) {
-    const Modal =
-        window.bootstrap?.Modal;
+    const Modal = window.bootstrap?.Modal;
 
     if (!Modal) {
-        throw new Error(
-            "Bootstrap Modal is not available."
-        );
+        throw new Error("Bootstrap Modal is not available.");
     }
 
-    return Modal.getOrCreateInstance(
-        element
-    );
+    return Modal.getOrCreateInstance(element);
 }
 
 function titleCase(value) {
-    const text =
-        normalizeText(
-            value
-        ).toLowerCase();
+    const text = normalizeText(value).toLowerCase();
 
-    return text
-        ? text.charAt(0).toUpperCase() +
-            text.slice(1)
-        : "—";
+    return text ? text.charAt(0).toUpperCase() + text.slice(1) : "—";
 }
 
-function actionButton(
-    action,
-    student,
-    iconName
-) {
-    const isDelete =
-        action === "delete";
+function actionButton(action, student, iconName) {
+    const isDelete = action === "delete";
 
-    const label =
-        `${
-            isDelete
-                ? "Delete"
-                : "Edit"
-        } ${student.fullName}`;
+    const label = `${isDelete ? "Delete" : "Edit"} ${student.fullName}`;
 
     return node(
         "button",
         {
-            className:
-                `table-action-btn${
-                    isDelete
-                        ? " delete-action"
-                        : ""
-                }`,
+            className: `table-action-btn${isDelete ? " delete-action" : ""}`,
 
             attributes: {
                 type: "button",
                 title: label,
-                "aria-label": label
+                "aria-label": label,
             },
 
             dataset: {
                 action,
-                studentId:
-                    student.id
-            }
+                studentId: student.id,
+            },
         },
-        [
-            icon(iconName)
-        ]
+        [icon(iconName)]
     );
 }
 
@@ -254,252 +153,145 @@ function studentRow(student) {
     const identity = node(
         "div",
         {
-            className:
-                "student-identity"
+            className: "student-identity",
         },
         [
             node("span", {
-                className:
-                    "student-avatar",
+                className: "student-avatar",
 
-                text:
-                    getInitials(
-                        student.fullName
-                    ) || "ST",
+                text: getInitials(student.fullName) || "ST",
 
                 attributes: {
-                    "aria-hidden":
-                        "true"
-                }
+                    "aria-hidden": "true",
+                },
             }),
 
-            node(
-                "div",
-                {},
-                [
-                    node("strong", {
-                        text:
-                            student.fullName ||
-                            "Unnamed student"
-                    }),
+            node("div", {}, [
+                node("strong", {
+                    text: student.fullName || "Unnamed student",
+                }),
 
-                    node("small", {
-                        text:
-                            "Student account"
-                    })
-                ]
-            )
+                node("small", {
+                    text: "Student account",
+                }),
+            ]),
         ]
     );
 
     const actions = node(
         "div",
         {
-            className:
-                "student-actions"
+            className: "student-actions",
         },
         [
-            actionButton(
-                "edit",
-                student,
-                "bi-pencil"
-            ),
+            actionButton("edit", student, "bi-pencil"),
 
-            actionButton(
-                "delete",
-                student,
-                "bi-trash3"
-            )
+            actionButton("delete", student, "bi-trash3"),
         ]
     );
 
-    return node(
-        "tr",
-        {},
-        [
-            node(
-                "td",
-                {},
-                [
-                    identity
-                ]
-            ),
+    return node("tr", {}, [
+        node("td", {}, [identity]),
 
-            node("td", {
-                text:
-                    student.username ||
-                    "—"
+        node("td", {
+            text: student.username || "—",
+        }),
+
+        node("td", {
+            text: student.nationalId || "—",
+        }),
+
+        node("td", {
+            text: student.phone || "—",
+        }),
+
+        node("td", {}, [
+            node("span", {
+                className: "gender-badge",
+
+                text: titleCase(student.gender),
             }),
+        ]),
 
-            node("td", {
-                text:
-                    student.nationalId ||
-                    "—"
-            }),
-
-            node("td", {
-                text:
-                    student.phone ||
-                    "—"
-            }),
-
-            node(
-                "td",
-                {},
-                [
-                    node("span", {
-                        className:
-                            "gender-badge",
-
-                        text:
-                            titleCase(
-                                student.gender
-                            )
-                    })
-                ]
-            ),
-
-            node(
-                "td",
-                {},
-                [
-                    actions
-                ]
-            )
-        ]
-    );
+        node("td", {}, [actions]),
+    ]);
 }
 
 function emptyRow(message) {
-    return node(
-        "tr",
-        {},
-        [
-            node("td", {
-                className:
-                    "dashboard-muted-value",
+    return node("tr", {}, [
+        node("td", {
+            className: "dashboard-muted-value",
 
-                text: message,
+            text: message,
 
-                attributes: {
-                    colspan: "6"
-                }
-            })
-        ]
-    );
+            attributes: {
+                colspan: "6",
+            },
+        }),
+    ]);
 }
 
-function filteredStudents(
-    elements
-) {
-    const query =
-        normalizeText(
-            elements.search.value
-        ).toLowerCase();
+function filteredStudents(elements) {
+    const query = normalizeText(elements.search.value).toLowerCase();
 
-    const gender =
-        FILTERS[
-            filterIndex
-        ].value;
+    const gender = FILTERS[filterIndex].value;
 
-    return students.filter(
-        (student) => {
-            const matchesGender =
-                gender === "all" ||
-                normalizeText(
-                    student.gender
-                ).toLowerCase() ===
-                    gender;
+    return students.filter((student) => {
+        const matchesGender =
+            gender === "all" ||
+            normalizeText(student.gender).toLowerCase() === gender;
 
-            if (!matchesGender) {
-                return false;
-            }
-
-            if (!query) {
-                return true;
-            }
-
-            return [
-                student.fullName,
-                student.username,
-                student.nationalId,
-                student.phone
-            ]
-                .map(
-                    (value) =>
-                        normalizeText(
-                            value
-                        ).toLowerCase()
-                )
-                .join(" ")
-                .includes(query);
+        if (!matchesGender) {
+            return false;
         }
+
+        if (!query) {
+            return true;
+        }
+
+        return [
+            student.fullName,
+            student.username,
+            student.nationalId,
+            student.phone,
+        ]
+            .map((value) => normalizeText(value).toLowerCase())
+            .join(" ")
+            .includes(query);
+    });
+}
+
+function updateFilterButton(elements) {
+    const filter = FILTERS[filterIndex];
+
+    setText(elements.filterLabel, filter.label);
+
+    elements.filterButton.setAttribute(
+        "aria-label",
+        `Gender filter: ${filter.label}`
     );
 }
 
-function updateFilterButton(
-    elements
-) {
-    const filter =
-        FILTERS[
-            filterIndex
-        ];
+function renderStudents(elements) {
+    const visible = filteredStudents(elements);
 
-    setText(
-        elements.filterLabel,
-        filter.label
-    );
+    const total = students.length;
 
-    elements.filterButton
-        .setAttribute(
-            "aria-label",
-            `Gender filter: ${filter.label}`
-        );
-}
-
-function renderStudents(
-    elements
-) {
-    const visible =
-        filteredStudents(
-            elements
-        );
-
-    const total =
-        students.length;
-
-    setText(
-        elements.badge,
-        `${total} ${
-            total === 1
-                ? "student"
-                : "students"
-        }`
-    );
+    setText(elements.badge, `${total} ${total === 1 ? "student" : "students"}`);
 
     setText(
         elements.summary,
         `Showing ${visible.length} of ${total} active ${
-            total === 1
-                ? "student"
-                : "students"
+            total === 1 ? "student" : "students"
         }`
     );
 
-    clearElement(
-        elements.tableBody
-    );
+    clearElement(elements.tableBody);
 
-    if (
-        visible.length === 0
-    ) {
+    if (visible.length === 0) {
         const hasFilter =
-            normalizeText(
-                elements.search.value
-            ) !== "" ||
-            FILTERS[
-                filterIndex
-            ].value !== "all";
+            normalizeText(elements.search.value) !== "" ||
+            FILTERS[filterIndex].value !== "all";
 
         elements.tableBody.append(
             emptyRow(
@@ -512,131 +304,61 @@ function renderStudents(
         return;
     }
 
-    visible.forEach(
-        (student) => {
-            elements.tableBody
-                .append(
-                    studentRow(
-                        student
-                    )
-                );
-        }
-    );
+    visible.forEach((student) => {
+        elements.tableBody.append(studentRow(student));
+    });
 }
 
-function reloadStudents(
-    elements
-) {
-    students =
-        getActiveStudents();
+function reloadStudents(elements) {
+    students = getActiveStudents();
 
-    renderStudents(
-        elements
-    );
+    renderStudents(elements);
 }
 
 function formData(elements) {
     return Object.fromEntries(
-        Object.entries(
-            elements.fields
-        ).map(
-            ([name, field]) => [
-                name,
-                field.value
-            ]
-        )
+        Object.entries(elements.fields).map(([name, field]) => [
+            name,
+            field.value,
+        ])
     );
 }
 
-function clearErrors(
-    elements
-) {
-    Object.values(
-        elements.fields
-    ).forEach((field) => {
-        field.classList.remove(
-            "is-invalid"
-        );
+function clearErrors(elements) {
+    Object.values(elements.fields).forEach((field) => {
+        field.classList.remove("is-invalid");
 
-        field.removeAttribute(
-            "aria-invalid"
-        );
+        field.removeAttribute("aria-invalid");
     });
 }
 
-function markErrors(
-    elements,
-    errors
-) {
-    Object.keys(
-        errors
-    ).forEach((name) => {
-        elements.fields[
-            name
-        ]?.classList.add(
-            "is-invalid"
-        );
+function markErrors(elements, errors) {
+    Object.keys(errors).forEach((name) => {
+        elements.fields[name]?.classList.add("is-invalid");
 
-        elements.fields[
-            name
-        ]?.setAttribute(
-            "aria-invalid",
-            "true"
-        );
+        elements.fields[name]?.setAttribute("aria-invalid", "true");
     });
 }
 
-function setPasswordVisible(
-    elements,
-    visible
-) {
-    elements.fields.password.type =
-        visible
-            ? "text"
-            : "password";
+function setPasswordVisible(elements, visible) {
+    elements.fields.password.type = visible ? "text" : "password";
 
-    elements.passwordToggle
-        .setAttribute(
-            "aria-label",
-            visible
-                ? "Hide password"
-                : "Show password"
-        );
-
-    clearElement(
-        elements.passwordToggle
+    elements.passwordToggle.setAttribute(
+        "aria-label",
+        visible ? "Hide password" : "Show password"
     );
 
-    elements.passwordToggle
-        .append(
-            icon(
-                visible
-                    ? "bi-eye-slash"
-                    : "bi-eye"
-            )
-        );
+    clearElement(elements.passwordToggle);
+
+    elements.passwordToggle.append(icon(visible ? "bi-eye-slash" : "bi-eye"));
 }
 
-function setSaving(
-    elements,
-    saving
-) {
-    setDisabled(
-        elements.saveButton,
-        saving
-    );
+function setSaving(elements, saving) {
+    setDisabled(elements.saveButton, saving);
 
-    elements.saveButton
-        .setAttribute(
-            "aria-busy",
-            String(saving)
-        );
+    elements.saveButton.setAttribute("aria-busy", String(saving));
 
-    const label =
-        getOptionalElement(
-            "span",
-            elements.saveButton
-        );
+    const label = getOptionalElement("span", elements.saveButton);
 
     if (!label) {
         return;
@@ -647,8 +369,8 @@ function setSaving(
         saving
             ? "Saving..."
             : editingStudentId
-                ? "Update Student"
-                : "Save Student"
+            ? "Update Student"
+            : "Save Student"
     );
 }
 
@@ -659,103 +381,56 @@ function resetForm(elements) {
 
     clearErrors(elements);
 
-    setPasswordVisible(
-        elements,
-        false
-    );
+    setPasswordVisible(elements, false);
 
-    setText(
-        elements.modalTitle,
-        "Add New Student"
-    );
+    setText(elements.modalTitle, "Add New Student");
 
-    elements.fields.password
-        .required = true;
+    elements.fields.password.required = true;
 
-    elements.fields.password
-        .placeholder =
-            "Create a password";
+    elements.fields.password.placeholder = "Create a password";
 
-    setSaving(
-        elements,
-        false
-    );
+    setSaving(elements, false);
 }
 
-function openEditor(
-    elements,
-    studentId
-) {
-    const student =
-        students.find(
-            (item) =>
-                item.id ===
-                studentId
-        );
+function openEditor(elements, studentId) {
+    const student = students.find((item) => item.id === studentId);
 
     if (!student) {
-        throw new Error(
-            "Student was not found."
-        );
+        throw new Error("Student was not found.");
     }
 
-    editingStudentId =
-        student.id;
+    editingStudentId = student.id;
 
     clearErrors(elements);
 
-    for (
-        const name of [
-            "fullName",
-            "gender",
-            "nationalId",
-            "phone",
-            "username"
-        ]
-    ) {
-        elements.fields[
-            name
-        ].value =
-            student[name] ?? "";
+    for (const name of [
+        "fullName",
+        "gender",
+        "nationalId",
+        "phone",
+        "username",
+    ]) {
+        elements.fields[name].value = student[name] ?? "";
     }
 
-    elements.fields.password
-        .value = "";
+    elements.fields.password.value = "";
 
-    elements.fields.password
-        .required = false;
+    elements.fields.password.required = false;
 
-    elements.fields.password
-        .placeholder =
-            "Leave blank to keep current password";
+    elements.fields.password.placeholder =
+        "Leave blank to keep current password";
 
-    setText(
-        elements.modalTitle,
-        "Edit Student"
-    );
+    setText(elements.modalTitle, "Edit Student");
 
-    setSaving(
-        elements,
-        false
-    );
+    setSaving(elements, false);
 
-    modalInstance(
-        elements.modal
-    ).show();
+    modalInstance(elements.modal).show();
 }
 
-async function validateForm(
-    elements,
-    data
-) {
-    const currentStudent =
-        editingStudentId
-            ? students.find(
-                (student) =>
-                    student.id ===
-                    editingStudentId
-            )
-            : null;
+async function validateForm(elements, data) {
+    const currentStudent = editingStudentId
+        ? students.find((student) => student.id === editingStudentId)
+        : null;
 
     /*
      * validateStudentForm requires a
@@ -764,373 +439,192 @@ async function validateForm(
      * validation when the teacher leaves
      * the password field empty.
      */
-    const result =
-        validateStudentForm({
-            ...data,
+    const result = validateStudentForm({
+        ...data,
 
-            password:
-                editingStudentId &&
-                !data.password
-                    ? currentStudent
-                        ?.password ?? ""
-                    : data.password
-        });
+        password:
+            editingStudentId && !data.password
+                ? currentStudent?.password ?? ""
+                : data.password,
+    });
 
     if (result.isValid) {
         return true;
     }
 
-    markErrors(
-        elements,
-        result.errors
-    );
+    markErrors(elements, result.errors);
 
-    const firstErrorField =
-        Object.keys(
-            result.errors
-        )[0];
+    const firstErrorField = Object.keys(result.errors)[0];
 
-    elements.fields[
-        firstErrorField
-    ]?.focus();
+    elements.fields[firstErrorField]?.focus();
 
     await showError(
         "Invalid student information",
-        getFirstError(
-            result.errors
-        )
+        getFirstError(result.errors)
     );
 
     return false;
 }
 
-async function submitForm(
-    event,
-    elements
-) {
+async function submitForm(event, elements) {
     event.preventDefault();
 
     clearErrors(elements);
 
-    const data =
-        formData(elements);
+    const data = formData(elements);
 
-    if (
-        !await validateForm(
-            elements,
-            data
-        )
-    ) {
+    if (!(await validateForm(elements, data))) {
         return;
     }
 
-    setSaving(
-        elements,
-        true
-    );
+    setSaving(elements, true);
 
     try {
         if (editingStudentId) {
             const changes = {
-                fullName:
-                    data.fullName,
+                fullName: data.fullName,
 
-                gender:
-                    data.gender,
+                gender: data.gender,
 
-                nationalId:
-                    data.nationalId,
+                nationalId: data.nationalId,
 
-                phone:
-                    data.phone,
+                phone: data.phone,
 
-                username:
-                    data.username
+                username: data.username,
             };
 
-            if (
-                normalizeText(
-                    data.password
-                )
-            ) {
-                changes.password =
-                    data.password;
+            if (normalizeText(data.password)) {
+                changes.password = data.password;
             }
 
-            updateStudent(
-                editingStudentId,
-                changes
-            );
+            updateStudent(editingStudentId, changes);
 
-            showSuccessToast(
-                "Student updated successfully."
-            );
+            showSuccessToast("Student updated successfully.");
         } else {
             createStudent(data);
 
-            showSuccessToast(
-                "Student created successfully."
-            );
+            showSuccessToast("Student created successfully.");
         }
 
-        modalInstance(
-            elements.modal
-        ).hide();
+        modalInstance(elements.modal).hide();
 
-        reloadStudents(
-            elements
-        );
+        reloadStudents(elements);
     } catch (error) {
-        console.error(
-            "Unable to save the student.",
-            error
-        );
+        console.error("Unable to save the student.", error);
 
         await showError(
             "Unable to save student",
-            error.message ||
-                "The student could not be saved."
+            error.message || "The student could not be saved."
         );
     } finally {
-        setSaving(
-            elements,
-            false
-        );
+        setSaving(elements, false);
     }
 }
 
-async function deleteStudent(
-    elements,
-    studentId,
-    button
-) {
-    const student =
-        students.find(
-            (item) =>
-                item.id ===
-                studentId
-        );
+async function deleteStudent(elements, studentId, button) {
+    const student = students.find((item) => item.id === studentId);
 
     if (!student) {
-        showErrorToast(
-            "Student was not found."
-        );
+        showErrorToast("Student was not found.");
 
         return;
     }
 
-    const confirmed =
-        await confirmDelete(
-            student.fullName
-        );
+    const confirmed = await confirmDelete(student.fullName);
 
     if (!confirmed) {
         return;
     }
 
-    setDisabled(
-        button,
-        true
-    );
+    setDisabled(button, true);
 
     try {
-        softDeleteStudent(
-            student.id
-        );
+        softDeleteStudent(student.id);
 
-        reloadStudents(
-            elements
-        );
+        reloadStudents(elements);
 
-        showSuccessToast(
-            "Student removed successfully."
-        );
+        showSuccessToast("Student removed successfully.");
     } catch (error) {
-        console.error(
-            "Unable to remove the student.",
-            error
-        );
+        console.error("Unable to remove the student.", error);
 
         await showError(
             "Unable to remove student",
-            error.message ||
-                "The student could not be removed."
+            error.message || "The student could not be removed."
         );
     } finally {
-        setDisabled(
-            button,
-            false
-        );
+        setDisabled(button, false);
     }
 }
 
-function handleTableClick(
-    event,
-    elements
-) {
-    const button =
-        event.target.closest(
-            "[data-action][data-student-id]"
-        );
+function handleTableClick(event, elements) {
+    const button = event.target.closest("[data-action][data-student-id]");
 
-    if (
-        !button ||
-        !elements.tableBody
-            .contains(button)
-    ) {
+    if (!button || !elements.tableBody.contains(button)) {
         return;
     }
 
-    const studentId =
-        normalizeText(
-            button.dataset
-                .studentId
-        );
+    const studentId = normalizeText(button.dataset.studentId);
 
-    if (
-        button.dataset.action ===
-        "edit"
-    ) {
+    if (button.dataset.action === "edit") {
         try {
-            openEditor(
-                elements,
-                studentId
-            );
+            openEditor(elements, studentId);
         } catch (error) {
-            showErrorToast(
-                error.message ||
-                "Unable to edit the student."
-            );
+            showErrorToast(error.message || "Unable to edit the student.");
         }
 
         return;
     }
 
-    if (
-        button.dataset.action ===
-        "delete"
-    ) {
-        void deleteStudent(
-            elements,
-            studentId,
-            button
-        );
+    if (button.dataset.action === "delete") {
+        void deleteStudent(elements, studentId, button);
     }
 }
 
 function bindEvents(elements) {
-    elements.search
-        .addEventListener(
-            "input",
-            () =>
-                renderStudents(
-                    elements
-                )
+    elements.search.addEventListener("input", () => renderStudents(elements));
+
+    elements.filterButton.addEventListener("click", () => {
+        filterIndex = (filterIndex + 1) % FILTERS.length;
+
+        updateFilterButton(elements);
+
+        renderStudents(elements);
+    });
+
+    elements.tableBody.addEventListener("click", (event) =>
+        handleTableClick(event, elements)
+    );
+
+    elements.form.addEventListener("submit", (event) =>
+        submitForm(event, elements)
+    );
+
+    elements.addButton.addEventListener("click", () => resetForm(elements));
+
+    elements.passwordToggle.addEventListener("click", () => {
+        setPasswordVisible(
+            elements,
+            elements.fields.password.type === "password"
         );
+    });
 
-    elements.filterButton
-        .addEventListener(
-            "click",
-            () => {
-                filterIndex =
-                    (
-                        filterIndex +
-                        1
-                    ) %
-                    FILTERS.length;
+    Object.values(elements.fields).forEach((field) => {
+        for (const eventName of ["input", "change"]) {
+            field.addEventListener(eventName, () => {
+                field.classList.remove("is-invalid");
 
-                updateFilterButton(
-                    elements
-                );
-
-                renderStudents(
-                    elements
-                );
-            }
-        );
-
-    elements.tableBody
-        .addEventListener(
-            "click",
-            (event) =>
-                handleTableClick(
-                    event,
-                    elements
-                )
-        );
-
-    elements.form
-        .addEventListener(
-            "submit",
-            (event) =>
-                submitForm(
-                    event,
-                    elements
-                )
-        );
-
-    elements.addButton
-        .addEventListener(
-            "click",
-            () =>
-                resetForm(
-                    elements
-                )
-        );
-
-    elements.passwordToggle
-        .addEventListener(
-            "click",
-            () => {
-                setPasswordVisible(
-                    elements,
-                    elements.fields
-                        .password
-                        .type ===
-                        "password"
-                );
-            }
-        );
-
-    Object.values(
-        elements.fields
-    ).forEach((field) => {
-        for (
-            const eventName of [
-                "input",
-                "change"
-            ]
-        ) {
-            field.addEventListener(
-                eventName,
-                () => {
-                    field.classList
-                        .remove(
-                            "is-invalid"
-                        );
-
-                    field.removeAttribute(
-                        "aria-invalid"
-                    );
-                }
-            );
+                field.removeAttribute("aria-invalid");
+            });
         }
     });
 
-    elements.modal
-        .addEventListener(
-            "hidden.bs.modal",
-            () =>
-                resetForm(
-                    elements
-                )
-        );
+    elements.modal.addEventListener("hidden.bs.modal", () =>
+        resetForm(elements)
+    );
 }
 
 function initializeStudentsPage() {
-    const teacher = requireRole(
-        USER_ROLES.TEACHER
-    );
+    const teacher = requireRole(USER_ROLES.TEACHER);
 
     if (!teacher) {
         return;
@@ -1141,86 +635,44 @@ function initializeStudentsPage() {
     try {
         elements = getElements();
 
-        setText(
-            elements.badge,
-            "-- students"
-        );
+        setText(elements.badge, "-- students");
 
-        setText(
-            elements.summary,
-            "Loading students..."
-        );
+        setText(elements.summary, "Loading students...");
 
-        clearElement(
-            elements.tableBody
-        );
+        clearElement(elements.tableBody);
 
-        elements.tableBody.append(
-            emptyRow(
-                "Loading students..."
-            )
-        );
+        elements.tableBody.append(emptyRow("Loading students..."));
 
-        updateFilterButton(
-            elements
-        );
+        updateFilterButton(elements);
 
-        resetForm(
-            elements
-        );
+        resetForm(elements);
 
-        bindEvents(
-            elements
-        );
+        bindEvents(elements);
 
-        reloadStudents(
-            elements
-        );
+        reloadStudents(elements);
     } catch (error) {
-        console.error(
-            "Unable to initialize the students page.",
-            error
-        );
+        console.error("Unable to initialize the students page.", error);
 
         if (elements) {
-            setText(
-                elements.badge,
-                "-- students"
-            );
+            setText(elements.badge, "-- students");
 
-            setText(
-                elements.summary,
-                "Unable to load students."
-            );
+            setText(elements.summary, "Unable to load students.");
 
-            clearElement(
-                elements.tableBody
-            );
+            clearElement(elements.tableBody);
 
             elements.tableBody.append(
-                emptyRow(
-                    "Unable to load students. Refresh the page."
-                )
+                emptyRow("Unable to load students. Refresh the page.")
             );
         }
 
-        showErrorToast(
-            "Unable to load the students page."
-        );
+        showErrorToast("Unable to load the students page.");
     }
 }
 
-if (
-    document.readyState ===
-    "loading"
-) {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeStudentsPage,
-        {
-            once: true
-        }
-    );
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initializeStudentsPage, {
+        once: true,
+    });
 } else {
     initializeStudentsPage();
 }
