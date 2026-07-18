@@ -1,267 +1,227 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Manage student accounts in the Looply teacher dashboard."
-    />
+    <meta name="description" content="Manage student accounts in the Looply teacher dashboard." />
     <title>Looply | Students</title>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
-    <link rel="stylesheet" href="../../css/base.css" />
-    <link rel="stylesheet" href="../../css/dashboard.css" />
-  </head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="../../css/base.css?v=20260718-1" />
+    <link rel="stylesheet" href="../../css/dashboard.css?v=20260718-1" />
+</head>
 
-  <body class="auth-pending teacher-page">
+<body class="auth-pending teacher-page">
     <header id="teacher-topbar-root"></header>
     <aside id="teacher-sidebar-root"></aside>
 
     <div id="teacher-sidebar-overlay" class="teacher-sidebar-overlay"></div>
 
     <main class="teacher-main">
-      <div class="teacher-content students-page">
-        <section class="students-page-header">
-          <div class="students-header-content">
-            <span class="dashboard-page-label"> Student Management</span>
-            <h1 class="dashboard-page-title">Students</h1>
-            <p class="dashboard-page-description">
-              Manage student accounts, personal information, and platform
-              access.
-            </p>
-          </div>
+        <div class="teacher-content students-page">
+            <section class="students-page-header">
+                <div class="students-header-content">
+                    <span class="dashboard-page-label">
+                        Student Management</span>
+                    <h1 class="dashboard-page-title">Students</h1>
+                    <p class="dashboard-page-description">
+                        Manage student accounts, personal information, and
+                        platform access.
+                    </p>
+                </div>
 
-          <button
-            type="button"
-            class="primary-btn add-student-btn"
-            id="add-student-button"
-          >
-            <i class="bi bi-person-plus" aria-hidden="true"></i>
+                <button type="button" class="primary-btn add-student-btn" id="add-student-button">
+                    <i class="bi bi-person-plus" aria-hidden="true"></i>
 
-            <span>Add Student</span>
-          </button>
-        </section>
+                    <span>Add Student</span>
+                </button>
+            </section>
 
-        <!-- Students Panel -->
-        <section class="students-panel">
-          <!-- Panel Header -->
-          <div class="students-panel-header">
-            <div class="students-panel-heading">
-              <div class="students-title-row">
-                <h2>All Students</h2>
+            <!-- Students Panel -->
+            <section class="students-panel">
+                <!-- Panel Header -->
+                <div class="students-panel-header">
+                    <div class="students-panel-heading">
+                        <div class="students-title-row">
+                            <h2>All Students</h2>
 
-                <span class="students-count" id="total-students-badge">
-                  -- students
-                </span>
-              </div>
+                            <span class="students-count" id="total-students-badge">
+                                -- students
+                            </span>
+                        </div>
 
-              <p>View and manage all registered student accounts.</p>
-            </div>
+                        <p>
+                            View and manage all registered student accounts.
+                        </p>
+                    </div>
 
-            <div class="students-toolbar">
-              <div class="student-search">
-                <i class="bi bi-search" aria-hidden="true"></i>
+                    <div class="students-toolbar">
+                        <div class="student-search">
+                            <i class="bi bi-search" aria-hidden="true"></i>
 
-                <input
-                  type="search"
-                  id="student-search"
-                  placeholder="Search students..."
-                  aria-label="Search students"
-                />
-              </div>
+                            <input type="search" id="student-search" placeholder="Search students..."
+                                aria-label="Search students" />
+                        </div>
 
-              <button
-                type="button"
-                class="students-filter-btn"
-                id="student-filter-button"
-                aria-label="Gender filter: All"
-              >
-                <i class="bi bi-funnel" aria-hidden="true"></i>
-                <span id="student-filter-label">All</span>
-              </button>
-            </div>
-          </div>
-          <div class="students-table-wrapper">
-            <table class="students-table">
-              <thead>
-                <tr>
-                  <th scope="col">Student</th>
-                  <th scope="col">Username</th>
-                  <th scope="col">National ID</th>
-                  <th scope="col">Phone Number</th>
-                  <th scope="col">Gender</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="students-table-body">
-                <!-- Dynamic student roster rows will be injected here -->
-              </tbody>
-            </table>
-          </div>
+                        <button type="button" class="students-filter-btn" id="student-filter-button"
+                            aria-label="Gender filter: All">
+                            <i class="bi bi-funnel" aria-hidden="true"></i>
+                            <span id="student-filter-label">All</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="students-table-wrapper">
+                    <table class="students-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Student</th>
+                                <th scope="col">Username</th>
+                                <th scope="col">National ID</th>
+                                <th scope="col">Phone Number</th>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <!-- Dynamic student roster rows will be injected here -->
+                        </tbody>
+                    </table>
+                </div>
 
-          <!-- No Pagination -->
-          <div class="students-panel-footer">
-            <p id="students-summary">Loading students...</p>
-          </div>
-        </section>
-      </div>
+                <!-- No Pagination -->
+                <div class="students-panel-footer">
+                    <p id="students-summary">Loading students...</p>
+                </div>
+            </section>
+        </div>
     </main>
 
-    <div
-      class="student-modal"
-      id="addStudentModal"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="addStudentModalTitle"
-      aria-hidden="true"
-      hidden
-    >
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <!-- Modal Header -->
-          <div class="modal-header student-modal-header">
-            <div>
-              <span class="modal-label"> Student Account </span>
+    <div class="student-modal" id="addStudentModal" role="dialog" aria-modal="true"
+        aria-labelledby="addStudentModalTitle" aria-hidden="true" hidden>
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header student-modal-header">
+                    <div>
+                        <span class="modal-label"> Student Account </span>
 
-              <h2 class="modal-title" id="addStudentModalTitle">
-                Add New Student
-              </h2>
+                        <h2 class="modal-title" id="addStudentModalTitle">
+                            Add New Student
+                        </h2>
 
-              <p>
-                Enter the student's personal information and temporary login
-                details.
-              </p>
-            </div>
+                        <p>
+                            Enter the student's personal information and
+                            temporary login details.
+                        </p>
+                    </div>
 
-            <button
-              type="button"
-              class="student-modal-close"
-              data-modal-close
-              aria-label="Close modal"
-            >
-              <i class="bi bi-x-lg" aria-hidden="true"></i>
-            </button>
-          </div>
-
-          <div class="modal-body student-modal-body">
-            <form class="student-form" id="student-form">
-              <div class="student-form-grid">
-                <!-- Full Name -->
-                <div class="student-form-group">
-                  <label for="student-full-name"> Full Name </label>
-
-                  <input
-                    type="text"
-                    id="student-full-name"
-                    name="fullName"
-                    placeholder="Enter full name"
-                  />
-                </div>
-                <div class="student-form-group">
-                  <label for="student-gender"> Gender </label>
-
-                  <select id="student-gender" name="gender">
-                    <option value="" selected disabled>Select gender</option>
-
-                    <option value="male">Male</option>
-
-                    <option value="female">Female</option>
-                  </select>
-                </div>
-
-                <div class="student-form-group">
-                  <label for="student-national-id"> National ID </label>
-
-                  <input
-                    type="text"
-                    id="student-national-id"
-                    name="nationalId"
-                    placeholder="Enter national ID"
-                  />
-                </div>
-
-                <div class="student-form-group">
-                  <label for="student-phone"> Phone Number </label>
-
-                  <input
-                    type="tel"
-                    id="student-phone"
-                    name="phone"
-                    placeholder="07X XXX XXXX"
-                  />
-                </div>
-
-                <div class="student-form-group">
-                  <label for="student-username"> Username </label>
-
-                  <input
-                    type="text"
-                    id="student-username"
-                    name="username"
-                    placeholder="Create a username"
-                  />
-                </div>
-
-                <div class="student-form-group">
-                  <label for="student-password"> Temporary Password </label>
-
-                  <div class="student-password-field">
-                    <input
-                      type="password"
-                      id="student-password"
-                      name="password"
-                      placeholder="Create a password"
-                    />
-
-                    <button
-                      type="button"
-                      id="student-password-toggle"
-                      aria-label="Show password"
-                    >
-                      <i class="bi bi-eye" aria-hidden="true"></i>
+                    <button type="button" class="student-modal-close" data-modal-close aria-label="Close modal">
+                        <i class="bi bi-x-lg" aria-hidden="true"></i>
                     </button>
-                  </div>
                 </div>
-              </div>
 
-              <div class="student-form-note">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
+                <div class="modal-body student-modal-body">
+                    <form class="student-form" id="student-form">
+                        <div class="student-form-grid">
+                            <!-- Full Name -->
+                            <div class="student-form-group">
+                                <label for="student-full-name">
+                                    Full Name
+                                </label>
 
-                <p>
-                  The student will use the username and temporary password to
-                  access Looply.
-                </p>
-              </div>
-            </form>
-          </div>
+                                <input type="text" id="student-full-name" name="fullName" placeholder="Enter full name"
+                                    minlength="3" required />
+                            </div>
+                            <div class="student-form-group">
+                                <label for="student-gender"> Gender </label>
 
-          <div class="modal-footer student-modal-footer">
-            <button type="button" class="secondary-btn" data-modal-close>
-              Cancel
-            </button>
+                                <select id="student-gender" name="gender" required>
+                                    <option value="" selected disabled>
+                                        Select gender
+                                    </option>
 
-            <button
-              type="submit"
-              form="student-form"
-              class="primary-btn save-student-btn"
-              id="save-student-button"
-            >
-              <i class="bi bi-person-check" aria-hidden="true"></i>
+                                    <option value="male">Male</option>
 
-              <span>Save Student</span>
-            </button>
-          </div>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="student-form-group">
+                                <label for="student-national-id">
+                                    National ID
+                                </label>
+
+                                <input type="text" id="student-national-id" name="nationalId"
+                                    placeholder="Enter national ID" inputmode="numeric" pattern="[0-9]{10}"
+                                    maxlength="10" required />
+                            </div>
+
+                            <div class="student-form-group">
+                                <label for="student-phone">
+                                    Phone Number
+                                </label>
+
+                                <input type="tel" id="student-phone" name="phone" placeholder="07X XXX XXXX"
+                                    inputmode="tel" pattern="07[0-9]{8}" maxlength="10" required />
+                            </div>
+
+                            <div class="student-form-group">
+                                <label for="student-username">
+                                    Username
+                                </label>
+
+                                <input type="text" id="student-username" name="username" placeholder="Create a username"
+                                    minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" required />
+                            </div>
+
+                            <div class="student-form-group">
+                                <label for="student-password">
+                                    Temporary Password
+                                </label>
+
+                                <div class="student-password-field">
+                                    <input type="password" id="student-password" name="password"
+                                        placeholder="Create a password" minlength="6" required />
+
+                                    <button type="button" id="student-password-toggle" aria-label="Show password">
+                                        <i class="bi bi-eye" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="student-form-note">
+                            <i class="bi bi-info-circle" aria-hidden="true"></i>
+
+                            <p>
+                                The student will use the username and
+                                temporary password to access Looply.
+                            </p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="modal-footer student-modal-footer">
+                    <button type="button" class="secondary-btn" data-modal-close>
+                        Cancel
+                    </button>
+
+                    <button type="submit" form="student-form" class="primary-btn save-student-btn"
+                        id="save-student-button">
+                        <i class="bi bi-person-check" aria-hidden="true"></i>
+
+                        <span>Save Student</span>
+                    </button>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module" src="../../js/core/app.js"></script>
     <script type="module" src="../../js/components/teacher-topbar.js"></script>
     <script type="module" src="../../js/components/teacher-sidebar.js"></script>
-    <script type="module" src="../../js/teacher/students.js"></script>
-  </body>
+    <script type="module" src="../../js/teacher/students.js?v=20260718-1"></script>
+</body>
+
 </html>

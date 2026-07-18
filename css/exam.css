@@ -7,8 +7,7 @@
    inside dashboard-student.css.
 */
 .student-main {
-    padding:
-        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .exam-result-page {
@@ -21,7 +20,6 @@
 
     margin-inline: auto;
 }
-
 
 /* ==================================================
    Back Link
@@ -55,7 +53,6 @@
 
     transform: translateX(-3px);
 }
-
 
 /* ==================================================
    Page Header
@@ -170,7 +167,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Result Summary
    ================================================== */
@@ -194,8 +190,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 14px 30px rgba(0, 0, 0, 0.19);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.19);
 }
 
 .exam-result-score-label {
@@ -213,13 +208,12 @@
     margin-top: 0.45rem;
 }
 
-
 .exam-result-score-percentage {
-  display: inline-flex;
-  margin-top: 0.35rem;
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--primary);
+    display: inline-flex;
+    margin-top: 0.35rem;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--primary);
 }
 
 .exam-result-score-value strong {
@@ -267,8 +261,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.16);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.16);
 
     transition:
         background-color var(--transition-normal),
@@ -346,7 +339,6 @@
     line-height: 1.4;
 }
 
-
 /* ==================================================
    Review Panel
    ================================================== */
@@ -360,8 +352,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 16px 36px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
 }
 
 .exam-result-panel-header {
@@ -460,7 +451,6 @@
     border-color: rgba(251, 113, 133, 0.24) !important;
 }
 
-
 /* ==================================================
    Question Review
    ================================================== */
@@ -475,8 +465,7 @@
 
     border-bottom: 1px solid var(--border);
 
-    transition:
-        background-color var(--transition-normal);
+    transition: background-color var(--transition-normal);
 }
 
 .exam-result-question:hover {
@@ -570,7 +559,6 @@
     font-weight: 600;
     line-height: 1.75;
 }
-
 
 /* ==================================================
    Question Options
@@ -666,7 +654,6 @@
     border-color: rgba(251, 113, 133, 0.26);
 }
 
-
 /* ==================================================
    Written Answers
    ================================================== */
@@ -724,7 +711,6 @@
     color: var(--success);
 }
 
-
 /* ==================================================
    Feedback
    ================================================== */
@@ -769,7 +755,6 @@
     color: var(--danger);
 }
 
-
 /* ==================================================
    Review Note
    ================================================== */
@@ -797,7 +782,6 @@
     font-size: 0.54rem;
     line-height: 1.55;
 }
-
 
 /* ==================================================
    Page Actions
@@ -845,7 +829,6 @@
     min-width: 170px;
 }
 
-
 /* ==================================================
    Responsive
    ================================================== */
@@ -862,8 +845,7 @@
 
 @media (max-width: 768px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .exam-result-header {
@@ -916,8 +898,7 @@
 
 @media (max-width: 576px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
+        padding: calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .exam-result-view-exams-btn {
@@ -961,8 +942,7 @@
    the undefined --page-gutter variable.
 */
 .student-main {
-    padding:
-        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .student-exams-page {
@@ -975,7 +955,6 @@
 
     margin-inline: auto;
 }
-
 
 /* ==================================================
    Page Header
@@ -1065,7 +1044,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Exams Panel
    ================================================== */
@@ -1079,8 +1057,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 16px 36px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
 }
 
 .student-exams-panel-header {
@@ -1144,7 +1121,6 @@
     line-height: 1.55;
 }
 
-
 /* ==================================================
    Exams List
    ================================================== */
@@ -1161,8 +1137,7 @@
 
     border-bottom: 1px solid var(--border);
 
-    transition:
-        background-color var(--transition-normal);
+    transition: background-color var(--transition-normal);
 }
 
 .student-exam-card:last-child {
@@ -1253,7 +1228,6 @@
     line-height: 1.7;
 }
 
-
 /* ==================================================
    Exam Details
    ================================================== */
@@ -1328,7 +1302,6 @@
 
     font-size: 0.47rem;
 }
-
 
 /* ==================================================
    Exam Actions
@@ -1406,7 +1379,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Page Note
    ================================================== */
@@ -1424,8 +1396,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
 }
 
 .student-exams-page-note>span {
@@ -1462,7 +1433,6 @@
     font-size: 0.54rem;
     line-height: 1.6;
 }
-
 
 /* ==================================================
    Responsive
@@ -1502,8 +1472,7 @@
 
 @media (max-width: 768px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .student-exams-header {
@@ -1536,8 +1505,7 @@
 
 @media (max-width: 576px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
+        padding: calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .student-exams-history-btn {
@@ -1577,8 +1545,7 @@ html {
 }
 
 .student-main {
-    padding:
-        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .take-exam-page {
@@ -1591,7 +1558,6 @@ html {
 
     margin-inline: auto;
 }
-
 
 /* ==================================================
    Exam Header
@@ -1643,7 +1609,6 @@ html {
     line-height: 1.75;
 }
 
-
 /* ==================================================
    Timer
    ================================================== */
@@ -1663,8 +1628,7 @@ html {
     border: 1px solid rgba(241, 117, 34, 0.3);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
 .take-exam-timer-icon {
@@ -1705,7 +1669,6 @@ html {
     line-height: 1;
 }
 
-
 /* ==================================================
    Progress Panel
    ================================================== */
@@ -1724,8 +1687,7 @@ html {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
 }
 
 .take-exam-progress-copy span,
@@ -1769,7 +1731,6 @@ html {
     color: var(--primary);
 }
 
-
 /* ==================================================
    Main Layout
    ================================================== */
@@ -1798,7 +1759,6 @@ html {
     gap: 1rem;
 }
 
-
 /* ==================================================
    Question Card
    ================================================== */
@@ -1811,11 +1771,9 @@ html {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 14px 30px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
 
-    scroll-margin-top:
-        calc(var(--student-topbar-height) + 1.5rem);
+    scroll-margin-top: calc(var(--student-topbar-height) + 1.5rem);
 
     transition:
         border-color var(--transition-normal),
@@ -1912,7 +1870,6 @@ html {
     font-weight: 600;
     line-height: 1.8;
 }
-
 
 /* ==================================================
    Answer Options
@@ -2050,7 +2007,6 @@ html {
     outline-offset: 2px;
 }
 
-
 /* ==================================================
    Code Block
    ================================================== */
@@ -2079,7 +2035,6 @@ html {
 .take-exam-code code {
     font-family: inherit;
 }
-
 
 /* ==================================================
    Written Answers
@@ -2145,10 +2100,8 @@ html {
 
     border-color: var(--primary);
 
-    box-shadow:
-        0 0 0 3px rgba(241, 117, 34, 0.09);
+    box-shadow: 0 0 0 3px rgba(241, 117, 34, 0.09);
 }
-
 
 /* ==================================================
    Question Navigation
@@ -2163,8 +2116,7 @@ html {
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 28px rgba(0, 0, 0, 0.17);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.17);
 }
 
 .take-exam-sidebar-header {
@@ -2263,7 +2215,6 @@ html {
     line-height: 1.55;
 }
 
-
 /* ==================================================
    Submit Panel
    ================================================== */
@@ -2345,7 +2296,6 @@ html {
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Bottom Actions
    ================================================== */
@@ -2399,7 +2349,6 @@ html {
     min-width: 145px;
 }
 
-
 /* ==================================================
    Responsive
    ================================================== */
@@ -2424,8 +2373,7 @@ html {
 
 @media (max-width: 768px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .take-exam-header {
@@ -2479,8 +2427,7 @@ html {
 
 @media (max-width: 576px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
+        padding: calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .take-exam-timer {

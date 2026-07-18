@@ -1,30 +1,25 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta
-      name="description"
-      content="Manage programming exams in the Looply teacher dashboard."
-    />
+    <meta name="description" content="Manage programming exams in the Looply teacher dashboard." />
 
     <title>Looply | Exams</title>
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
     <link rel="stylesheet" href="../../css/base.css" />
 
     <link rel="stylesheet" href="../../css/dashboard.css" />
 
     <link rel="stylesheet" href="../../css/exam.css" />
-  </head>
+</head>
 
-  <body class="auth-pending teacher-page">
+<body class="auth-pending teacher-page">
     <!-- Shared teacher topbar -->
     <header id="teacher-topbar-root"></header>
 
@@ -35,113 +30,94 @@
     <div id="teacher-sidebar-overlay" class="teacher-sidebar-overlay"></div>
 
     <main class="teacher-main">
-      <div class="teacher-content exams-page">
-        <!-- Page header -->
-        <section class="exams-page-header">
-          <div class="exams-header-content">
-            <span class="dashboard-page-label"> Exam Management </span>
+        <div class="teacher-content exams-page">
+            <!-- Page header -->
+            <section class="exams-page-header">
+                <div class="exams-header-content">
+                    <span class="dashboard-page-label">
+                        Exam Management
+                    </span>
 
-            <h1 class="dashboard-page-title">Exams</h1>
+                    <h1 class="dashboard-page-title">Exams</h1>
 
-            <p class="dashboard-page-description">
-              Create, edit, activate, deactivate, and manage programming exams.
-            </p>
-          </div>
+                    <p class="dashboard-page-description">
+                        Create, edit, activate, deactivate, and manage
+                        programming exams.
+                    </p>
+                </div>
 
-          <a href="exam-form.html" class="primary-btn create-exam-btn">
-            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+                <a href="exam-form.html" class="primary-btn create-exam-btn">
+                    <i class="bi bi-plus-lg" aria-hidden="true"></i>
 
-            <span>Create Exam</span>
-          </a>
-        </section>
+                    <span>Create Exam</span>
+                </a>
+            </section>
 
-        <!-- Exams panel -->
-        <section class="exams-panel">
-          <!-- Panel header -->
-          <div class="exams-panel-header">
-            <div class="exams-panel-heading">
-              <div class="exams-title-row">
-                <h2>All Exams</h2>
+            <!-- Exams panel -->
+            <section class="exams-panel">
+                <!-- Panel header -->
+                <div class="exams-panel-header">
+                    <div class="exams-panel-heading">
+                        <div class="exams-title-row">
+                            <h2>All Exams</h2>
 
-                <span class="exams-count"> -- exams </span>
-              </div>
+                            <span class="exams-count"> -- exams </span>
+                        </div>
 
-              <p>Search, review, and manage all created exams.</p>
-            </div>
+                        <p>Search, review, and manage all created exams.</p>
+                    </div>
 
-            <!-- Search and filters -->
-            <div class="exams-toolbar">
-              <div class="exams-search">
-                <i class="bi bi-search" aria-hidden="true"></i>
+                    <!-- Search and filters -->
+                    <div class="exams-toolbar">
+                        <div class="exams-search">
+                            <i class="bi bi-search" aria-hidden="true"></i>
 
-                <input
-                  type="search"
-                  id="teacher-exam-search"
-                  placeholder="Search exams..."
-                  aria-label="Search exams"
-                  autocomplete="off"
-                />
-              </div>
+                            <input type="search" id="teacher-exam-search" placeholder="Search exams..."
+                                aria-label="Search exams" autocomplete="off" />
+                        </div>
 
-              <div class="exams-filter" aria-label="Filter exams by status">
-                <button
-                  type="button"
-                  class="exams-filter-btn active"
-                  data-exam-filter="all"
-                  aria-pressed="true"
-                >
-                  All
-                </button>
+                        <div class="exams-filter" aria-label="Filter exams by status">
+                            <button type="button" class="exams-filter-btn active" data-exam-filter="all"
+                                aria-pressed="true">
+                                All
+                            </button>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="active"
-                  aria-pressed="false"
-                >
-                  Active
-                </button>
+                            <button type="button" class="exams-filter-btn" data-exam-filter="active"
+                                aria-pressed="false">
+                                Active
+                            </button>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="end"
-                  aria-pressed="false"
-                >
-                  End
-                </button>
+                            <button type="button" class="exams-filter-btn" data-exam-filter="end" aria-pressed="false">
+                                End
+                            </button>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="inactive"
-                  aria-pressed="false"
-                >
-                  Inactive
-                </button>
-              </div>
-            </div>
-          </div>
+                            <button type="button" class="exams-filter-btn" data-exam-filter="inactive"
+                                aria-pressed="false">
+                                Inactive
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
-          <!-- Exams table -->
-          <div class="exams-table-wrapper">
-            <table class="exams-table">
-              <thead>
-                <tr>
-                  <th scope="col">Exam</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">End Date</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Questions</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
+                <!-- Exams table -->
+                <div class="exams-table-wrapper">
+                    <table class="exams-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Exam</th>
+                                <th scope="col">Start Date</th>
+                                <th scope="col">End Date</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Questions</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
 
-              <tbody id="teacher-exams-body"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
+                        <tbody id="teacher-exams-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -149,5 +125,6 @@
     <script type="module" src="../../js/components/teacher-topbar.js"></script>
     <script type="module" src="../../js/components/teacher-sidebar.js"></script>
     <script type="module" src="../../js/teacher/exams.js"></script>
-  </body>
+</body>
+
 </html>
