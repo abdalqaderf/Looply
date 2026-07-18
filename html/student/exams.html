@@ -58,8 +58,9 @@
             <div class="student-exams-heading-row">
               <h2>Exams You Can Take</h2>
 
-              <div class="student-exams-list" id="student-exams-list">
-              </div>
+              <span class="student-exams-count" id="student-exams-count">
+                -- exams
+              </span>
             </div>
 
             <p>
@@ -68,189 +69,10 @@
           </div>
         </div>
 
-        <div class="student-exams-list">
-          <!-- Exam 1 -->
-          <article class="student-exam-card">
-            <div class="student-exam-card-main">
-              <div class="student-exam-card-heading">
-                <span class="student-exam-card-icon">
-                  <i class="bi bi-braces" aria-hidden="true"></i>
-                </span>
-
-                <div class="student-exam-card-title">
-                  <div class="student-exam-title-row">
-                    <h3>JavaScript Fundamentals</h3>
-
-                    <span class="student-exam-available"> Available </span>
-                  </div>
-
-                  <p>
-                    Test your understanding of variables, conditions,
-                    functions, arrays, and JavaScript fundamentals.
-                  </p>
-                </div>
-              </div>
-
-              <div class="student-exam-details" aria-label="JavaScript Fundamentals exam information">
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-list-ol" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Questions</small>
-
-                    <strong>15 questions</strong>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-clock" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Duration</small>
-
-                    <strong>60 minutes</strong>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-calendar-event" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Available Until</small>
-
-                    <strong>July 18, 2026</strong>
-
-                    <span>4:00 PM</span>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-award" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Total Score</small>
-
-                    <strong>75 points</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="student-exam-card-actions">
-              <div class="student-exam-card-note">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-
-                <p>The timer begins when you start the exam.</p>
-              </div>
-
-              <a href="take-exam.html" class="student-exam-start-btn">
-                <span>Start Exam</span>
-
-                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-              </a>
-            </div>
-          </article>
-
-          <!-- Exam 2 -->
-          <article class="student-exam-card">
-            <div class="student-exam-card-main">
-              <div class="student-exam-card-heading">
-                <span class="student-exam-card-icon">
-                  <i class="bi bi-filetype-html" aria-hidden="true"></i>
-                </span>
-
-                <div class="student-exam-card-title">
-                  <div class="student-exam-title-row">
-                    <h3>HTML &amp; CSS Essentials</h3>
-
-                    <span class="student-exam-available"> Available </span>
-                  </div>
-
-                  <p>
-                    Review semantic HTML, forms, selectors, box model,
-                    Flexbox, and responsive design fundamentals.
-                  </p>
-                </div>
-              </div>
-
-              <div class="student-exam-details" aria-label="HTML and CSS Essentials exam information">
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-list-ol" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Questions</small>
-
-                    <strong>20 questions</strong>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-clock" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Duration</small>
-
-                    <strong>75 minutes</strong>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-calendar-event" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Available Until</small>
-
-                    <strong>July 22, 2026</strong>
-
-                    <span>12:00 PM</span>
-                  </div>
-                </div>
-
-                <div class="student-exam-detail">
-                  <span class="student-exam-detail-icon">
-                    <i class="bi bi-award" aria-hidden="true"></i>
-                  </span>
-
-                  <div>
-                    <small>Total Score</small>
-
-                    <strong>100 points</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="student-exam-card-actions">
-              <div class="student-exam-card-note">
-                <i class="bi bi-info-circle" aria-hidden="true"></i>
-
-                <p>The exam can only be submitted once.</p>
-              </div>
-
-              <a href="take-exam.html" class="student-exam-start-btn">
-                <span>Start Exam</span>
-
-                <i class="bi bi-arrow-right" aria-hidden="true"></i>
-              </a>
-            </div>
-          </article>
+        <div class="student-exams-list" id="student-exams-list">
+          <!-- Available exams are rendered by student/exams.js -->
         </div>
       </section>
-
       <!-- Page note -->
       <section class="student-exams-page-note">
         <span>

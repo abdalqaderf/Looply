@@ -3,10 +3,10 @@ const ALERT_CLASSES = Object.freeze({
     title: "looply-alert__title",
     htmlContainer: "looply-alert__text",
     actions: "looply-alert__actions",
-    confirmButton:
-        "looply-alert__button looply-alert__button--confirm",
+
     cancelButton:
         "looply-alert__button looply-alert__button--cancel",
+
     icon: "looply-alert__icon"
 });
 
@@ -39,8 +39,13 @@ function fireAlert(options = {}) {
 
     const {
         customClass = {},
+        buttonVariant = "info",
         ...alertOptions
     } = options;
+
+    const confirmButtonClass =
+        BUTTON_CLASSES[buttonVariant] ??
+        BUTTON_CLASSES.info;
 
     return Swal.fire({
         background: "var(--box)",
@@ -48,9 +53,15 @@ function fireAlert(options = {}) {
         buttonsStyling: false,
         heightAuto: false,
         scrollbarPadding: false,
+
         ...alertOptions,
+
         customClass: {
             ...ALERT_CLASSES,
+
+            confirmButton:
+                confirmButtonClass,
+
             ...customClass
         }
     });
@@ -140,7 +151,8 @@ export function showSuccess(
         iconColor: ICON_COLORS.success,
         title,
         text,
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+        buttonVariant: "success"
     });
 }
 
@@ -153,7 +165,8 @@ export function showError(
         iconColor: ICON_COLORS.error,
         title,
         text,
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+        buttonVariant: "error"
     });
 }
 
@@ -166,7 +179,9 @@ export function showWarning(
         iconColor: ICON_COLORS.warning,
         title,
         text,
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+        buttonVariant: "warning"
+
     });
 }
 
@@ -179,7 +194,9 @@ export function showInfo(
         iconColor: ICON_COLORS.info,
         title,
         text,
-        confirmButtonText: "OK"
+        confirmButtonText: "OK",
+        buttonVariant: "info"
+
     });
 }
 
@@ -191,6 +208,7 @@ export async function confirmAction(
 
     const result = await fireAlert({
         icon,
+
         iconColor:
             options.iconColor ??
             ICON_COLORS[icon],
@@ -212,6 +230,10 @@ export async function confirmAction(
             options.cancelText ??
             "Cancel",
 
+        buttonVariant:
+            options.buttonVariant ??
+            icon,
+
         reverseButtons: true,
         focusCancel: true,
         allowOutsideClick: false,
@@ -226,34 +248,46 @@ export function confirmDelete(
 ) {
     return confirmAction({
         title: "Delete item?",
+
         text:
             `Are you sure you want to remove ${itemName}? ` +
             "The information will remain stored.",
+
         confirmText: "Delete",
         cancelText: "Cancel",
-        icon: "warning"
+
+        icon: "error",
+        buttonVariant: "error"
     });
 }
 
 export function confirmLogout() {
     return confirmAction({
         title: "Log out?",
+
         text:
             "Your current session will be closed.",
+
         confirmText: "Log out",
         cancelText: "Stay",
-        icon: "question"
+
+        icon: "warning",
+        buttonVariant: "warning"
     });
 }
 
 export function confirmExamSubmission() {
     return confirmAction({
         title: "Submit exam?",
+
         text:
             "You cannot change your answers after submission.",
+
         confirmText: "Submit exam",
         cancelText: "Review answers",
-        icon: "question"
+
+        icon: "question",
+        buttonVariant: "question"
     });
 }
 
@@ -282,3 +316,19 @@ export function closeAlert() {
     Swal.hideLoading();
     Swal.close();
 }
+const BUTTON_CLASSES = Object.freeze({
+    success:
+        "looply-alert__button looply-alert__button--success",
+
+    error:
+        "looply-alert__button looply-alert__button--error",
+
+    warning:
+        "looply-alert__button looply-alert__button--warning",
+
+    info:
+        "looply-alert__button looply-alert__button--info",
+
+    question:
+        "looply-alert__button looply-alert__button--question"
+});

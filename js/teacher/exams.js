@@ -106,28 +106,26 @@ function dateParts(value) {
 function effectiveStatus(exam) {
     if (
         exam.status ===
-        EXAM_STATUS.DRAFT
+        EXAM_STATUS.INACTIVE
     ) {
-        return EXAM_STATUS.DRAFT;
+        return EXAM_STATUS.INACTIVE;
     }
 
     if (
         exam.status ===
-        EXAM_STATUS.CLOSED
+        EXAM_STATUS.END
     ) {
-        return EXAM_STATUS.CLOSED;
+        return EXAM_STATUS.END;
     }
 
     const endTime =
-        new Date(
-            exam.endAt
-        ).getTime();
+        new Date(exam.endAt).getTime();
 
     return (
         Number.isFinite(endTime) &&
         endTime < Date.now()
     )
-        ? EXAM_STATUS.CLOSED
+        ? EXAM_STATUS.END
         : EXAM_STATUS.ACTIVE;
 }
 
@@ -190,9 +188,8 @@ function actionLink(
                     `${label} exam`,
 
                 "aria-label":
-                    `${label} ${
-                        exam.title ||
-                        "exam"
+                    `${label} ${exam.title ||
+                    "exam"
                     }`
             }
         },
@@ -201,58 +198,46 @@ function actionLink(
     );
 }
 
-function statusButton(
-    exam,
-    status
-) {
-    const shouldActivate =
-        status !==
-        EXAM_STATUS.ACTIVE;
+function statusButton(exam, status) {
+    const nextStatus =
+        status === EXAM_STATUS.ACTIVE
+            ? EXAM_STATUS.INACTIVE
+            : status === EXAM_STATUS.END
+                ? EXAM_STATUS.INACTIVE
+                : EXAM_STATUS.ACTIVE;
 
     const label =
-        shouldActivate
+        nextStatus === EXAM_STATUS.ACTIVE
             ? "Activate"
-            : "Deactivate";
+            : status === EXAM_STATUS.END
+                ? "Set Inactive"
+                : "Deactivate";
 
     return make(
         "button",
         {
             className:
-                `exam-toggle-btn ${
-                    shouldActivate
-                        ? "exam-activate-btn"
-                        : "exam-deactivate-btn"
+                `exam-toggle-btn ${nextStatus === EXAM_STATUS.ACTIVE
+                    ? "exam-activate-btn"
+                    : "exam-deactivate-btn"
                 }`,
 
             attributes: {
                 type: "button",
-
-                title:
-                    `${label} exam`,
-
+                title: `${label} exam`,
                 "aria-label":
-                    `${label} ${
-                        exam.title ||
-                        "exam"
-                    }`
+                    `${label} ${exam.title || "exam"}`
             },
 
             dataset: {
-                examAction:
-                    "toggle",
-
-                examId:
-                    exam.id,
-
-                nextStatus:
-                    shouldActivate
-                        ? EXAM_STATUS.ACTIVE
-                        : EXAM_STATUS.DRAFT
+                examAction: "toggle",
+                examId: exam.id,
+                nextStatus
             }
         },
 
         icon(
-            shouldActivate
+            nextStatus === EXAM_STATUS.ACTIVE
                 ? "bi-play-circle"
                 : "bi-pause-circle"
         ),
@@ -277,9 +262,8 @@ function deleteButton(exam) {
                     "Delete exam",
 
                 "aria-label":
-                    `Delete ${
-                        exam.title ||
-                        "exam"
+                    `Delete ${exam.title ||
+                    "exam"
                     }`
             },
 
@@ -435,10 +419,9 @@ function setCount(
 ) {
     setText(
         element,
-        `${count} ${
-            count === 1
-                ? "exam"
-                : "exams"
+        `${count} ${count === 1
+            ? "exam"
+            : "exams"
         }`
     );
 }
@@ -460,9 +443,9 @@ function visibleExams(
 
             const matchesFilter =
                 activeFilter ===
-                    "all" ||
+                "all" ||
                 status ===
-                    activeFilter;
+                activeFilter;
 
             if (!matchesFilter) {
                 return false;
@@ -510,7 +493,7 @@ function render(elements) {
     ) {
         const filtering =
             activeFilter !==
-                "all" ||
+            "all" ||
             normalizeText(
                 elements.search.value
             );
@@ -653,8 +636,7 @@ async function toggleStatus(
             nextStatus ===
                 EXAM_STATUS.ACTIVE
                 ? "Exam activated successfully."
-                : "Exam moved to draft."
-        );
+                : "Exam set to inactive.");
     } catch (error) {
         console.error(
             "Unable to change exam status.",
@@ -664,7 +646,7 @@ async function toggleStatus(
         await showError(
             "Unable to update exam",
             error.message ||
-                "The exam status could not be changed."
+            "The exam status could not be changed."
         );
     } finally {
         setDisabled(
@@ -732,7 +714,7 @@ async function removeExam(
         await showError(
             "Unable to remove exam",
             error.message ||
-                "The exam could not be removed."
+            "The exam could not be removed."
         );
     } finally {
         setDisabled(

@@ -1,153 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8" />
 
-    <meta
-      name="description"
-      content="Manage programming exams in the Looply teacher dashboard."
-    />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Looply | Exams</title>
+  <meta name="description" content="Manage programming exams in the Looply teacher dashboard." />
 
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-    />
+  <title>Looply | Exams</title>
 
-    <link rel="stylesheet" href="../../css/base.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-    <link rel="stylesheet" href="../../css/dashboard.css" />
+  <link rel="stylesheet" href="../../css/base.css" />
 
-    <link rel="stylesheet" href="../../css/exam.css" />
-  </head>
+  <link rel="stylesheet" href="../../css/dashboard.css" />
 
-  <body class="teacher-page">
-    <!-- Shared teacher topbar -->
-    <header id="teacher-topbar-root"></header>
+  <link rel="stylesheet" href="../../css/exam.css" />
+</head>
 
-    <!-- Shared teacher sidebar -->
-    <aside id="teacher-sidebar-root"></aside>
+<body class="teacher-page">
+  <!-- Shared teacher topbar -->
+  <header id="teacher-topbar-root"></header>
 
-    <!-- Sidebar overlay for mobile -->
-    <div id="teacher-sidebar-overlay" class="teacher-sidebar-overlay"></div>
+  <!-- Shared teacher sidebar -->
+  <aside id="teacher-sidebar-root"></aside>
 
-    <main class="teacher-main">
-      <div class="teacher-content exams-page">
-        <!-- Page header -->
-        <section class="exams-page-header">
-          <div class="exams-header-content">
-            <span class="dashboard-page-label"> Exam Management </span>
+  <!-- Sidebar overlay for mobile -->
+  <div id="teacher-sidebar-overlay" class="teacher-sidebar-overlay"></div>
 
-            <h1 class="dashboard-page-title">Exams</h1>
+  <main class="teacher-main">
+    <div class="teacher-content exams-page">
+      <!-- Page header -->
+      <section class="exams-page-header">
+        <div class="exams-header-content">
+          <span class="dashboard-page-label"> Exam Management </span>
 
-            <p class="dashboard-page-description">
-              Create, edit, activate, deactivate, and manage programming exams.
-            </p>
-          </div>
+          <h1 class="dashboard-page-title">Exams</h1>
 
-          <a href="exam-form.html" class="primary-btn create-exam-btn">
-            <i class="bi bi-plus-lg" aria-hidden="true"></i>
+          <p class="dashboard-page-description">
+            Create, edit, activate, deactivate, and manage programming exams.
+          </p>
+        </div>
 
-            <span>Create Exam</span>
-          </a>
-        </section>
+        <a href="exam-form.html" class="primary-btn create-exam-btn">
+          <i class="bi bi-plus-lg" aria-hidden="true"></i>
 
-        <!-- Exams panel -->
-        <section class="exams-panel">
-          <!-- Panel header -->
-          <div class="exams-panel-header">
-            <div class="exams-panel-heading">
-              <div class="exams-title-row">
-                <h2>All Exams</h2>
+          <span>Create Exam</span>
+        </a>
+      </section>
 
-                <span class="exams-count"> -- exams </span>
-              </div>
+      <!-- Exams panel -->
+      <section class="exams-panel">
+        <!-- Panel header -->
+        <div class="exams-panel-header">
+          <div class="exams-panel-heading">
+            <div class="exams-title-row">
+              <h2>All Exams</h2>
 
-              <p>Search, review, and manage all created exams.</p>
+              <span class="exams-count"> -- exams </span>
             </div>
 
-            <!-- Search and filters -->
-            <div class="exams-toolbar">
-              <div class="exams-search">
-                <i class="bi bi-search" aria-hidden="true"></i>
+            <p>Search, review, and manage all created exams.</p>
+          </div>
 
-                <input
-                  type="search"
-                  id="teacher-exam-search"
-                  placeholder="Search exams..."
-                  aria-label="Search exams"
-                  autocomplete="off"
-                />
-              </div>
+          <!-- Search and filters -->
+          <div class="exams-toolbar">
+            <div class="exams-search">
+              <i class="bi bi-search" aria-hidden="true"></i>
 
-              <div class="exams-filter" aria-label="Filter exams by status">
-                <button
-                  type="button"
-                  class="exams-filter-btn active"
-                  data-exam-filter="all"
-                  aria-pressed="true"
-                >
-                  All
-                </button>
+              <input type="search" id="teacher-exam-search" placeholder="Search exams..." aria-label="Search exams"
+                autocomplete="off" />
+            </div>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="active"
-                  aria-pressed="false"
-                >
-                  Active
-                </button>
+            <div class="exams-filter" aria-label="Filter exams by status">
+              <button type="button" class="exams-filter-btn active" data-exam-filter="all" aria-pressed="true">
+                All
+              </button>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="draft"
-                  aria-pressed="false"
-                >
-                  Draft
-                </button>
+              <button type="button" class="exams-filter-btn" data-exam-filter="active" aria-pressed="false">
+                Active
+              </button>
 
-                <button
-                  type="button"
-                  class="exams-filter-btn"
-                  data-exam-filter="closed"
-                  aria-pressed="false"
-                >
-                  Closed
-                </button>
-              </div>
+              <button type="button" class="exams-filter-btn" data-exam-filter="end" aria-pressed="false">
+                End
+              </button>
+
+              <button type="button" class="exams-filter-btn" data-exam-filter="closed" aria-pressed="false">
+                Closed
+              </button>
             </div>
           </div>
+        </div>
 
-          <!-- Exams table -->
-          <div class="exams-table-wrapper">
-            <table class="exams-table">
-              <thead>
-                <tr>
-                  <th scope="col">Exam</th>
-                  <th scope="col">Start Date</th>
-                  <th scope="col">End Date</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Questions</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
+        <!-- Exams table -->
+        <div class="exams-table-wrapper">
+          <table class="exams-table">
+            <thead>
+              <tr>
+                <th scope="col">Exam</th>
+                <th scope="col">Start Date</th>
+                <th scope="col">End Date</th>
+                <th scope="col">Status</th>
+                <th scope="col">Questions</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
 
-              <tbody id="teacher-exams-body"></tbody>
-            </table>
-          </div>
-        </section>
-      </div>
-    </main>
+            <tbody id="teacher-exams-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="../../js/core/app.js"></script>
-    <script type="module" src="../../js/components/teacher-topbar.js"></script>
-    <script type="module" src="../../js/components/teacher-sidebar.js"></script>
-    <script type="module" src="../../js/teacher/exams.js"></script>
-  </body>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="module" src="../../js/core/app.js"></script>
+  <script type="module" src="../../js/components/teacher-topbar.js"></script>
+  <script type="module" src="../../js/components/teacher-sidebar.js"></script>
+  <script type="module" src="../../js/teacher/exams.js"></script>
+</body>
+
 </html>

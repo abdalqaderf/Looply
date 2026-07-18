@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Karantina:wght@300;400;700&display=swap");
 
-:root{
+:root {
     --bg: #0b0718;
     --box: #140422;
     --in-box: #2c0345;
@@ -17,7 +17,7 @@
     --danger: #fb7185;
     --warning: #fbbf24;
     --info: #60a5fa;
-    --nav-color:#0d0614;
+    --nav-color: #0d0614;
     --font-main: "IBM Plex Mono", monospace;
     --font-title: "Karantina", sans-serif;
     --font-size-md: 0.8rem;
@@ -33,14 +33,14 @@
 
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 
 }
 
-body{
+body {
     background-color: var(--bg);
     z-index: 1000;
     font-family: var(--font-main);
@@ -49,14 +49,14 @@ body{
 
 
 
-a{
+a {
     color: inherit;
     text-decoration: none;
 
 }
 
-html{
-        scroll-behavior: smooth;
+html {
+    scroll-behavior: smooth;
 }
 
 html,
@@ -64,14 +64,16 @@ body {
     width: 100%;
     overflow-x: clip;
 }
-.container{
+
+.container {
     padding: 0 4rem;
 }
 
-ul{
+ul {
     list-style: none;
 }
-li{
+
+li {
     display: inline;
     margin-left: 20px;
 }
@@ -81,19 +83,19 @@ svg {
     max-width: 100%;
 }
 
-.box{
+.box {
 
     background-color: var(--box);
-    box-shadow: 0 4px 6px -1px rgba(38, 16, 41, 0.315), 0 10px 20px -5px rgba(3, 2, 3, 0.5); 
+    box-shadow: 0 4px 6px -1px rgba(38, 16, 41, 0.315), 0 10px 20px -5px rgba(3, 2, 3, 0.5);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 }
 
 .box:hover {
-    border-width:2px ;
+    border-width: 2px;
 }
 
-.box{
+.box {
     margin: 50px;
     height: 200px;
 }
@@ -109,11 +111,9 @@ svg {
 
     color: var(--text);
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             var(--primary),
-            var(--primary-dark)
-        );
+            var(--primary-dark));
 
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-md);
@@ -142,11 +142,9 @@ svg {
     color: var(--text);
 
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             var(--primary-hover),
-            var(--primary)
-        );
+            var(--primary));
 
     border-color: rgba(255, 255, 255, 0.22);
 
@@ -179,11 +177,9 @@ svg {
     color: rgba(245, 241, 255, 0.55);
 
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             rgba(241, 117, 34, 0.45),
-            rgba(201, 87, 13, 0.4)
-        );
+            rgba(201, 87, 13, 0.4));
 
     border-color: rgba(255, 255, 255, 0.06);
     box-shadow: none;
@@ -203,7 +199,8 @@ svg {
 .primary-btn:hover i {
     transform: translateX(2px);
 }
-.new-section{
+
+.new-section {
     margin-top: 5rem;
 }
 
@@ -233,11 +230,9 @@ svg {
     color: var(--text);
 
     background:
-        linear-gradient(
-            145deg,
+        linear-gradient(145deg,
             var(--box),
-            #100219
-        ) !important;
+            #100219) !important;
 
     border:
         1px solid var(--border);
@@ -336,42 +331,119 @@ svg {
         box-shadow 180ms ease;
 }
 
-/* Confirm button */
 
-.looply-alert__button--confirm {
-    color: var(--text);
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--primary-dark)
-        );
+.looply-alert__button--success,
+.looply-alert__button--error,
+.looply-alert__button--warning,
+.looply-alert__button--info,
+.looply-alert__button--question {
+    color: #ffffff;
 
     border:
-        1px solid rgba(255, 255, 255, 0.12);
+        1px solid rgba(255, 255, 255, 0.14);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.16),
-        0 8px 20px rgba(241, 117, 34, 0.2);
+        0 8px 20px var(--alert-button-shadow);
+
+    transition:
+        transform 180ms ease,
+        filter 180ms ease,
+        box-shadow 180ms ease;
 }
 
-.looply-alert__button--confirm:hover {
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary-hover),
-            var(--primary)
-        );
 
-    transform: translateY(-2px);
+.looply-alert__button--success {
+    --alert-button-shadow:
+        rgba(16, 185, 129, 0.25);
+
+    --alert-button-focus:
+        rgba(16, 185, 129, 0.55);
+
+    background:
+        linear-gradient(135deg,
+            #10b981,
+            #047857);
+}
+
+
+.looply-alert__button--error {
+    --alert-button-shadow:
+        rgba(244, 63, 94, 0.25);
+
+    --alert-button-focus:
+        rgba(244, 63, 94, 0.55);
+
+    background:
+        linear-gradient(135deg,
+            #fb7185,
+            #be123c);
+}
+
+
+.looply-alert__button--warning {
+    --alert-button-shadow:
+        rgba(245, 158, 11, 0.25);
+
+    --alert-button-focus:
+        rgba(245, 158, 11, 0.55);
+
+    color: #211603;
+
+    background:
+        linear-gradient(135deg,
+            #fbbf24,
+            #d97706);
+}
+
+
+.looply-alert__button--info {
+    --alert-button-shadow:
+        rgba(37, 99, 235, 0.25);
+
+    --alert-button-focus:
+        rgba(37, 99, 235, 0.55);
+
+    background:
+        linear-gradient(135deg,
+            #60a5fa,
+            #2563eb);
+}
+
+.looply-alert__button--question {
+    --alert-button-shadow:
+        rgba(124, 58, 237, 0.25);
+
+    --alert-button-focus:
+        rgba(178, 135, 255, 0.55);
+
+    background:
+        linear-gradient(135deg,
+            #b287ff,
+            #7c3aed);
+}
+
+.looply-alert__button--success:hover,
+.looply-alert__button--error:hover,
+.looply-alert__button--warning:hover,
+.looply-alert__button--info:hover,
+.looply-alert__button--question:hover {
+    filter: brightness(1.08);
+
+    transform:
+        translateY(-2px);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        0 12px 26px rgba(241, 117, 34, 0.28);
+        0 12px 26px var(--alert-button-shadow);
 }
 
 /* Cancel button */
+.looply-alert__button--cancel {
+    --alert-button-focus:
+        rgba(178, 135, 255, 0.45);
+}
 
 .looply-alert__button--cancel {
     color:
@@ -403,7 +475,8 @@ svg {
 
     box-shadow:
         0 0 0 3px var(--bg),
-        0 0 0 5px rgba(241, 117, 34, 0.55);
+        0 0 0 5px var(--alert-button-focus,
+            rgba(178, 135, 255, 0.55));
 }
 
 /* SweetAlert inputs used later */
@@ -442,8 +515,7 @@ svg {
 
 .looply-alert .swal2-loader {
     border-color:
-        var(--primary) transparent
-        var(--primary) transparent;
+        var(--primary) transparent var(--primary) transparent;
 }
 
 /* Toast */
@@ -455,11 +527,9 @@ svg {
     color: var(--text);
 
     background:
-        linear-gradient(
-            135deg,
+        linear-gradient(135deg,
             var(--box),
-            #100219
-        ) !important;
+            #100219) !important;
 
     border:
         1px solid var(--border);
@@ -517,6 +587,3 @@ svg {
         margin: 0 !important;
     }
 }
-
-
-
