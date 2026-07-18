@@ -1774,6 +1774,7 @@ body.teacher-page {
 .dashboard-primary-btn i {
     font-size: 0.9rem;
 }
+
 .dashboard-stats {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1897,7 +1898,7 @@ body.teacher-page {
     font-weight: 700;
 }
 
-.dashboard-panel-heading > p {
+.dashboard-panel-heading>p {
     margin: 0.4rem 0 0;
 
     color: var(--sec-text);
@@ -2084,12 +2085,16 @@ body.teacher-page {
     border-color: rgba(178, 135, 255, 0.28);
 }
 
-.status-draft {
+.status-inactive {
     color: #fcd87a;
     background-color: rgba(251, 191, 36, 0.08);
     border-color: rgba(251, 191, 36, 0.26);
 }
-.status-closed {
+<<<<<<< HEAD
+
+=======
+>>>>>>> a7219edd97ac382e7bda92d6bef5ee2cf946a7f8
+.status-end {
     color: #fecdd3;
     background-color: rgba(251, 113, 133, 0.08);
     border-color: rgba(251, 113, 133, 0.24);
@@ -2099,7 +2104,7 @@ body.teacher-page {
     min-width: 110px;
 }
 
-.dashboard-submission-cell > span {
+.dashboard-submission-cell>span {
     color: var(--text);
 
     font-size: 0.62rem;
@@ -2124,22 +2129,18 @@ body.teacher-page {
     height: 100%;
 
     background:
-        linear-gradient(
-            90deg,
+        linear-gradient(90deg,
             var(--primary-dark),
-            var(--primary)
-        );
+            var(--primary));
 
     border-radius: inherit;
 }
 
 .dashboard-progress.is-complete span {
     background:
-        linear-gradient(
-            90deg,
+        linear-gradient(90deg,
             #169b6e,
-            var(--success)
-        );
+            var(--success));
 }
 
 .dashboard-date,
@@ -2208,6 +2209,7 @@ body.teacher-page {
     .dashboard-stats {
         grid-template-columns: 1fr;
     }
+
     .dashboard-hero-actions {
         flex-direction: column;
         align-items: stretch;
@@ -2225,6 +2227,7 @@ body.teacher-page {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .dashboard-stat-card,
     .dashboard-secondary-btn,
     .dashboard-view-all,

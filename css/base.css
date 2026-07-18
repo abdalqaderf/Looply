@@ -210,6 +210,7 @@ svg {
 ========================= */
 
 .swal2-container {
+    z-index: 3000 !important;
     font-family: var(--font-main);
 }
 
@@ -333,12 +334,19 @@ svg {
 
 
 
+<<<<<<< HEAD
 .looply-alert__button--success,
 .looply-alert__button--error,
 .looply-alert__button--warning,
 .looply-alert__button--info,
 .looply-alert__button--question {
     color: #ffffff;
+=======
+    background:
+        linear-gradient(135deg,
+            var(--primary),
+            var(--primary-dark));
+>>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
 
     border:
         1px solid rgba(255, 255, 255, 0.14);
@@ -353,6 +361,14 @@ svg {
         box-shadow 180ms ease;
 }
 
+<<<<<<< HEAD
+=======
+.looply-alert__button--confirm:hover {
+    background:
+        linear-gradient(135deg,
+            var(--primary-hover),
+            var(--primary));
+>>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
 
 .looply-alert__button--success {
     --alert-button-shadow:
@@ -586,4 +602,8 @@ svg {
 
         margin: 0 !important;
     }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986

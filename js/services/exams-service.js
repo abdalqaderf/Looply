@@ -21,12 +21,66 @@ const ALLOWED_EXAM_STATUSES = new Set(
 const ALLOWED_QUESTION_TYPES = new Set(
     Object.values(QUESTION_TYPES)
 );
+const LEGACY_EXAM_STATUSES = Object.freeze({
+    draft: EXAM_STATUS.INACTIVE,
+    closed: EXAM_STATUS.END
+});
+
+function migrateStoredExamStatus(exam) {
+    const currentStatus =
+        normalizeText(exam?.status).toLowerCase();
+
+    const migratedStatus =
+        LEGACY_EXAM_STATUSES[currentStatus];
+
+    if (!migratedStatus) {
+        return {
+            exam,
+            changed: false
+        };
+    }
+
+    return {
+        exam: {
+            ...exam,
+            status: migratedStatus
+        },
+        changed: true
+    };
+}
 
 
 export function getAllExams() {
-    const exams = readStorage(STORAGE_KEYS.EXAMS, []);
+    const storedExams = readStorage(
+        STORAGE_KEYS.EXAMS,
+        []
+    );
 
-    return Array.isArray(exams) ? exams : [];
+    if (!Array.isArray(storedExams)) {
+        return [];
+    }
+
+    let storageChanged = false;
+
+    const exams = storedExams.map((exam) => {
+        const migration =
+            migrateStoredExamStatus(exam);
+
+        storageChanged =
+            storageChanged ||
+            migration.changed;
+
+        return migration.exam;
+    });
+
+    if (storageChanged) {
+        writeStorage(
+            STORAGE_KEYS.EXAMS,
+            exams
+        );
+    }
+
+    return exams;
 }
 
 
@@ -233,7 +287,9 @@ function normalizeQuestions(questions) {
 
 function normalizeExamData(data = {}, currentExam = null) {
     const status = normalizeText(
-        data.status ?? currentExam?.status ?? EXAM_STATUS.DRAFT
+        data.status ?? 
+        currentExam?.status ?? 
+        EXAM_STATUS.INACTIVE
     ).toLowerCase();
 
     if (!ALLOWED_EXAM_STATUSES.has(status)) {
@@ -399,7 +455,7 @@ export function deleteExam(examId) {
         ...exams[examIndex],
         isDeleted: true,
         deletedAt: timestamp,
-        status: EXAM_STATUS.CLOSED,
+        status: EXAM_STATUS.END,
         updatedAt: timestamp
     };
 
@@ -426,7 +482,7 @@ export function restoreExam(examId) {
         ...exams[examIndex],
         isDeleted: false,
         deletedAt: null,
-        status: EXAM_STATUS.DRAFT,
+        status: EXAM_STATUS.INACTIVE,
         updatedAt: new Date().toISOString()
     };
 

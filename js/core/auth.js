@@ -131,7 +131,7 @@ export function getCurrentSession() {
 
     if (!isValidSession) {
         if (session !== null) {
-            clearCurrentSession();
+            removeCurrentSessionValue();
         }
 
         return null;

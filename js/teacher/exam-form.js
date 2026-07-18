@@ -92,41 +92,7 @@ function getPageElements() {
   };
 }
 
-function ensureClosedStatus(elements) {
-  if (document.getElementById("exam-status-closed")) {
-    return;
-  }
 
-  elements.statusOptions.append(
-    fromHTML(`
-            <div class="exam-status-option">
-                <input
-                    type="radio"
-                    id="exam-status-closed"
-                    name="status"
-                    value="closed"
-                />
-
-                <label for="exam-status-closed">
-                    <span class="exam-status-option-icon">
-                        <i
-                            class="bi bi-x-circle"
-                            aria-hidden="true"
-                        ></i>
-                    </span>
-
-                    <span class="exam-status-option-text">
-                        <strong>Closed</strong>
-
-                        <small>
-                            Students cannot start new attempts.
-                        </small>
-                    </span>
-                </label>
-            </div>
-        `),
-  );
-}
 
 function defaultQuestion() {
   return {
@@ -669,7 +635,7 @@ function localDateParts(value) {
 
 function setStatus(status) {
   getElements('input[name="status"]').forEach((input) => {
-    input.checked = input.value === (status || EXAM_STATUS.DRAFT);
+    input.checked = input.value === (status || EXAM_STATUS.INACTIVE);
   });
 }
 
@@ -1087,7 +1053,7 @@ async function loadMode(elements, teacher) {
   const examId = normalizeText(getQueryParam("examId"));
 
   if (!examId) {
-    setStatus(EXAM_STATUS.DRAFT);
+    setStatus(EXAM_STATUS.INACTIVE);
 
     renderQuestions(elements, []);
 
@@ -1150,8 +1116,6 @@ async function initializeExamForm() {
     elements = getPageElements();
 
     elements.form.noValidate = true;
-
-    ensureClosedStatus(elements);
 
     clearElement(elements.questionList);
 
