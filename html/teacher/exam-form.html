@@ -208,223 +208,119 @@
                 <legend>Exam Status</legend>
 
                 <div class="exam-status-options">
-                  <div class="exam-status-option">
-                    <input type="radio" id="exam-status-draft" name="status" value="draft" checked />
+  <div class="exam-status-option">
+    <input
+      type="radio"
+      id="exam-status-inactive"
+      name="status"
+      value="inactive"
+      checked
+    />
 
-                    <label for="exam-status-draft">
-                      <span class="exam-status-option-icon">
-                        <i class="bi bi-pause-circle" aria-hidden="true"></i>
-                      </span>
+    <label for="exam-status-inactive">
+      <span class="exam-status-option-icon">
+        <i class="bi bi-pause-circle" aria-hidden="true"></i>
+      </span>
 
-                      <span class="exam-status-option-text">
-                        <strong>Draft</strong>
+      <span class="exam-status-option-text">
+        <strong>Inactive</strong>
+        <small>Students cannot access it.</small>
+      </span>
+    </label>
+  </div>
 
-                        <small> Students cannot access it. </small>
-                      </span>
-                    </label>
-                  </div>
-                </div>
+  <div class="exam-status-option">
+    <input
+      type="radio"
+      id="exam-status-active"
+      name="status"
+      value="active"
+    />
+
+    <label for="exam-status-active">
+      <span class="exam-status-option-icon">
+        <i class="bi bi-play-circle" aria-hidden="true"></i>
+      </span>
+
+      <span class="exam-status-option-text">
+        <strong>Active</strong>
+        <small>Students can access it during the schedule.</small>
+      </span>
+    </label>
+  </div>
+
+  <div class="exam-status-option">
+    <input
+      type="radio"
+      id="exam-status-end"
+      name="status"
+      value="end"
+    />
+
+    <label for="exam-status-end">
+      <span class="exam-status-option-icon">
+        <i class="bi bi-stop-circle" aria-hidden="true"></i>
+      </span>
+
+      <span class="exam-status-option-text">
+        <strong>End</strong>
+        <small>The exam is finished and cannot be started.</small>
+      </span>
+    </label>
+  </div>
+</div>
               </fieldset>
             </div>
           </div>
         </section>
 
         <!-- Questions -->
-        <section class="exam-form-panel exam-questions-editor-panel">
-          <div class="exam-form-panel-header">
-            <div class="exam-form-panel-heading">
-              <div class="exam-form-heading-row">
-                <h2>Questions</h2>
+<section class="exam-form-panel exam-questions-editor-panel">
+  <div class="exam-form-panel-header">
+    <div class="exam-form-panel-heading">
+      <div class="exam-form-heading-row">
+        <h2>Questions</h2>
 
-                <span class="exam-form-question-count" id="exam-question-count">
-                  1 question
-                </span>
-              </div>
-
-              <p>
-                Add questions, answers, points, and optional code snippets.
-              </p>
-            </div>
-
-            <button type="button" class="exam-form-add-question-btn" id="add-question-btn" data-add-question>
-              <i class="bi bi-plus-lg" aria-hidden="true"></i>
-
-              <span>Add Question</span>
-            </button>
-          </div>
-
-          <div class="exam-question-editor-note">
-            <i class="bi bi-info-circle" aria-hidden="true"></i>
-
-            <p>
-              Each question must contain its text, points, and a correct answer.
-            </p>
-          </div> <!-- Question editor -->
-          <article class="exam-question-editor" data-question-card data-question-index="1">
-            <div class="exam-question-editor-header">
-              <div class="exam-question-editor-number">
-                <span>Question</span>
-
-                <strong>01</strong>
-              </div>
-
-              <button type="button" class="exam-question-remove-btn" data-remove-question aria-label="Remove question 1"
-                title="Remove question">
-                <i class="bi bi-trash" aria-hidden="true"></i>
-
-                <span>Remove</span>
-              </button>
-            </div>
-
-            <div class="exam-question-editor-body">
-              <!-- Question settings -->
-              <div class="exam-question-settings-grid">
-                <div class="exam-form-field">
-                  <label for="question-1-type">
-                    Question Type
-
-                    <span aria-hidden="true">*</span>
-                  </label>
-
-                  <select id="question-1-type" name="questions[0][type]" data-question-type-select required>
-                    <option value="multiple-choice">Multiple Choice</option>
-
-                    <option value="true-false">True or False</option>
-
-                    <option value="short-answer">Short Answer</option>
-
-                    <option value="code-output">Code Output</option>
-                  </select>
-                </div>
-
-                <div class="exam-form-field">
-                  <label for="question-1-points">
-                    Points
-
-                    <span aria-hidden="true">*</span>
-                  </label>
-
-                  <input type="number" id="question-1-points" name="questions[0][points]" min="1" max="100" value="5"
-                    required />
-                </div>
-              </div>
-
-              <!-- Question text -->
-              <div class="exam-form-field">
-                <label for="question-1-text">
-                  Question Text
-
-                  <span aria-hidden="true">*</span>
-                </label>
-
-                <textarea id="question-1-text" name="questions[0][text]" rows="4" maxlength="1000"
-                  placeholder="Write the question here." required></textarea>
-              </div>
-
-              <!-- Code snippet -->
-              <div class="exam-form-field">
-                <label for="question-1-code">
-                  Code Snippet
-                  <small>Optional</small>
-                </label>
-
-                <textarea id="question-1-code" name="questions[0][code]" class="exam-code-input" rows="7"
-                  spellcheck="false" placeholder="const message = 'Hello';&#10;console.log(message);"></textarea>
-
-                <small>
-                  Leave this empty when the question does not contain code.
-                </small>
-              </div>
-
-              <!-- Answer options -->
-              <fieldset class="exam-answer-options" data-answer-options>
-                <div class="exam-answer-options-header">
-                  <div>
-                    <legend>Answer Options</legend>
-
-                    <p>
-                      Select the correct answer using the button beside an
-                      option.
-                    </p>
-                  </div>
-
-                  <span> Correct answer required </span>
-                </div>
-
-                <!-- Option A -->
-                <div class="exam-answer-option-row">
-                  <input type="radio" id="question-1-correct-a" name="questions[0][correct_answer]" value="a"
-                    required />
-
-                  <label for="question-1-correct-a" class="exam-answer-correct-control"
-                    title="Mark option A as correct">
-                    <span>A</span>
-
-                    <i class="bi bi-check-lg" aria-hidden="true"></i>
-                  </label>
-
-                  <input type="text" id="question-1-option-a" name="questions[0][options][a]"
-                    placeholder="Enter option A" maxlength="300" required />
-                </div>
-
-                <!-- Option B -->
-                <div class="exam-answer-option-row">
-                  <input type="radio" id="question-1-correct-b" name="questions[0][correct_answer]" value="b" />
-
-                  <label for="question-1-correct-b" class="exam-answer-correct-control"
-                    title="Mark option B as correct">
-                    <span>B</span>
-
-                    <i class="bi bi-check-lg" aria-hidden="true"></i>
-                  </label>
-
-                  <input type="text" id="question-1-option-b" name="questions[0][options][b]"
-                    placeholder="Enter option B" maxlength="300" required />
-                </div>
-
-                <!-- Option C -->
-                <div class="exam-answer-option-row">
-                  <input type="radio" id="question-1-correct-c" name="questions[0][correct_answer]" value="c" />
-
-                  <label for="question-1-correct-c" class="exam-answer-correct-control"
-                    title="Mark option C as correct">
-                    <span>C</span>
-
-                    <i class="bi bi-check-lg" aria-hidden="true"></i>
-                  </label>
-
-                  <input type="text" id="question-1-option-c" name="questions[0][options][c]"
-                    placeholder="Enter option C" maxlength="300" required />
-                </div>
-
-                <!-- Option D -->
-                <div class="exam-answer-option-row">
-                  <input type="radio" id="question-1-correct-d" name="questions[0][correct_answer]" value="d" />
-
-                  <label for="question-1-correct-d" class="exam-answer-correct-control"
-                    title="Mark option D as correct">
-                    <span>D</span>
-
-                    <i class="bi bi-check-lg" aria-hidden="true"></i>
-                  </label>
-
-                  <input type="text" id="question-1-option-d" name="questions[0][options][d]"
-                    placeholder="Enter option D" maxlength="300" required />
-                </div>
-              </fieldset>
-            </div>
-          </article>
-    </div>
-
-    <div class="exam-question-editor-note">
-      <i class="bi bi-info-circle" aria-hidden="true"></i>
+        <span
+          class="exam-form-question-count"
+          id="exam-question-count"
+        >
+          -- questions
+        </span>
+      </div>
 
       <p>
-        The Add Question and Remove buttons will be connected when the
-        JavaScript phase begins.
+        Add questions, answers, points, and optional code snippets.
       </p>
     </div>
-    </section>
+
+    <button
+      type="button"
+      class="exam-form-add-question-btn"
+      id="add-question-btn"
+      data-add-question
+    >
+      <i class="bi bi-plus-lg" aria-hidden="true"></i>
+      <span>Add Question</span>
+    </button>
+  </div>
+
+  <div class="exam-question-editor-note">
+    <i class="bi bi-info-circle" aria-hidden="true"></i>
+
+    <p>
+      Each question must contain its text, points, and a correct answer.
+    </p>
+  </div>
+
+  <div
+    class="exam-question-editor-list"
+    id="exam-question-list"
+    data-question-list
+  >
+    <!-- Questions are rendered by exam-form.js -->
+  </div>
+</section>
 
     <!-- Sticky form actions -->
     <div class="exam-form-actions-bar">

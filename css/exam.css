@@ -457,14 +457,14 @@
     border-color: rgba(52, 211, 153, 0.25);
 }
 
-.exam-status-draft {
+.exam-status-inactive {
     color: var(--sec-text);
     background-color: rgba(178, 135, 255, 0.08);
 
     border-color: var(--border);
 }
 
-.exam-status-closed {
+.exam-status-end {
     color: #fecdd3;
     background-color: rgba(251, 113, 133, 0.08);
 
@@ -774,14 +774,14 @@
     border-color: rgba(52, 211, 153, 0.25);
 }
 
-.exam-details-status--draft {
+.exam-details-status--inactive {
     color: var(--sec-text);
     background-color: rgba(178, 135, 255, 0.08);
 
     border-color: var(--border);
 }
 
-.exam-details-status--closed {
+.exam-details-status--end {
     color: #fecdd3;
     background-color: rgba(251, 113, 133, 0.08);
 
@@ -2538,13 +2538,35 @@
     border-color: rgba(251, 113, 133, 0.55);
 }
 
-#exam-status-closed:checked + label {
+#exam-status-end:checked + label {
     background-color: rgba(251, 113, 133, 0.07);
     border-color: rgba(251, 113, 133, 0.32);
 }
 
-#exam-status-closed:checked + label .exam-status-option-icon {
+#exam-status-end:checked + label .exam-status-option-icon {
     color: var(--danger);
     background-color: rgba(251, 113, 133, 0.08);
     border-color: rgba(251, 113, 133, 0.28);
+}
+
+#exam-status-active:checked + label {
+    background-color: rgba(52, 211, 153, 0.07);
+    border-color: rgba(52, 211, 153, 0.34);
+}
+
+#exam-status-active:checked + label .exam-status-option-icon {
+    color: #34d399;
+    background-color: rgba(52, 211, 153, 0.09);
+    border-color: rgba(52, 211, 153, 0.28);
+}
+
+#exam-status-inactive:checked + label {
+    background-color: rgba(178, 135, 255, 0.07);
+    border-color: rgba(178, 135, 255, 0.34);
+}
+
+#exam-status-inactive:checked + label .exam-status-option-icon {
+    color: var(--acc);
+    background-color: rgba(178, 135, 255, 0.09);
+    border-color: rgba(178, 135, 255, 0.28);
 }

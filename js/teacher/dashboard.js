@@ -119,21 +119,21 @@ function getGreeting() {
 function getDisplayStatus(exam) {
     if (
         exam.status ===
-        EXAM_STATUS.DRAFT
+        EXAM_STATUS.INACTIVE
     ) {
         return [
-            "Draft",
-            "status-draft"
+            "Inactive",
+            "status-inactive"
         ];
     }
 
     if (
         exam.status ===
-        EXAM_STATUS.CLOSED
+        EXAM_STATUS.END
     ) {
         return [
-            "Closed",
-            "status-closed"
+            "End",
+        "status-end"
         ];
     }
 
@@ -164,8 +164,8 @@ function getDisplayStatus(exam) {
         now > end
     ) {
         return [
-            "Closed",
-            "status-closed"
+            "END",
+            "status-end"
         ];
     }
 
@@ -209,7 +209,7 @@ function submissionsCell(
 
     if (
         exam.status ===
-            EXAM_STATUS.DRAFT &&
+            EXAM_STATUS.INACTIVE &&
         submitted === 0
     ) {
         return node(
@@ -306,11 +306,11 @@ function examRow(
         statusClass
     ] = getDisplayStatus(exam);
 
-    const isDraft =
+    const isInactive =
         exam.status ===
-        EXAM_STATUS.DRAFT;
+        EXAM_STATUS.INACTIVE;
 
-    const actionRoute = isDraft
+    const actionRoute = isInactive
         ? ROUTES.TEACHER_EXAM_FORM
         : ROUTES.TEACHER_EXAM_DETAILS;
 
@@ -446,7 +446,7 @@ function examRow(
 
                                 "aria-label":
                                     `${
-                                        isDraft
+                                        isInactive
                                             ? "Edit"
                                             : "View"
                                     } ${
@@ -457,7 +457,7 @@ function examRow(
                         },
                         [
                             icon(
-                                isDraft
+                                isInactive
                                     ? "bi-pencil"
                                     : "bi-arrow-up-right"
                             )

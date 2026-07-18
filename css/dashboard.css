@@ -2084,12 +2084,12 @@ body.teacher-page {
     border-color: rgba(178, 135, 255, 0.28);
 }
 
-.status-draft {
+.status-inactive {
     color: #fcd87a;
     background-color: rgba(251, 191, 36, 0.08);
     border-color: rgba(251, 191, 36, 0.26);
 }
-.status-closed {
+.status-end {
     color: #fecdd3;
     background-color: rgba(251, 113, 133, 0.08);
     border-color: rgba(251, 113, 133, 0.24);

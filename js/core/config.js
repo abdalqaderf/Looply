@@ -25,9 +25,9 @@ export const SESSION_KEYS = Object.freeze({
 });
 
 export const EXAM_STATUS = Object.freeze({
-    DRAFT: "draft",
+    INACTIVE: "inactive",
     ACTIVE: "active",
-    CLOSED: "closed"
+    END: "end"
 });
 
 export const ATTEMPT_STATUS = Object.freeze({

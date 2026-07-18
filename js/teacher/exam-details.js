@@ -202,16 +202,16 @@ function questionTypeLabel(type) {
 function effectiveStatus(exam) {
     if (
         exam.status ===
-        EXAM_STATUS.DRAFT
+        EXAM_STATUS.INACTIVE
     ) {
-        return EXAM_STATUS.DRAFT;
+        return EXAM_STATUS.INACTIVE;
     }
 
     if (
         exam.status ===
-        EXAM_STATUS.CLOSED
+        EXAM_STATUS.END
     ) {
-        return EXAM_STATUS.CLOSED;
+        return EXAM_STATUS.END;
     }
 
     const endTime =
@@ -226,7 +226,7 @@ function effectiveStatus(exam) {
         endTime <
             Date.now()
     ) {
-        return EXAM_STATUS.CLOSED;
+        return EXAM_STATUS.END;
     }
 
     return EXAM_STATUS.ACTIVE;
@@ -652,8 +652,8 @@ function configureStatus(
         .classList
         .remove(
             "exam-details-status--active",
-            "exam-details-status--draft",
-            "exam-details-status--closed"
+            "exam-details-status--inactive",
+            "exam-details-status--end"
         );
 
     elements.status
@@ -675,7 +675,7 @@ function configureStatus(
 
     const nextStatus =
         storedActive
-            ? EXAM_STATUS.DRAFT
+            ? EXAM_STATUS.INACTIVE
             : EXAM_STATUS.ACTIVE;
 
     elements.statusButton
@@ -714,7 +714,7 @@ function configureStatus(
                         EXAM_STATUS.ACTIVE
                             ? "Activate"
                             : status ===
-                                EXAM_STATUS.CLOSED
+                                EXAM_STATUS.END
                                 ? "Move to Draft"
                                 : "Deactivate"
                 }
