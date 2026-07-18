@@ -10,6 +10,7 @@ const ALERT_CLASSES = Object.freeze({
 });
 
 const TOAST_CLASSES = Object.freeze({
+  container: "looply-toast-container",
   popup: "looply-toast",
   title: "looply-toast__title",
   icon: "looply-toast__icon",
@@ -102,6 +103,7 @@ function showToast(icon, message, options = {}) {
     background: "var(--box)",
     color: "var(--text)",
     showConfirmButton: false,
+    backdrop: false,
     timer: options.timer ?? 2200,
     timerProgressBar: true,
     heightAuto: false,

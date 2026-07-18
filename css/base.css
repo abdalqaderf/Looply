@@ -15,9 +15,9 @@ body.auth-pending {
     --primary: #f17522;
     --primary-hover: #ff8738;
     --primary-dark: #c9570d;
-    --primary-surface: #c2410c;
-    --primary-surface-hover: #b93808;
-    --primary-surface-dark: #9a3412;
+    --primary-surface: #f17522;
+    --primary-surface-hover: #f17522;
+    --primary-surface-dark: #f17522;
     --border: rgba(178, 135, 255, 0.2);
     --border-hover: rgba(178, 135, 255, 0.55);
     --border-strong: #b287ff;
