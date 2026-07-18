@@ -15,7 +15,7 @@
     />
     <link href="../../css/base.css" rel="stylesheet" />
     <link href="../../css/dashboard.css" rel="stylesheet" />
-    <link href="../../css/exam.css" rel="stylesheet" />
+    <link href="../../css/exam.css?v=20260719-1" rel="stylesheet" />
   </head>
   <body class="auth-pending teacher-page">
     <!-- Shared teacher topbar -->
@@ -151,6 +151,42 @@
             </div>
           </div>
         </section>
+        <!-- Student results -->
+        <section class="exam-details-panel exam-results-panel">
+          <div class="exam-details-panel-header">
+            <div>
+              <div class="exam-details-heading-row">
+                <h2>Student Results</h2>
+                <span class="exam-details-count" id="exam-results-count">-- attempts</span>
+              </div>
+              <p>Students who started or submitted this exam and their current grades.</p>
+            </div>
+            <span class="exam-details-panel-icon">
+              <i aria-hidden="true" class="bi bi-people"></i>
+            </span>
+          </div>
+
+          <div class="exam-results-table-wrapper">
+            <table class="exam-results-table">
+              <thead>
+                <tr>
+                  <th scope="col">Student</th>
+                  <th scope="col">Username</th>
+                  <th scope="col">Score</th>
+                  <th scope="col">Percentage</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Submitted</th>
+                </tr>
+              </thead>
+              <tbody id="exam-results-body">
+                <tr>
+                  <td colspan="6">Loading student results...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
         <!-- Questions -->
         <section class="exam-details-panel exam-questions-panel">
           <div class="exam-details-panel-header">

@@ -490,8 +490,6 @@
 
     .title-hero {
         max-width: 650px;
-
-        font-size: clamp(3rem, 10vw, 4.3rem);
         line-height: 0.94;
     }
 
@@ -539,7 +537,7 @@
     }
 
     .title-hero {
-        font-size: clamp(2.8rem, 14vw, 3.5rem);
+        font-size: clamp(2.8rem, 14vw, 2.5rem);
         line-height: 0.94;
     }
 
@@ -868,9 +866,6 @@
         padding: 1.4rem;
     }
 
-    .features-title {
-        font-size: clamp(2.7rem, 14vw, 3.8rem);
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1183,7 +1178,7 @@
     color: var(--text);
 
     font-family: var(--font-title);
-    font-size: clamp(3.2rem, 5vw, 4.6rem);
+        font-size: clamp(2.2rem, 5vw, 2.6rem);
     font-weight: 700;
     line-height: 0.92;
 }
@@ -1604,7 +1599,7 @@
     color: var(--text);
 
     font-family: var(--font-title);
-    font-size: clamp(3.7rem, 6vw, 5.8rem);
+    font-size: clamp(2.7rem, 6vw, 3.8rem);
     font-weight: 700;
     line-height: 0.9;
     letter-spacing: 0.02em;
@@ -1945,7 +1940,7 @@
     }
 
     .about-title {
-        font-size: clamp(3.3rem, 16vw, 4.4rem);
+        font-size: clamp(3.3rem, 16vw, 2.4rem);
     }
 
     .contact-card {

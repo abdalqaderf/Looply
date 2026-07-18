@@ -1,5 +1,6 @@
 import {
     APP_CONFIG,
+    ATTEMPT_STATUS,
     EXAM_STATUS,
     QUESTION_TYPES,
     ROUTES,
@@ -41,6 +42,10 @@ import {
 import {
     getAttemptsByExam
 } from "../services/attempts-service.js";
+
+import {
+    getUserById
+} from "../services/users-service.js";
 
 const LOCALE =
     APP_CONFIG.defaultLocale;
@@ -156,6 +161,16 @@ function getPageElements() {
         questionNote:
             getElement(
                 ".exam-questions-note p"
+            ),
+
+        resultsCount:
+            getElement(
+                "#exam-results-count"
+            ),
+
+        resultsBody:
+            getElement(
+                "#exam-results-body"
             ),
 
         backLink:
@@ -802,6 +817,193 @@ function renderQuestions(
     );
 }
 
+function formatResultDate(value) {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+        return "—";
+    }
+
+    return new Intl.DateTimeFormat(
+        LOCALE,
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    ).format(date);
+}
+
+function createResultStateRow(message) {
+    return make(
+        "tr",
+        {},
+        make(
+            "td",
+            {
+                className: "exam-results-empty",
+                text: message,
+                attributes: {
+                    colspan: "6"
+                }
+            }
+        )
+    );
+}
+
+function renderStudentResults(elements, exam, attempts) {
+    const submittedCount = attempts.filter(
+        (attempt) => attempt.status === ATTEMPT_STATUS.SUBMITTED
+    ).length;
+
+    const inProgressCount = attempts.filter(
+        (attempt) => attempt.status === ATTEMPT_STATUS.IN_PROGRESS
+    ).length;
+
+    const countParts = [
+        `${submittedCount} submitted`
+    ];
+
+    if (inProgressCount > 0) {
+        countParts.push(`${inProgressCount} in progress`);
+    }
+
+    setText(
+        elements.resultsCount,
+        countParts.join(" • ")
+    );
+
+    clearElement(elements.resultsBody);
+
+    if (attempts.length === 0) {
+        elements.resultsBody.append(
+            createResultStateRow(
+                "No students have started this exam yet."
+            )
+        );
+
+        return;
+    }
+
+    const maximumScore = getExamTotalPoints(exam);
+
+    attempts.forEach((attempt) => {
+        const student = getUserById(
+            attempt.studentId,
+            { includeDeleted: true }
+        );
+
+        const submitted =
+            attempt.status === ATTEMPT_STATUS.SUBMITTED;
+
+        const score = Number(attempt.score);
+        const totalPoints = Number(attempt.totalPoints);
+        const percentage = Number(attempt.percentage);
+
+        const studentName =
+            normalizeText(student?.fullName) ||
+            "Deleted or unknown student";
+
+        const username =
+            normalizeText(student?.username) || "—";
+
+        const row = make(
+            "tr",
+            {},
+            make(
+                "td",
+                {},
+                make(
+                    "div",
+                    { className: "exam-result-student" },
+                    make(
+                        "span",
+                        { className: "exam-result-student-icon" },
+                        icon("bi-person")
+                    ),
+                    make(
+                        "div",
+                        {},
+                        make(
+                            "strong",
+                            { text: studentName }
+                        ),
+                        student?.isDeleted === true
+                            ? make(
+                                "small",
+                                { text: "Deleted student" }
+                            )
+                            : make(
+                                "small",
+                                { text: "Student" }
+                            )
+                    )
+                )
+            ),
+            make(
+                "td",
+                { text: username }
+            ),
+            make(
+                "td",
+                {
+                    className: submitted
+                        ? "exam-result-score"
+                        : "exam-results-muted",
+                    text: submitted
+                        ? `${Number.isFinite(score) ? score : 0} / ${
+                            Number.isFinite(totalPoints)
+                                ? totalPoints
+                                : maximumScore
+                        }`
+                        : "—"
+                }
+            ),
+            make(
+                "td",
+                {
+                    className: submitted
+                        ? "exam-result-percentage"
+                        : "exam-results-muted",
+                    text: submitted
+                        ? `${Number.isFinite(percentage)
+                            ? Math.round(percentage)
+                            : 0}%`
+                        : "—"
+                }
+            ),
+            make(
+                "td",
+                {},
+                make(
+                    "span",
+                    {
+                        className: submitted
+                            ? "exam-result-attempt-status exam-result-attempt-status--submitted"
+                            : "exam-result-attempt-status exam-result-attempt-status--progress",
+                        text: submitted
+                            ? "Submitted"
+                            : "In progress"
+                    }
+                )
+            ),
+            make(
+                "td",
+                {
+                    className: "exam-result-date",
+                    text: submitted
+                        ? formatResultDate(attempt.submittedAt)
+                        : "—"
+                }
+            )
+        );
+
+        elements.resultsBody.append(row);
+    });
+}
+
 function renderExam(
     elements,
     exam
@@ -911,6 +1113,12 @@ function renderExam(
     renderQuestions(
         elements,
         exam
+    );
+
+    renderStudentResults(
+        elements,
+        exam,
+        attempts
     );
 
     configureStatus(
@@ -1154,6 +1362,21 @@ function renderLoading(
 
     clearElement(
         elements.questionList
+    );
+
+    clearElement(
+        elements.resultsBody
+    );
+
+    setText(
+        elements.resultsCount,
+        "-- attempts"
+    );
+
+    elements.resultsBody.append(
+        createResultStateRow(
+            "Loading student results..."
+        )
     );
 
     elements.questionList

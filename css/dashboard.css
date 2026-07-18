@@ -2008,12 +2008,6 @@ body.modal-open {
     border-color: rgba(52, 211, 153, 0.28);
 }
 
-.status-scheduled {
-    color: #93c5fd;
-    background-color: rgba(96, 165, 250, 0.08);
-    border-color: rgba(96, 165, 250, 0.28);
-}
-
 .status-completed {
     color: #d8c4ff;
     background-color: rgba(178, 135, 255, 0.09);

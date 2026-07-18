@@ -139,32 +139,17 @@ function getDisplayStatus(exam) {
 
     const now = Date.now();
 
-    const start =
-        new Date(
-            exam.startAt
-        ).getTime();
-
     const end =
         new Date(
             exam.endAt
         ).getTime();
 
     if (
-        Number.isFinite(start) &&
-        now < start
-    ) {
-        return [
-            "Scheduled",
-            "status-scheduled"
-        ];
-    }
-
-    if (
         Number.isFinite(end) &&
         now > end
     ) {
         return [
-            "END",
+            "End",
             "status-end"
         ];
     }

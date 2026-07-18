@@ -83,6 +83,14 @@ function getPageElements() {
 
         navigationCount: getElement(".take-exam-sidebar-header span"),
 
+        previousButton: getElement("#previous-question-btn"),
+
+        nextButton: getElement("#next-question-btn"),
+
+        currentPosition: getElement("#exam-current-question-position"),
+
+        remainingCount: getElement("#exam-questions-remaining"),
+
         submitButtons: getElements("[data-submit-exam]"),
 
         exitLink: getElement(".take-exam-exit-btn"),
@@ -437,19 +445,60 @@ function renderNavigation(elements) {
 
 function updateProgress(elements) {
     const answered = getAnsweredCount();
-
     const total = currentExam.questions.length;
+    const remainingAfterCurrent = Math.max(
+        0,
+        total - currentQuestionIndex - 1
+    );
 
     setText(
         elements.progress,
-
         `${answered} of ${total} answered`
     );
 
     setText(
         elements.navigationCount,
-
         `${total} total`
+    );
+
+    setText(
+        elements.currentPosition,
+        `Question ${currentQuestionIndex + 1} of ${total}`
+    );
+
+    setText(
+        elements.remainingCount,
+        remainingAfterCurrent === 0
+            ? "This is the last question"
+            : `${remainingAfterCurrent} ${
+                  remainingAfterCurrent === 1
+                      ? "question"
+                      : "questions"
+              } remaining`
+    );
+
+    setDisabled(
+        elements.previousButton,
+        currentQuestionIndex === 0
+    );
+
+    setDisabled(
+        elements.nextButton,
+        currentQuestionIndex === total - 1
+    );
+
+    elements.previousButton.setAttribute(
+        "aria-label",
+        currentQuestionIndex === 0
+            ? "Previous question unavailable"
+            : `Open question ${currentQuestionIndex}`
+    );
+
+    elements.nextButton.setAttribute(
+        "aria-label",
+        currentQuestionIndex === total - 1
+            ? "Next question unavailable"
+            : `Open question ${currentQuestionIndex + 2}`
     );
 }
 
@@ -662,6 +711,9 @@ async function handleManualSubmission(event, elements) {
 }
 
 function bindEvents(elements) {
+    let touchStartX = null;
+    let touchStartY = null;
+
     elements.form.addEventListener("submit", (event) => {
         void handleManualSubmission(event, elements);
     });
@@ -685,9 +737,81 @@ function bindEvents(elements) {
 
         showQuestion(
             elements,
-
             Number(button.dataset.questionIndex)
         );
+    });
+
+    elements.previousButton.addEventListener("click", () => {
+        showQuestion(elements, currentQuestionIndex - 1);
+    });
+
+    elements.nextButton.addEventListener("click", () => {
+        showQuestion(elements, currentQuestionIndex + 1);
+    });
+
+    elements.questionWrapper.addEventListener(
+        "touchstart",
+        (event) => {
+            const touch = event.changedTouches[0];
+
+            touchStartX = touch?.clientX ?? null;
+            touchStartY = touch?.clientY ?? null;
+        },
+        { passive: true }
+    );
+
+    elements.questionWrapper.addEventListener(
+        "touchend",
+        (event) => {
+            if (touchStartX === null || touchStartY === null) {
+                return;
+            }
+
+            const touch = event.changedTouches[0];
+            const differenceX = (touch?.clientX ?? touchStartX) - touchStartX;
+            const differenceY = (touch?.clientY ?? touchStartY) - touchStartY;
+
+            touchStartX = null;
+            touchStartY = null;
+
+            if (
+                Math.abs(differenceX) < 55 ||
+                Math.abs(differenceX) <= Math.abs(differenceY)
+            ) {
+                return;
+            }
+
+            showQuestion(
+                elements,
+                differenceX < 0
+                    ? currentQuestionIndex + 1
+                    : currentQuestionIndex - 1
+            );
+        },
+        { passive: true }
+    );
+
+    document.addEventListener("keydown", (event) => {
+        const target =
+            event.target instanceof Element
+                ? event.target
+                : null;
+
+        const interactiveTarget = target?.closest(
+            "input, textarea, select, button, a"
+        );
+
+        if (interactiveTarget) {
+            return;
+        }
+
+        if (event.key === "ArrowLeft") {
+            showQuestion(elements, currentQuestionIndex - 1);
+        }
+
+        if (event.key === "ArrowRight") {
+            showQuestion(elements, currentQuestionIndex + 1);
+        }
     });
 
     document.addEventListener("visibilitychange", () => {
@@ -794,6 +918,11 @@ async function initializeTakeExam() {
         setText(elements.totalPoints, "--");
 
         setText(elements.navigationCount, "-- total");
+        setText(elements.currentPosition, "Question -- of --");
+        setText(elements.remainingCount, "-- questions remaining");
+
+        setDisabled(elements.previousButton, true);
+        setDisabled(elements.nextButton, true);
 
         clearElement(elements.questionWrapper);
 

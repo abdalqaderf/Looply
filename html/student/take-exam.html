@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -15,12 +14,13 @@
     />
     <link href="../../css/base.css" rel="stylesheet" />
     <link href="../../css/dashboard-student.css" rel="stylesheet" />
-    <link href="../../css/student-exam.css" rel="stylesheet" />
+    <link href="../../css/student-exam.css?v=20260719-1" rel="stylesheet" />
   </head>
   <body class="auth-pending student-page">
     <header id="student-topbar-root"></header>
     <aside id="student-sidebar-root"></aside>
     <div class="student-sidebar-overlay" id="student-sidebar-overlay"></div>
+
     <main class="student-main">
       <form
         action="#"
@@ -29,13 +29,14 @@
         method="post"
       >
         <input name="exam_id" type="hidden" value="" />
-        <!-- Exam header -->
+
         <section class="take-exam-header">
           <div class="take-exam-header-content">
-            <span class="take-exam-label">Loading exam</span>
+            <span class="take-exam-label">Current Exam</span>
             <h1 class="take-exam-title">Loading exam...</h1>
             <p class="take-exam-description">Exam information is loading.</p>
           </div>
+
           <div
             aria-label="Time remaining"
             class="take-exam-timer"
@@ -50,7 +51,7 @@
             </div>
           </div>
         </section>
-        <!-- Exam progress -->
+
         <section aria-label="Exam progress" class="take-exam-progress-panel">
           <div class="take-exam-progress-copy">
             <span>Exam Progress</span>
@@ -59,78 +60,92 @@
           <div class="take-exam-progress-meta">
             <span>
               <i aria-hidden="true" class="bi bi-list-check"></i>
-              Answer every question
+              Answers are saved automatically
             </span>
             <span>
               <i aria-hidden="true" class="bi bi-award"></i>
               <span id="exam-total-points-badge">--</span> total points
             </span>
           </div>
-          <div class="take-exam-questions" id="active-question-card-wrapper">
-            <!-- Dynamically loaded question card will render here -->
-          </div>
         </section>
-        <div class="take-exam-layout">
-          <!-- Questions -->
-          <!-- Exam sidebar -->
-          <aside class="take-exam-sidebar">
-            <section class="take-exam-navigation-panel">
-              <div class="take-exam-sidebar-header">
-                <h2>Questions</h2>
-                <span>-- total</span>
-              </div>
-              <nav
-                aria-label="Exam question navigation"
-                class="take-exam-question-navigation"
-                id="question-navigation-grid"
-              >
-                <!-- Navigation bubbles generated dynamically -->
-              </nav>
-              <div class="take-exam-navigation-note">
-                <i aria-hidden="true" class="bi bi-info-circle"></i>
-                <p>Use the question numbers to move through the exam.</p>
-              </div>
-            </section>
-            <section class="take-exam-submit-panel">
-              <span class="take-exam-submit-icon">
-                <i aria-hidden="true" class="bi bi-send-check"></i>
-              </span>
-              <div>
-                <h2>Submit Exam</h2>
-                <p>
-                  Review all answers before submitting. You cannot submit the
-                  exam twice.
-                </p>
-              </div>
-              <button
-                class="take-exam-submit-btn"
-                data-submit-exam=""
-                id="submit-exam-btn"
-                type="submit"
-              >
-                <i aria-hidden="true" class="bi bi-check-lg"></i>
-                <span>Submit Exam</span>
-              </button>
-            </section>
-          </aside>
-        </div>
-        <!-- Bottom actions -->
+
+        <section class="take-exam-workspace">
+          <div class="take-exam-questions" id="active-question-card-wrapper">
+            <!-- The active question is rendered dynamically. -->
+          </div>
+
+          <div class="take-exam-question-controls" aria-label="Question controls">
+            <button
+              class="take-exam-direction-btn"
+              id="previous-question-btn"
+              type="button"
+            >
+              <i aria-hidden="true" class="bi bi-arrow-left"></i>
+              <span>Previous</span>
+            </button>
+
+            <div class="take-exam-question-position" aria-live="polite">
+              <strong id="exam-current-question-position">Question -- of --</strong>
+              <span id="exam-questions-remaining">-- questions remaining</span>
+            </div>
+
+            <button
+              class="take-exam-direction-btn take-exam-direction-btn--next"
+              id="next-question-btn"
+              type="button"
+            >
+              <span>Next</span>
+              <i aria-hidden="true" class="bi bi-arrow-right"></i>
+            </button>
+          </div>
+
+          <section class="take-exam-navigation-panel">
+            <div class="take-exam-sidebar-header">
+              <h2>Questions</h2>
+              <span>-- total</span>
+            </div>
+            <nav
+              aria-label="Exam question navigation"
+              class="take-exam-question-navigation"
+              id="question-navigation-grid"
+            >
+              <!-- Navigation buttons are generated dynamically. -->
+            </nav>
+            <div class="take-exam-navigation-note">
+              <i aria-hidden="true" class="bi bi-info-circle"></i>
+              <p>Choose a number, use Previous and Next, or swipe horizontally.</p>
+            </div>
+          </section>
+
+          <section class="take-exam-submit-panel">
+            <span class="take-exam-submit-icon">
+              <i aria-hidden="true" class="bi bi-send-check"></i>
+            </span>
+            <div>
+              <h2>Submit Exam</h2>
+              <p>Review your answers before submitting. Submission is final.</p>
+            </div>
+            <button
+              class="take-exam-submit-btn"
+              data-submit-exam=""
+              id="submit-exam-btn"
+              type="submit"
+            >
+              <i aria-hidden="true" class="bi bi-check-lg"></i>
+              <span>Submit Exam</span>
+            </button>
+          </section>
+        </section>
+
         <div class="take-exam-bottom-actions">
           <a class="take-exam-exit-btn" href="exams.html">
             <i aria-hidden="true" class="bi bi-arrow-left"></i>
             <span>Exit Exam</span>
           </a>
-          <button
-            class="primary-btn take-exam-bottom-submit-btn"
-            data-submit-exam=""
-            type="submit"
-          >
-            <i aria-hidden="true" class="bi bi-check-lg"></i>
-            <span>Submit Exam</span>
-          </button>
         </div>
       </form>
     </main>
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="../../js/core/app.js" type="module"></script>
     <script src="../../js/components/student-topbar.js" type="module"></script>
