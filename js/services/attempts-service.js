@@ -312,4 +312,3 @@ export function submitAttempt(attemptId, finalAnswers = null) {
 
     return submittedAttempt;
 }
-

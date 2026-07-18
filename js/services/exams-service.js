@@ -491,3 +491,4 @@ export function restoreExam(examId) {
 
     return restoredExam;
 }
+

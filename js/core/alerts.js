@@ -25,17 +25,43 @@ const ICON_COLORS = Object.freeze({
 });
 
 function getSweetAlert() {
-    if (!window.Swal) {
-        throw new Error(
-            "SweetAlert2 is not loaded. Add its CDN script before the page module."
-        );
+    return window.Swal ?? null;
+}
+
+function getFallbackMessage(options = {}) {
+    return [options.title, options.text]
+        .filter(Boolean)
+        .join("\n\n");
+}
+
+async function fireFallback(options = {}) {
+    const message =
+        getFallbackMessage(options) ||
+        "Looply requires your attention.";
+
+    if (options.showCancelButton) {
+        return {
+            isConfirmed: window.confirm(message),
+            isDismissed: false
+        };
     }
 
-    return window.Swal;
+    if (options.showConfirmButton !== false) {
+        window.alert(message);
+    }
+
+    return {
+        isConfirmed: true,
+        isDismissed: false
+    };
 }
 
 function fireAlert(options = {}) {
     const Swal = getSweetAlert();
+
+    if (!Swal) {
+        return fireFallback(options);
+    }
 
     const {
         customClass = {},
@@ -73,6 +99,13 @@ function showToast(
     options = {}
 ) {
     const Swal = getSweetAlert();
+
+    if (!Swal) {
+        return Promise.resolve({
+            isConfirmed: true,
+            isDismissed: false
+        });
+    }
 
     return Swal.fire({
         toast: true,
@@ -313,10 +346,13 @@ export function showLoading(
 export function closeAlert() {
     const Swal = getSweetAlert();
 
+    if (!Swal) {
+        return;
+    }
+
     Swal.hideLoading();
     Swal.close();
 }
-<<<<<<< HEAD
 const BUTTON_CLASSES = Object.freeze({
     success:
         "looply-alert__button looply-alert__button--success",
@@ -333,5 +369,3 @@ const BUTTON_CLASSES = Object.freeze({
     question:
         "looply-alert__button looply-alert__button--question"
 });
-=======
->>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
