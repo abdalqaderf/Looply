@@ -223,7 +223,7 @@ function createSeedExams(referenceDate) {
             startAt: closedStart.toISOString(),
             endAt: closedEnd.toISOString(),
             durationMinutes: 25,
-            status: EXAM_STATUS.CLOSED,
+            status: EXAM_STATUS.END,
             questions: [
                 {
                     id: "html-question-1",
@@ -345,7 +345,7 @@ function createSeedExams(referenceDate) {
         {
             id: "exam-advanced-draft",
             teacherId: "user-teacher-1",
-            title: "Advanced JavaScript Draft",
+            title: "Advanced JavaScript Inactive",
             description:
                 "A draft exam reserved for later editing by the teacher.",
             instructions: "Draft only.",
@@ -359,7 +359,7 @@ function createSeedExams(referenceDate) {
                 59
             ).toISOString(),
             durationMinutes: 45,
-            status: EXAM_STATUS.DRAFT,
+            status: EXAM_STATUS.INACTIVE,
             questions: [],
             isDeleted: false,
             deletedAt: null,
