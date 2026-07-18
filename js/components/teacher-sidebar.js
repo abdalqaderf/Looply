@@ -5,27 +5,27 @@ const TEACHER_WORKSPACE_LINKS = Object.freeze([
         label: "Dashboard",
         icon: "bi-grid",
         href: ROUTES.TEACHER_DASHBOARD,
-        activePages: ["dashboard.html"]
+        activePages: ["dashboard.html"],
     },
     {
         label: "Students",
         icon: "bi-people",
         href: ROUTES.TEACHER_STUDENTS,
-        activePages: ["students.html"]
+        activePages: ["students.html"],
     },
     {
         label: "Exams",
         icon: "bi-journal-code",
         href: ROUTES.TEACHER_EXAMS,
-        activePages: ["exams.html", "exam-details.html"]
+        activePages: ["exams.html", "exam-details.html"],
     },
     {
         label: "Create Exam",
         icon: "bi-plus-square",
         href: ROUTES.TEACHER_EXAM_FORM,
         activePages: ["exam-form.html"],
-        extraClass: "teacher-create-exam-link"
-    }
+        extraClass: "teacher-create-exam-link",
+    },
 ]);
 
 const TEACHER_ACCOUNT_LINKS = Object.freeze([
@@ -33,7 +33,7 @@ const TEACHER_ACCOUNT_LINKS = Object.freeze([
         label: "Profile",
         icon: "bi-person",
         href: ROUTES.TEACHER_PROFILE,
-        activePages: ["profile.html"]
+        activePages: ["profile.html"],
     },
     {
         label: "Logout",
@@ -41,8 +41,8 @@ const TEACHER_ACCOUNT_LINKS = Object.freeze([
         href: ROUTES.LOGIN,
         activePages: [],
         extraClass: "teacher-logout-link",
-        action: "logout"
-    }
+        action: "logout",
+    },
 ]);
 
 function getCurrentPageName() {
@@ -62,7 +62,9 @@ function createTeacherLinks(links, currentPage) {
             return `
                 <a
                     href="${link.href}"
-                    class="teacher-side-link ${isActive ? "active" : ""} ${extraClass}"
+                    class="teacher-side-link ${
+                        isActive ? "active" : ""
+                    } ${extraClass}"
                     ${isActive ? 'aria-current="page"' : ""}
                     ${actionAttribute}
                 >
@@ -77,10 +79,7 @@ function createTeacherLinks(links, currentPage) {
         .join("");
 }
 
-
-export function createTeacherSidebar(
-    currentPage = getCurrentPageName()
-) {
+export function createTeacherSidebar(currentPage = getCurrentPageName()) {
     return `
         <div class="teacher-sidebar-content">
             <section class="teacher-sidebar-section">
@@ -92,10 +91,7 @@ export function createTeacherSidebar(
                     class="teacher-side-nav"
                     aria-label="Teacher workspace navigation"
                 >
-                    ${createTeacherLinks(
-                        TEACHER_WORKSPACE_LINKS,
-                        currentPage
-                    )}
+                    ${createTeacherLinks(TEACHER_WORKSPACE_LINKS, currentPage)}
                 </nav>
             </section>
 
@@ -108,10 +104,7 @@ export function createTeacherSidebar(
                     class="teacher-side-nav"
                     aria-label="Teacher account navigation"
                 >
-                    ${createTeacherLinks(
-                        TEACHER_ACCOUNT_LINKS,
-                        currentPage
-                    )}
+                    ${createTeacherLinks(TEACHER_ACCOUNT_LINKS, currentPage)}
                 </nav>
             </section>
         </div>
@@ -130,17 +123,14 @@ export function createTeacherSidebar(
 }
 
 function dispatchLogoutRequest() {
-    const logoutEvent = new CustomEvent(
-        "looply:logout-requested",
-        {
-            bubbles: true,
-            cancelable: true,
-            detail: {
-                role: "teacher",
-                redirectUrl: ROUTES.LOGIN
-            }
-        }
-    );
+    const logoutEvent = new CustomEvent("looply:logout-requested", {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+            role: "teacher",
+            redirectUrl: ROUTES.LOGIN,
+        },
+    });
 
     const shouldContinueNavigation = document.dispatchEvent(logoutEvent);
 
@@ -149,12 +139,11 @@ function dispatchLogoutRequest() {
     }
 }
 
-
 export function renderTeacherSidebar(options = {}) {
     const {
         rootSelector = "#teacher-sidebar-root",
         overlaySelector = "#teacher-sidebar-overlay",
-        toggleSelector = "#teacher-sidebar-toggle"
+        toggleSelector = "#teacher-sidebar-toggle",
     } = options;
 
     const sidebarRoot = document.querySelector(rootSelector);
@@ -188,9 +177,7 @@ export function renderTeacherSidebar(options = {}) {
     }
 
     sidebarToggle?.addEventListener("click", () => {
-        setSidebarOpen(
-            !sidebarRoot.classList.contains("is-open")
-        );
+        setSidebarOpen(!sidebarRoot.classList.contains("is-open"));
     });
 
     sidebarOverlay?.addEventListener("click", closeSidebar);
@@ -233,11 +220,9 @@ function initializeTeacherSidebar() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeTeacherSidebar,
-        { once: true }
-    );
+    document.addEventListener("DOMContentLoaded", initializeTeacherSidebar, {
+        once: true,
+    });
 } else {
     initializeTeacherSidebar();
 }

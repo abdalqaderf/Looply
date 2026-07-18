@@ -5,24 +5,20 @@ const STUDENT_WORKSPACE_LINKS = Object.freeze([
         label: "Dashboard",
         icon: "bi-grid",
         href: ROUTES.STUDENT_DASHBOARD,
-        activePages: ["dashboard.html"]
+        activePages: ["dashboard.html"],
     },
     {
         label: "Exams",
         icon: "bi-journal-code",
         href: ROUTES.STUDENT_EXAMS,
-        activePages: [
-            "exams.html",
-            "take-exam.html",
-            "exam-result.html"
-        ]
+        activePages: ["exams.html", "take-exam.html", "exam-result.html"],
     },
     {
         label: "History",
         icon: "bi-clock-history",
         href: ROUTES.STUDENT_HISTORY,
-        activePages: ["history.html"]
-    }
+        activePages: ["history.html"],
+    },
 ]);
 
 const STUDENT_ACCOUNT_LINKS = Object.freeze([
@@ -30,7 +26,7 @@ const STUDENT_ACCOUNT_LINKS = Object.freeze([
         label: "Profile",
         icon: "bi-person",
         href: ROUTES.STUDENT_PROFILE,
-        activePages: ["profile.html"]
+        activePages: ["profile.html"],
     },
     {
         label: "Logout",
@@ -38,8 +34,8 @@ const STUDENT_ACCOUNT_LINKS = Object.freeze([
         href: ROUTES.LOGIN,
         activePages: [],
         extraClass: "student-logout-link",
-        action: "logout"
-    }
+        action: "logout",
+    },
 ]);
 
 function getCurrentPageName() {
@@ -59,7 +55,9 @@ function createStudentLinks(links, currentPage) {
             return `
                 <a
                     href="${link.href}"
-                    class="student-side-link ${isActive ? "active" : ""} ${extraClass}"
+                    class="student-side-link ${
+                        isActive ? "active" : ""
+                    } ${extraClass}"
                     ${isActive ? 'aria-current="page"' : ""}
                     ${actionAttribute}
                 >
@@ -80,9 +78,7 @@ function createStudentLinks(links, currentPage) {
  * @param {string} currentPage
  * @returns {string}
  */
-export function createStudentSidebar(
-    currentPage = getCurrentPageName()
-) {
+export function createStudentSidebar(currentPage = getCurrentPageName()) {
     return `
         <div class="student-sidebar-content">
             <section class="student-sidebar-section">
@@ -94,10 +90,7 @@ export function createStudentSidebar(
                     class="student-side-nav"
                     aria-label="Student workspace navigation"
                 >
-                    ${createStudentLinks(
-                        STUDENT_WORKSPACE_LINKS,
-                        currentPage
-                    )}
+                    ${createStudentLinks(STUDENT_WORKSPACE_LINKS, currentPage)}
                 </nav>
             </section>
 
@@ -110,10 +103,7 @@ export function createStudentSidebar(
                     class="student-side-nav"
                     aria-label="Student account navigation"
                 >
-                    ${createStudentLinks(
-                        STUDENT_ACCOUNT_LINKS,
-                        currentPage
-                    )}
+                    ${createStudentLinks(STUDENT_ACCOUNT_LINKS, currentPage)}
                 </nav>
             </section>
         </div>
@@ -132,17 +122,14 @@ export function createStudentSidebar(
 }
 
 function dispatchLogoutRequest() {
-    const logoutEvent = new CustomEvent(
-        "looply:logout-requested",
-        {
-            bubbles: true,
-            cancelable: true,
-            detail: {
-                role: "student",
-                redirectUrl: ROUTES.LOGIN
-            }
-        }
-    );
+    const logoutEvent = new CustomEvent("looply:logout-requested", {
+        bubbles: true,
+        cancelable: true,
+        detail: {
+            role: "student",
+            redirectUrl: ROUTES.LOGIN,
+        },
+    });
 
     const shouldContinueNavigation = document.dispatchEvent(logoutEvent);
 
@@ -165,7 +152,7 @@ export function renderStudentSidebar(options = {}) {
     const {
         rootSelector = "#student-sidebar-root",
         overlaySelector = "#student-sidebar-overlay",
-        toggleSelector = "#student-sidebar-toggle"
+        toggleSelector = "#student-sidebar-toggle",
     } = options;
 
     const sidebarRoot = document.querySelector(rootSelector);
@@ -199,9 +186,7 @@ export function renderStudentSidebar(options = {}) {
     }
 
     sidebarToggle?.addEventListener("click", () => {
-        setSidebarOpen(
-            !sidebarRoot.classList.contains("is-open")
-        );
+        setSidebarOpen(!sidebarRoot.classList.contains("is-open"));
     });
 
     sidebarOverlay?.addEventListener("click", closeSidebar);
@@ -244,12 +229,9 @@ function initializeStudentSidebar() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeStudentSidebar,
-        { once: true }
-    );
+    document.addEventListener("DOMContentLoaded", initializeStudentSidebar, {
+        once: true,
+    });
 } else {
     initializeStudentSidebar();
 }
-
