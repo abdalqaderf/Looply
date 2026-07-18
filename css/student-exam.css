@@ -8,9 +8,7 @@
 */
 .student-main {
     padding:
-        calc(var(--student-topbar-height) + 2rem)
-        clamp(1.25rem, 3vw, 3rem)
-        3rem;
+        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .exam-result-page {
@@ -310,7 +308,7 @@
 
 .exam-result-stat-card small,
 .exam-result-stat-card strong,
-.exam-result-stat-card div > span {
+.exam-result-stat-card div>span {
     display: block;
 }
 
@@ -330,7 +328,7 @@
     line-height: 1.4;
 }
 
-.exam-result-stat-card div > span {
+.exam-result-stat-card div>span {
     margin-top: 0.15rem;
 
     color: var(--sec-text);
@@ -680,7 +678,7 @@
     border-radius: 10px;
 }
 
-.exam-result-written-answer > span {
+.exam-result-written-answer>span {
     display: block;
 
     font-size: 0.51rem;
@@ -703,7 +701,7 @@
     border-color: rgba(251, 113, 133, 0.24);
 }
 
-.exam-result-written-answer--wrong > span {
+.exam-result-written-answer--wrong>span {
     color: var(--danger);
 }
 
@@ -713,7 +711,7 @@
     border-color: rgba(52, 211, 153, 0.24);
 }
 
-.exam-result-written-answer--correct > span {
+.exam-result-written-answer--correct>span {
     color: var(--success);
 }
 
@@ -856,9 +854,7 @@
 @media (max-width: 768px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1.25rem
-            2.5rem;
+            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .exam-result-header {
@@ -912,9 +908,7 @@
 @media (max-width: 576px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.25rem)
-            1rem
-            2rem;
+            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .exam-result-view-exams-btn {
@@ -939,6 +933,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .exam-result-back-link,
     .exam-result-view-exams-btn,
     .exam-result-stat-card,
@@ -958,9 +953,7 @@
 */
 .student-main {
     padding:
-        calc(var(--student-topbar-height) + 2rem)
-        clamp(1.25rem, 3vw, 3rem)
-        3rem;
+        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .student-exams-page {
@@ -1299,7 +1292,7 @@
 
 .student-exam-detail small,
 .student-exam-detail strong,
-.student-exam-detail div > span {
+.student-exam-detail div>span {
     display: block;
 }
 
@@ -1319,7 +1312,7 @@
     line-height: 1.4;
 }
 
-.student-exam-detail div > span {
+.student-exam-detail div>span {
     margin-top: 0.1rem;
 
     color: var(--sec-text);
@@ -1426,7 +1419,7 @@
         0 12px 26px rgba(0, 0, 0, 0.15);
 }
 
-.student-exams-page-note > span {
+.student-exams-page-note>span {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1501,9 +1494,7 @@
 @media (max-width: 768px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1.25rem
-            2.5rem;
+            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .student-exams-header {
@@ -1537,9 +1528,7 @@
 @media (max-width: 576px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.25rem)
-            1rem
-            2rem;
+            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .student-exams-history-btn {
@@ -1562,6 +1551,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .student-exams-history-btn,
     .student-exam-card,
     .student-exam-start-btn {
@@ -1579,9 +1569,7 @@ html {
 
 .student-main {
     padding:
-        calc(var(--student-topbar-height) + 2rem)
-        clamp(1.25rem, 3vw, 3rem)
-        3rem;
+        calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .take-exam-page {
@@ -2034,22 +2022,21 @@ html {
     font-weight: 700;
 }
 
-.take-exam-option input:checked + label {
+.take-exam-option input:checked+label {
     color: var(--text);
     background-color: rgba(241, 117, 34, 0.08);
 
     border-color: rgba(241, 117, 34, 0.45);
 }
 
-.take-exam-option input:checked + label
-.take-exam-option-letter {
+.take-exam-option input:checked+label .take-exam-option-letter {
     color: var(--text);
     background-color: var(--primary);
 
     border-color: var(--primary);
 }
 
-.take-exam-option input:focus-visible + label {
+.take-exam-option input:focus-visible+label {
     outline: 2px solid var(--primary);
     outline-offset: 2px;
 }
@@ -2429,9 +2416,7 @@ html {
 @media (max-width: 768px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1.25rem
-            2.5rem;
+            calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .take-exam-header {
@@ -2486,9 +2471,7 @@ html {
 @media (max-width: 576px) {
     .student-main {
         padding:
-            calc(var(--student-topbar-height) + 1.25rem)
-            1rem
-            2rem;
+            calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .take-exam-timer {
@@ -2507,6 +2490,43 @@ html {
     .take-exam-question-body h2 {
         font-size: 0.84rem;
     }
+}
+
+.exam-result-status--failed {
+    color: #fecdd3;
+    background-color: rgba(251, 113, 133, 0.08);
+    border-color: rgba(251, 113, 133, 0.28);
+}
+
+.take-exam-question-link.is-answered {
+    color: #a7f3d0;
+    background-color: rgba(52, 211, 153, 0.08);
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.take-exam-question-link.is-current {
+    color: var(--text);
+    background-color: rgba(241, 117, 34, 0.13);
+    border-color: rgba(241, 117, 34, 0.55);
+    box-shadow: 0 0 0 2px rgba(241, 117, 34, 0.08);
+}
+
+.take-exam-timer.is-warning {
+    border-color: rgba(251, 191, 36, 0.55);
+}
+
+.take-exam-timer.is-warning .take-exam-timer-icon,
+.take-exam-timer.is-warning strong {
+    color: #fbbf24;
+}
+
+.take-exam-timer.is-expired {
+    border-color: rgba(251, 113, 133, 0.55);
+}
+
+.take-exam-timer.is-expired .take-exam-timer-icon,
+.take-exam-timer.is-expired strong {
+    color: var(--danger);
 }
 
 @media (prefers-reduced-motion: reduce) {
