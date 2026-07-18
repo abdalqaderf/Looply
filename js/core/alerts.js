@@ -65,7 +65,7 @@ function showToast(
 
     return Swal.fire({
         toast: true,
-        position: options.position ?? "top-end",
+        position: options.position ?? "bottom",
         icon,
         iconColor:
             options.iconColor ??
@@ -74,7 +74,7 @@ function showToast(
         background: "var(--box)",
         color: "var(--text)",
         showConfirmButton: false,
-        timer: options.timer ?? 2800,
+        timer: options.timer ?? 2200,
         timerProgressBar: true,
         heightAuto: false,
         customClass: TOAST_CLASSES,
@@ -109,7 +109,7 @@ export function showErrorToast(
         "error",
         message,
         {
-            timer: 3800
+            timer: 3000
         }
     );
 }
