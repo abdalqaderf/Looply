@@ -127,7 +127,7 @@
 
     height: 3px;
 
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 
     content: "";
 }
@@ -142,7 +142,7 @@
     height: 94px;
 
     color: var(--text);
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 
     border: 5px solid rgba(241, 117, 34, 0.14);
     border-radius: 24px;
@@ -462,7 +462,7 @@
    ================================================== */
 
 .student-page .profile-avatar {
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 }
 
 .student-page .profile-role {
@@ -475,7 +475,7 @@
    ================================================== */
 
 .teacher-page .profile-avatar {
-    background-color: var(--primary-dark);
+    background-color: var(--primary-surface-dark);
 }
 
 .teacher-page .profile-role {

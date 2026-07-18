@@ -213,6 +213,15 @@
     margin-top: 0.45rem;
 }
 
+
+.exam-result-score-percentage {
+  display: inline-flex;
+  margin-top: 0.35rem;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
 .exam-result-score-value strong {
     color: var(--text);
 
@@ -2031,7 +2040,7 @@ html {
 
 .take-exam-option input:checked+label .take-exam-option-letter {
     color: var(--text);
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 
     border-color: var(--primary);
 }
@@ -2312,7 +2321,7 @@ html {
     margin-top: 0.2rem;
 
     color: var(--text);
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 
     border: 1px solid var(--primary);
     border-radius: var(--radius-md);
@@ -2330,7 +2339,7 @@ html {
 }
 
 .take-exam-submit-btn:hover {
-    background-color: var(--primary-dark);
+    background-color: var(--primary-surface-dark);
     border-color: var(--primary-dark);
 
     transform: translateY(-1px);

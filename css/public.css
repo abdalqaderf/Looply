@@ -92,7 +92,7 @@
 
     height: 2px;
 
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
     border-radius: 999px;
 
     transform: scaleX(0);
@@ -629,7 +629,7 @@
     width: 6px;
     height: 6px;
 
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
     border-radius: 50%;
 
     box-shadow: 0 0 10px rgba(241, 117, 34, 0.65);
@@ -787,7 +787,7 @@
 
 .feature-card:hover .feature-icon {
     color: #ffffff;
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
 
     transform: rotate(-3deg) scale(1.05);
 
@@ -1571,7 +1571,7 @@
     width: 7px;
     height: 7px;
 
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
     border-radius: 50%;
 
     box-shadow:
@@ -2016,7 +2016,7 @@
     padding: 12px 24px;
     border: 1px solid transparent;
     border-radius: 10px;
-    background: #7c5cff;
+    background: #6b4cf0;
     color: #ffffff;
     font: inherit;
     font-size: 0.95rem;
@@ -2030,7 +2030,7 @@
 }
 
 #newQuoteBtn:hover:not(:disabled) {
-    background: #6b4cf0;
+    background: #5f3dc4;
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(124, 92, 255, 0.3);
 }
