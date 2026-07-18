@@ -17,15 +17,10 @@
 
     margin-left: var(--student-sidebar-width);
 
-    padding:
-        calc(var(--student-topbar-height) + 2rem)
-        var(--page-gutter)
-        3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) var(--page-gutter) 3rem;
 
-    transition:
-        margin-left var(--transition-normal);
+    transition: margin-left var(--transition-normal);
 }
-
 
 /* ======================================
    Student Topbar
@@ -50,8 +45,7 @@
 
     border-bottom: 1px solid var(--border);
 
-    box-shadow:
-        0 8px 30px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
@@ -76,7 +70,6 @@
 
     object-fit: contain;
 }
-
 
 /* ======================================
    Sidebar Toggle
@@ -111,7 +104,6 @@
     background-color: var(--in-box);
     border-color: rgba(241, 117, 34, 0.45);
 }
-
 
 /* ======================================
    Student User Card
@@ -157,20 +149,14 @@
 
     color: #ffffff;
 
-    background:
-        linear-gradient(
-            135deg,
-            var(--primary),
-            var(--primary-hover)
-        );
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
 
     border-radius: 10px;
 
     font-size: 0.75rem;
     font-weight: 700;
 
-    box-shadow:
-        0 8px 18px rgba(241, 117, 34, 0.2);
+    box-shadow: 0 8px 18px rgba(241, 117, 34, 0.2);
 }
 
 .student-user-info {
@@ -204,7 +190,6 @@
     font-size: 0.72rem;
 }
 
-
 /* ======================================
    Student Sidebar
 ====================================== */
@@ -220,25 +205,20 @@
     flex-direction: column;
 
     width: var(--student-sidebar-width);
-    height:
-        calc(100vh - var(--student-topbar-height));
+    height: calc(100vh - var(--student-topbar-height));
 
     padding: 1.5rem 1rem;
 
     color: var(--text);
 
-    background:
-        radial-gradient(
-            circle at 10% 10%,
+    background: radial-gradient(circle at 10% 10%,
             rgba(65, 36, 130, 0.16),
-            transparent 35%
-        ),
+            transparent 35%),
         var(--box);
 
     border-right: 1px solid var(--border);
 
-    box-shadow:
-        10px 0 30px rgba(0, 0, 0, 0.16);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.16);
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -261,7 +241,6 @@
     gap: 0.7rem;
 }
 
-
 /* ======================================
    Sidebar Labels
 ====================================== */
@@ -280,7 +259,6 @@
 
     opacity: 0.78;
 }
-
 
 /* ======================================
    Sidebar Navigation
@@ -350,7 +328,6 @@
     color: var(--primary);
 }
 
-
 /* ======================================
    Active Link
 ====================================== */
@@ -358,12 +335,9 @@
 .student-side-link.active {
     color: var(--text);
 
-    background:
-        linear-gradient(
-            90deg,
+    background: linear-gradient(90deg,
             rgba(65, 36, 130, 0.75),
-            rgba(44, 3, 69, 0.8)
-        );
+            rgba(44, 3, 69, 0.8));
 
     border-color: rgba(178, 135, 255, 0.55);
 
@@ -382,11 +356,10 @@
     width: 3px;
     height: 55%;
 
-    background-color: var(--primary);
+    background-color: var(--primary-surface);
     border-radius: 0 5px 5px 0;
 
-    box-shadow:
-        0 0 12px rgba(241, 117, 34, 0.55);
+    box-shadow: 0 0 12px rgba(241, 117, 34, 0.55);
 
     transform: translateY(-50%);
 }
@@ -394,7 +367,6 @@
 .student-side-link.active i {
     color: var(--primary);
 }
-
 
 /* ======================================
    Logout
@@ -410,7 +382,6 @@
 .student-logout-link:hover i {
     color: var(--danger);
 }
-
 
 /* ======================================
    Sidebar Footer
@@ -465,7 +436,6 @@
     line-height: 1.4;
 }
 
-
 /* ======================================
    Overlay
 ====================================== */
@@ -494,16 +464,13 @@
     opacity: 1;
 }
 
-
 /* ======================================
    Scrollbar
 ====================================== */
 
 .student-sidebar {
     scrollbar-width: thin;
-    scrollbar-color:
-        rgba(178, 135, 255, 0.3)
-        transparent;
+    scrollbar-color: rgba(178, 135, 255, 0.3) transparent;
 }
 
 .student-sidebar::-webkit-scrollbar {
@@ -519,7 +486,6 @@
     border-radius: 999px;
 }
 
-
 /* ======================================
    Responsive
 ====================================== */
@@ -532,8 +498,7 @@
     .student-sidebar {
         transform: translateX(-100%);
 
-        box-shadow:
-            16px 0 40px rgba(0, 0, 0, 0.42);
+        box-shadow: 16px 0 40px rgba(0, 0, 0, 0.42);
     }
 
     .student-sidebar.is-open {
@@ -583,14 +548,12 @@
     }
 
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1rem
-            2rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1rem 2rem;
     }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .student-sidebar,
     .student-main,
     .student-sidebar-overlay,
@@ -609,10 +572,7 @@
    The original file uses an undefined --page-gutter variable.
 */
 .student-main {
-    padding:
-        calc(var(--student-topbar-height) + 2rem)
-        clamp(1.25rem, 3vw, 3rem)
-        3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .student-dashboard {
@@ -625,7 +585,6 @@
 
     margin-inline: auto;
 }
-
 
 /* ==================================================
    Page Header
@@ -684,7 +643,6 @@
     min-width: 145px;
 }
 
-
 /* ==================================================
    Statistics
    ================================================== */
@@ -708,8 +666,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.17);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.17);
 
     transition:
         background-color var(--transition-normal),
@@ -768,7 +725,6 @@
     line-height: 1;
 }
 
-
 /* ==================================================
    Dashboard Grid
    ================================================== */
@@ -776,12 +732,10 @@
 .student-dashboard-grid {
     display: grid;
     grid-template-columns:
-        minmax(0, 1.55fr)
-        minmax(300px, 0.75fr);
+        minmax(0, 1.55fr) minmax(300px, 0.75fr);
     align-items: stretch;
     gap: 1rem;
 }
-
 
 /* ==================================================
    Shared Panels
@@ -796,8 +750,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 14px 32px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.2);
 }
 
 .student-panel-header {
@@ -862,7 +815,6 @@
     transform: translateX(2px);
 }
 
-
 /* ==================================================
    Available Exams
    ================================================== */
@@ -883,8 +835,7 @@
 
     border-bottom: 1px solid var(--border);
 
-    transition:
-        background-color var(--transition-normal);
+    transition: background-color var(--transition-normal);
 }
 
 .student-available-exam:last-child {
@@ -996,7 +947,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Latest Result
    ================================================== */
@@ -1098,14 +1048,14 @@
     border-radius: var(--radius-md);
 }
 
-.student-result-score > span {
+.student-result-score>span {
     color: var(--sec-text);
 
     font-size: 0.57rem;
     font-weight: 600;
 }
 
-.student-result-score > div {
+.student-result-score>div {
     display: flex;
     align-items: baseline;
     gap: 0.25rem;
@@ -1131,7 +1081,7 @@
     gap: 0.65rem;
 }
 
-.student-result-details > div {
+.student-result-details>div {
     padding: 0.75rem;
 
     background-color: rgba(44, 3, 69, 0.25);
@@ -1198,7 +1148,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Responsive
    ================================================== */
@@ -1211,10 +1160,7 @@
 
 @media (max-width: 768px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1.25rem
-            2.5rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .student-dashboard-header {
@@ -1241,10 +1187,7 @@
 
 @media (max-width: 576px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.25rem)
-            1rem
-            2rem;
+        padding: calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .student-dashboard-stats {
@@ -1284,6 +1227,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .student-stat-card,
     .student-panel-link,
     .student-available-exam,
@@ -1302,10 +1246,7 @@
    inside dashboard-student.css.
 */
 .student-main {
-    padding:
-        calc(var(--student-topbar-height) + 2rem)
-        clamp(1.25rem, 3vw, 3rem)
-        3rem;
+    padding: calc(var(--student-topbar-height) + 2rem) clamp(1.25rem, 3vw, 3rem) 3rem;
 }
 
 .student-history-page {
@@ -1318,7 +1259,6 @@
 
     margin-inline: auto;
 }
-
 
 /* ==================================================
    Page Header
@@ -1408,7 +1348,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    History Panel
    ================================================== */
@@ -1422,8 +1361,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 16px 36px rgba(0, 0, 0, 0.22);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
 }
 
 .student-history-panel-header {
@@ -1487,7 +1425,6 @@
     line-height: 1.55;
 }
 
-
 /* ==================================================
    History List
    ================================================== */
@@ -1500,12 +1437,7 @@
 .student-history-item {
     display: grid;
     grid-template-columns:
-        minmax(230px, 1.4fr)
-        minmax(125px, 0.7fr)
-        minmax(135px, 0.75fr)
-        minmax(105px, 0.55fr)
-        85px
-        100px;
+        minmax(230px, 1.4fr) minmax(125px, 0.7fr) minmax(135px, 0.75fr) minmax(105px, 0.55fr) 85px 100px;
     align-items: center;
     gap: 1rem;
 
@@ -1514,8 +1446,7 @@
 
     border-bottom: 1px solid var(--border);
 
-    transition:
-        background-color var(--transition-normal);
+    transition: background-color var(--transition-normal);
 }
 
 .student-history-item:last-child {
@@ -1525,7 +1456,6 @@
 .student-history-item:hover {
     background-color: rgba(44, 3, 69, 0.2);
 }
-
 
 /* ==================================================
    Exam Identity
@@ -1580,7 +1510,6 @@
     line-height: 1.4;
 }
 
-
 /* ==================================================
    History Details
    ================================================== */
@@ -1616,12 +1545,11 @@
     line-height: 1.4;
 }
 
-
 /* ==================================================
    Score
    ================================================== */
 
-.student-history-score > small {
+.student-history-score>small {
     display: block;
 
     color: var(--third-text);
@@ -1629,7 +1557,7 @@
     font-size: 0.47rem;
 }
 
-.student-history-score > div {
+.student-history-score>div {
     display: flex;
     align-items: baseline;
     gap: 0.25rem;
@@ -1650,7 +1578,6 @@
 
     font-size: 0.47rem;
 }
-
 
 /* ==================================================
    Status
@@ -1692,7 +1619,6 @@
     border-color: rgba(251, 113, 133, 0.24);
 }
 
-
 /* ==================================================
    Review Button
    ================================================== */
@@ -1732,7 +1658,6 @@
     transform: translateY(-1px);
 }
 
-
 /* ==================================================
    Information Note
    ================================================== */
@@ -1750,8 +1675,7 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 
-    box-shadow:
-        0 12px 26px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.15);
 }
 
 .student-history-note-icon {
@@ -1789,7 +1713,6 @@
     line-height: 1.6;
 }
 
-
 /* ==================================================
    Responsive
    ================================================== */
@@ -1797,11 +1720,7 @@
 @media (max-width: 1150px) {
     .student-history-item {
         grid-template-columns:
-            minmax(220px, 1.4fr)
-            minmax(120px, 0.8fr)
-            minmax(120px, 0.8fr)
-            90px
-            85px;
+            minmax(220px, 1.4fr) minmax(120px, 0.8fr) minmax(120px, 0.8fr) 90px 85px;
 
         gap: 0.8rem;
     }
@@ -1814,9 +1733,7 @@
 @media (max-width: 900px) {
     .student-history-item {
         grid-template-columns:
-            minmax(0, 1fr)
-            auto
-            auto;
+            minmax(0, 1fr) auto auto;
 
         align-items: center;
     }
@@ -1842,10 +1759,7 @@
 
 @media (max-width: 768px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.5rem)
-            1.25rem
-            2.5rem;
+        padding: calc(var(--student-topbar-height) + 1.5rem) 1.25rem 2.5rem;
     }
 
     .student-history-header {
@@ -1878,17 +1792,14 @@
         gap: 0.6rem;
     }
 
-    .student-history-score > div {
+    .student-history-score>div {
         margin-top: 0;
     }
 }
 
 @media (max-width: 576px) {
     .student-main {
-        padding:
-            calc(var(--student-topbar-height) + 1.25rem)
-            1rem
-            2rem;
+        padding: calc(var(--student-topbar-height) + 1.25rem) 1rem 2rem;
     }
 
     .student-history-exams-btn {
@@ -1906,6 +1817,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
     .student-history-exams-btn,
     .student-history-item,
     .student-history-review-btn {

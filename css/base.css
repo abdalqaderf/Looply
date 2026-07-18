@@ -1,3 +1,8 @@
+/* Prevent protected page content from flashing before role validation. */
+body.auth-pending {
+    visibility: hidden;
+}
+
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Karantina:wght@300;400;700&display=swap");
 
 :root {
@@ -6,10 +11,13 @@
     --in-box: #2c0345;
     --text: #f5f1ff;
     --sec-text: #a99dc2;
-    --third-text: #786d91;
+    --third-text: #9184a8;
     --primary: #f17522;
     --primary-hover: #ff8738;
     --primary-dark: #c9570d;
+    --primary-surface: #c2410c;
+    --primary-surface-hover: #b93808;
+    --primary-surface-dark: #9a3412;
     --border: rgba(178, 135, 255, 0.2);
     --border-hover: rgba(178, 135, 255, 0.55);
     --border-strong: #b287ff;
@@ -30,14 +38,12 @@
     --transition-normal: 280ms ease;
     --section-space: 8rem;
     --page-gutter: clamp(1.25rem, 3vw, 3rem);
-
 }
 
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-
 }
 
 body {
@@ -47,12 +53,9 @@ body {
     color: var(--text);
 }
 
-
-
 a {
     color: inherit;
     text-decoration: none;
-
 }
 
 html {
@@ -83,10 +86,23 @@ svg {
     max-width: 100%;
 }
 
-.box {
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
 
+.box {
     background-color: var(--box);
-    box-shadow: 0 4px 6px -1px rgba(38, 16, 41, 0.315), 0 10px 20px -5px rgba(3, 2, 3, 0.5);
+    box-shadow:
+        0 4px 6px -1px rgba(38, 16, 41, 0.315),
+        0 10px 20px -5px rgba(3, 2, 3, 0.5);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
 }
@@ -110,10 +126,9 @@ svg {
     padding: 0.75rem 1.2rem;
 
     color: var(--text);
-    background:
-        linear-gradient(135deg,
-            var(--primary),
-            var(--primary-dark));
+    background: linear-gradient(135deg,
+            var(--primary-surface),
+            var(--primary-surface-dark));
 
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: var(--radius-md);
@@ -141,10 +156,9 @@ svg {
 .primary-btn:hover {
     color: var(--text);
 
-    background:
-        linear-gradient(135deg,
-            var(--primary-hover),
-            var(--primary));
+    background: linear-gradient(135deg,
+            var(--primary-surface-hover),
+            var(--primary-surface));
 
     border-color: rgba(255, 255, 255, 0.22);
 
@@ -176,8 +190,7 @@ svg {
 .primary-btn.disabled {
     color: rgba(245, 241, 255, 0.55);
 
-    background:
-        linear-gradient(135deg,
+    background: linear-gradient(135deg,
             rgba(241, 117, 34, 0.45),
             rgba(201, 87, 13, 0.4));
 
@@ -192,8 +205,7 @@ svg {
 .primary-btn i {
     font-size: 0.9rem;
 
-    transition:
-        transform 180ms ease;
+    transition: transform 180ms ease;
 }
 
 .primary-btn:hover i {
@@ -203,7 +215,6 @@ svg {
 .new-section {
     margin-top: 5rem;
 }
-
 
 /* =========================
    Looply SweetAlert Theme
@@ -215,8 +226,7 @@ svg {
 }
 
 .swal2-container.swal2-backdrop-show {
-    background:
-        rgba(5, 2, 12, 0.78);
+    background: rgba(5, 2, 12, 0.78);
 
     backdrop-filter: blur(6px);
 }
@@ -230,16 +240,11 @@ svg {
 
     color: var(--text);
 
-    background:
-        linear-gradient(145deg,
-            var(--box),
-            #100219) !important;
+    background: linear-gradient(145deg, var(--box), #100219) !important;
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:
-        var(--radius-lg);
+    border-radius: var(--radius-lg);
 
     box-shadow:
         0 28px 80px rgba(0, 0, 0, 0.6),
@@ -249,8 +254,7 @@ svg {
 /* Icon */
 
 .looply-alert__icon {
-    margin:
-        0.25rem auto 1rem !important;
+    margin: 0.25rem auto 1rem !important;
 
     transform: scale(0.9);
 }
@@ -260,14 +264,11 @@ svg {
 .looply-alert__title {
     padding: 0 !important;
 
-    color:
-        var(--text) !important;
+    color: var(--text) !important;
 
-    font-family:
-        var(--font-main) !important;
+    font-family: var(--font-main) !important;
 
-    font-size:
-        clamp(1.3rem, 3vw, 1.75rem) !important;
+    font-size: clamp(1.3rem, 3vw, 1.75rem) !important;
 
     font-weight: 700 !important;
 
@@ -282,14 +283,11 @@ svg {
     margin-top: 0.9rem !important;
     padding: 0 !important;
 
-    color:
-        var(--sec-text) !important;
+    color: var(--sec-text) !important;
 
-    font-family:
-        var(--font-main) !important;
+    font-family: var(--font-main) !important;
 
-    font-size:
-        0.95rem !important;
+    font-size: 0.95rem !important;
 
     line-height: 1.7 !important;
 }
@@ -300,8 +298,7 @@ svg {
     display: flex !important;
     gap: 0.75rem !important;
 
-    margin:
-        1.6rem 0 0 !important;
+    margin: 1.6rem 0 0 !important;
 }
 
 /* Shared button */
@@ -312,14 +309,11 @@ svg {
 
     padding: 0.7rem 1.2rem;
 
-    border-radius:
-        var(--radius-md);
+    border-radius: var(--radius-md);
 
-    font-family:
-        var(--font-main);
+    font-family: var(--font-main);
 
-    font-size:
-        var(--font-size-md);
+    font-size: var(--font-size-md);
 
     font-weight: 700;
 
@@ -332,24 +326,14 @@ svg {
         box-shadow 180ms ease;
 }
 
-
-
-<<<<<<< HEAD
 .looply-alert__button--success,
 .looply-alert__button--error,
 .looply-alert__button--warning,
 .looply-alert__button--info,
 .looply-alert__button--question {
     color: #ffffff;
-=======
-    background:
-        linear-gradient(135deg,
-            var(--primary),
-            var(--primary-dark));
->>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
 
-    border:
-        1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.14);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.16),
@@ -361,83 +345,46 @@ svg {
         box-shadow 180ms ease;
 }
 
-<<<<<<< HEAD
-=======
-.looply-alert__button--confirm:hover {
-    background:
-        linear-gradient(135deg,
-            var(--primary-hover),
-            var(--primary));
->>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
-
 .looply-alert__button--success {
-    --alert-button-shadow:
-        rgba(16, 185, 129, 0.25);
+    --alert-button-shadow: rgba(16, 185, 129, 0.25);
 
-    --alert-button-focus:
-        rgba(16, 185, 129, 0.55);
+    --alert-button-focus: rgba(16, 185, 129, 0.55);
 
-    background:
-        linear-gradient(135deg,
-            #10b981,
-            #047857);
+    background: linear-gradient(135deg, #10b981, #047857);
 }
-
 
 .looply-alert__button--error {
-    --alert-button-shadow:
-        rgba(244, 63, 94, 0.25);
+    --alert-button-shadow: rgba(244, 63, 94, 0.25);
 
-    --alert-button-focus:
-        rgba(244, 63, 94, 0.55);
+    --alert-button-focus: rgba(244, 63, 94, 0.55);
 
-    background:
-        linear-gradient(135deg,
-            #fb7185,
-            #be123c);
+    background: linear-gradient(135deg, #fb7185, #be123c);
 }
 
-
 .looply-alert__button--warning {
-    --alert-button-shadow:
-        rgba(245, 158, 11, 0.25);
+    --alert-button-shadow: rgba(245, 158, 11, 0.25);
 
-    --alert-button-focus:
-        rgba(245, 158, 11, 0.55);
+    --alert-button-focus: rgba(245, 158, 11, 0.55);
 
     color: #211603;
 
-    background:
-        linear-gradient(135deg,
-            #fbbf24,
-            #d97706);
+    background: linear-gradient(135deg, #fbbf24, #d97706);
 }
 
-
 .looply-alert__button--info {
-    --alert-button-shadow:
-        rgba(37, 99, 235, 0.25);
+    --alert-button-shadow: rgba(37, 99, 235, 0.25);
 
-    --alert-button-focus:
-        rgba(37, 99, 235, 0.55);
+    --alert-button-focus: rgba(37, 99, 235, 0.55);
 
-    background:
-        linear-gradient(135deg,
-            #60a5fa,
-            #2563eb);
+    background: linear-gradient(135deg, #60a5fa, #2563eb);
 }
 
 .looply-alert__button--question {
-    --alert-button-shadow:
-        rgba(124, 58, 237, 0.25);
+    --alert-button-shadow: rgba(124, 58, 237, 0.25);
 
-    --alert-button-focus:
-        rgba(178, 135, 255, 0.55);
+    --alert-button-focus: rgba(178, 135, 255, 0.55);
 
-    background:
-        linear-gradient(135deg,
-            #b287ff,
-            #7c3aed);
+    background: linear-gradient(135deg, #b287ff, #7c3aed);
 }
 
 .looply-alert__button--success:hover,
@@ -447,8 +394,7 @@ svg {
 .looply-alert__button--question:hover {
     filter: brightness(1.08);
 
-    transform:
-        translateY(-2px);
+    transform: translateY(-2px);
 
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.2),
@@ -457,29 +403,23 @@ svg {
 
 /* Cancel button */
 .looply-alert__button--cancel {
-    --alert-button-focus:
-        rgba(178, 135, 255, 0.45);
+    --alert-button-focus: rgba(178, 135, 255, 0.45);
 }
 
 .looply-alert__button--cancel {
-    color:
-        var(--sec-text);
+    color: var(--sec-text);
 
-    background:
-        rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.04);
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 }
 
 .looply-alert__button--cancel:hover {
     color: var(--text);
 
-    background:
-        rgba(178, 135, 255, 0.1);
+    background: rgba(178, 135, 255, 0.1);
 
-    border-color:
-        var(--border-hover);
+    border-color: var(--border-hover);
 
     transform: translateY(-2px);
 }
@@ -491,8 +431,7 @@ svg {
 
     box-shadow:
         0 0 0 3px var(--bg),
-        0 0 0 5px var(--alert-button-focus,
-            rgba(178, 135, 255, 0.55));
+        0 0 0 5px var(--alert-button-focus, rgba(178, 135, 255, 0.55));
 }
 
 /* SweetAlert inputs used later */
@@ -502,17 +441,13 @@ svg {
 .looply-alert .swal2-select {
     color: var(--text);
 
-    background:
-        var(--in-box);
+    background: var(--in-box);
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:
-        var(--radius-md);
+    border-radius: var(--radius-md);
 
-    font-family:
-        var(--font-main);
+    font-family: var(--font-main);
 
     box-shadow: none;
 }
@@ -520,55 +455,41 @@ svg {
 .looply-alert .swal2-input:focus,
 .looply-alert .swal2-textarea:focus,
 .looply-alert .swal2-select:focus {
-    border-color:
-        var(--primary);
+    border-color: var(--primary);
 
-    box-shadow:
-        0 0 0 3px rgba(241, 117, 34, 0.15);
+    box-shadow: 0 0 0 3px rgba(241, 117, 34, 0.15);
 }
 
 /* Loading spinner */
 
 .looply-alert .swal2-loader {
-    border-color:
-        var(--primary) transparent var(--primary) transparent;
+    border-color: var(--primary) transparent var(--primary) transparent;
 }
 
 /* Toast */
 
 .swal2-popup.looply-toast {
-    padding:
-        0.9rem 1rem;
+    padding: 0.9rem 1rem;
 
     color: var(--text);
 
-    background:
-        linear-gradient(135deg,
-            var(--box),
-            #100219) !important;
+    background: linear-gradient(135deg, var(--box), #100219) !important;
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
-    border-radius:
-        var(--radius-md);
+    border-radius: var(--radius-md);
 
-    box-shadow:
-        0 16px 40px rgba(0, 0, 0, 0.48);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.48);
 }
 
 .looply-toast__title {
-    color:
-        var(--text) !important;
+    color: var(--text) !important;
 
-    font-family:
-        var(--font-main) !important;
+    font-family: var(--font-main) !important;
 
-    font-size:
-        0.88rem !important;
+    font-size: 0.88rem !important;
 
-    font-weight:
-        600 !important;
+    font-weight: 600 !important;
 }
 
 .looply-toast__icon {
@@ -576,19 +497,16 @@ svg {
 }
 
 .swal2-timer-progress-bar {
-    background:
-        var(--primary) !important;
+    background: var(--primary) !important;
 }
 
 /* Mobile */
 
 @media (max-width: 576px) {
     .swal2-popup.looply-alert {
-        width:
-            calc(100% - 1.5rem);
+        width: calc(100% - 1.5rem);
 
-        padding:
-            1.6rem 1.2rem 1.3rem;
+        padding: 1.6rem 1.2rem 1.3rem;
     }
 
     .looply-alert__actions {
@@ -602,8 +520,4 @@ svg {
 
         margin: 0 !important;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ab6497167d0e6bfcb51a20df89a92219de101986
