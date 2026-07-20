@@ -60,6 +60,21 @@ export function getStudentExamAttempt(studentId, examId) {
   );
 }
 
+export function getAttemptPercentage(attempt) {
+  const stored = Number(attempt.percentage);
+
+  const hasStoredValue =
+    attempt.percentage !== null &&
+    attempt.percentage !== undefined &&
+    attempt.percentage !== "";
+
+  if (hasStoredValue && Number.isFinite(stored)) {
+    return stored;
+  }
+
+  return calculatePercentage(attempt.score, attempt.totalScore);
+}
+
 export function hasStudentSubmittedExam(studentId, examId) {
   return getAttemptsByStudent(studentId).some(
     (attempt) =>

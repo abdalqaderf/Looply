@@ -55,6 +55,12 @@ export function formatDateTime(value, locale = "ar-JO") {
   }).format(date);
 }
 
+export function safeNumber(value) {
+  const number = Number(value);
+
+  return Number.isFinite(number) ? number : 0;
+}
+
 export function calculatePercentage(value, total) {
   const numericValue = Number(value);
   const numericTotal = Number(total);

@@ -16,11 +16,14 @@ import {
 
 import { showErrorToast } from "../core/alerts.js";
 
-import { calculatePercentage, normalizeText } from "../core/utils.js";
+import { normalizeText, safeNumber } from "../core/utils.js";
 
 import { getExamById } from "../services/exams-service.js";
 
-import { getAttemptsByStudent } from "../services/attempts-service.js";
+import {
+  getAttemptPercentage,
+  getAttemptsByStudent,
+} from "../services/attempts-service.js";
 
 const LOCALE = APP_CONFIG.defaultLocale;
 
@@ -58,27 +61,6 @@ function resultRoute(attemptId) {
   url.searchParams.set("attemptId", attemptId);
 
   return url.href;
-}
-
-function safeNumber(value) {
-  const number = Number(value);
-
-  return Number.isFinite(number) ? number : 0;
-}
-
-function percentage(attempt) {
-  const stored = Number(attempt.percentage);
-
-  if (
-    attempt.percentage !== null &&
-    attempt.percentage !== undefined &&
-    attempt.percentage !== "" &&
-    Number.isFinite(stored)
-  ) {
-    return stored;
-  }
-
-  return calculatePercentage(attempt.score, attempt.totalScore);
 }
 
 function dateParts(value) {
@@ -179,7 +161,7 @@ function historyItem(attempt) {
 
   const submitted = dateParts(attempt.submittedAt ?? attempt.updatedAt);
 
-  const passed = percentage(attempt) >= PASSING_PERCENTAGE;
+  const passed = getAttemptPercentage(attempt) >= PASSING_PERCENTAGE;
 
   const correct = safeNumber(attempt.correctAnswers);
 

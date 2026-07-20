@@ -19,15 +19,18 @@ import {
 import { showErrorToast } from "../core/alerts.js";
 
 import {
-  calculatePercentage,
   formatDate,
   formatDateTime,
   normalizeText,
+  safeNumber,
 } from "../core/utils.js";
 
 import { getActiveExams, getExamById } from "../services/exams-service.js";
 
-import { getAttemptsByStudent } from "../services/attempts-service.js";
+import {
+  getAttemptPercentage,
+  getAttemptsByStudent,
+} from "../services/attempts-service.js";
 
 const DASHBOARD_EXAM_LIMIT = 3;
 const PASSING_PERCENTAGE = 50;
@@ -308,27 +311,6 @@ function renderAvailableExams(elements, exams, attemptsByExam) {
   });
 }
 
-function safeNumber(value) {
-  const number = Number(value);
-
-  return Number.isFinite(number) ? number : 0;
-}
-
-function getPercentage(attempt) {
-  const stored = Number(attempt.percentage);
-
-  const hasStoredValue =
-    attempt.percentage !== null &&
-    attempt.percentage !== undefined &&
-    attempt.percentage !== "";
-
-  if (hasStoredValue && Number.isFinite(stored)) {
-    return stored;
-  }
-
-  return calculatePercentage(attempt.score, attempt.totalScore);
-}
-
 function renderLatestResult(elements, attempt) {
   if (!attempt) {
     hideElement(elements.latestResult);
@@ -346,7 +328,7 @@ function renderLatestResult(elements, attempt) {
 
   const title = normalizeText(exam?.title) || "Unavailable exam";
 
-  const passed = getPercentage(attempt) >= PASSING_PERCENTAGE;
+  const passed = getAttemptPercentage(attempt) >= PASSING_PERCENTAGE;
 
   setText(elements.latestTitle, title);
 

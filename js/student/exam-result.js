@@ -18,17 +18,17 @@ import {
 
 import { showError, showErrorToast } from "../core/alerts.js";
 
-import {
-  calculatePercentage,
-  getQueryParam,
-  normalizeText,
-} from "../core/utils.js";
+import { getQueryParam, normalizeText, safeNumber } from "../core/utils.js";
 
-import { getExamById } from "../services/exams-service.js";
+import {
+  getExamById,
+  getQuestionTypeLabel,
+} from "../services/exams-service.js";
 
 import {
   calculateScore,
   getAttemptById,
+  getAttemptPercentage,
 } from "../services/attempts-service.js";
 
 const LOCALE = APP_CONFIG.defaultLocale;
@@ -98,41 +98,6 @@ function getPageElements() {
 
     backLink: getElement(".exam-result-back-link"),
   };
-}
-
-function questionTypeLabel(type) {
-  const labels = {
-    [QUESTION_TYPES.MULTIPLE_CHOICE]: "Multiple Choice",
-
-    [QUESTION_TYPES.TRUE_FALSE]: "True or False",
-
-    [QUESTION_TYPES.SHORT_ANSWER]: "Short Answer",
-
-    [QUESTION_TYPES.CODE_OUTPUT]: "Code Output",
-  };
-
-  return labels[type] ?? "Question";
-}
-
-function safeNumber(value) {
-  const number = Number(value);
-
-  return Number.isFinite(number) ? number : 0;
-}
-
-function attemptPercentage(attempt) {
-  const stored = Number(attempt.percentage);
-
-  if (
-    attempt.percentage !== null &&
-    attempt.percentage !== undefined &&
-    attempt.percentage !== "" &&
-    Number.isFinite(stored)
-  ) {
-    return stored;
-  }
-
-  return calculatePercentage(attempt.score, attempt.totalScore);
 }
 
 function dateParts(value) {
@@ -420,7 +385,7 @@ function createQuestionReview(question, index, studentAnswer) {
         make("span", {
           className: "exam-result-question-type",
 
-          text: questionTypeLabel(question.type),
+          text: getQuestionTypeLabel(question.type),
         }),
 
         make("span", {
@@ -475,7 +440,7 @@ function renderResult(elements, exam, attempt) {
 
   const minutes = usedMinutes(attempt);
 
-  const passed = attemptPercentage(attempt) >= PASSING_PERCENTAGE;
+  const passed = getAttemptPercentage(attempt) >= PASSING_PERCENTAGE;
 
   document.title = `Looply | ${exam.title || "Exam Result"}`;
 

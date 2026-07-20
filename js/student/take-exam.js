@@ -26,7 +26,11 @@ import {
 
 import { getQueryParam, normalizeText } from "../core/utils.js";
 
-import { getExamById, getExamTotalPoints } from "../services/exams-service.js";
+import {
+  getExamById,
+  getExamTotalPoints,
+  getQuestionTypeLabel,
+} from "../services/exams-service.js";
 
 import {
   getStudentExamAttempt,
@@ -95,20 +99,6 @@ function getPageElements() {
 
     exitLink: getElement(".take-exam-exit-btn"),
   };
-}
-
-function questionTypeLabel(type) {
-  const labels = {
-    [QUESTION_TYPES.MULTIPLE_CHOICE]: "Multiple Choice",
-
-    [QUESTION_TYPES.TRUE_FALSE]: "True or False",
-
-    [QUESTION_TYPES.SHORT_ANSWER]: "Short Answer",
-
-    [QUESTION_TYPES.CODE_OUTPUT]: "Code Output",
-  };
-
-  return labels[type] ?? "Question";
 }
 
 function resultRoute(attemptId) {
@@ -356,7 +346,7 @@ function createQuestionCard(question, index) {
         make("span", {
           className: "take-exam-question-type",
 
-          text: questionTypeLabel(question.type),
+          text: getQuestionTypeLabel(question.type),
         }),
 
         make("span", {
