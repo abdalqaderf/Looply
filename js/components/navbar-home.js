@@ -1,5 +1,5 @@
 export function createPublicNavbar() {
-    return `
+  return `
         <nav
             class="public-navbar"
             aria-label="Main navigation"
@@ -88,226 +88,136 @@ export function createPublicNavbar() {
     `;
 }
 
-
 function getCurrentPageName() {
-    const pathParts =
-        window.location.pathname.split("/");
+  const pathParts = window.location.pathname.split("/");
 
-    return pathParts.pop() || "home.html";
+  return pathParts.pop() || "home.html";
 }
-
 
 function setActiveLink(links) {
-    const currentPage =
-        getCurrentPageName();
+  const currentPage = getCurrentPageName();
 
-    const currentHash =
-        window.location.hash;
+  const currentHash = window.location.hash;
 
-    links.forEach((link) => {
-        const pageName =
-            link.dataset.page;
+  links.forEach((link) => {
+    const pageName = link.dataset.page;
 
-        let isActive = false;
+    let isActive = false;
 
-        if (pageName === "home") {
-            isActive =
-                currentPage === "home.html" &&
-                currentHash !== "#features";
-        }
+    if (pageName === "home") {
+      isActive = currentPage === "home.html" && currentHash !== "#features";
+    }
 
-        if (pageName === "features") {
-            isActive =
-                currentPage === "home.html" &&
-                currentHash === "#features";
-        }
+    if (pageName === "features") {
+      isActive = currentPage === "home.html" && currentHash === "#features";
+    }
 
-        if (pageName === "contact-about") {
-            isActive =
-                currentPage ===
-                "contact-about.html";
-        }
+    if (pageName === "contact-about") {
+      isActive = currentPage === "contact-about.html";
+    }
 
-        link.classList.toggle(
-            "active",
-            isActive
-        );
+    link.classList.toggle("active", isActive);
 
-        if (isActive) {
-            link.setAttribute(
-                "aria-current",
-                "page"
-            );
-        } else {
-            link.removeAttribute(
-                "aria-current"
-            );
-        }
-    });
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
 }
 
+export function renderPublicNavbar(rootSelector = "#navbar-root") {
+  const navbarRoot = document.querySelector(rootSelector);
 
-export function renderPublicNavbar(
-    rootSelector = "#navbar-root"
-) {
-    const navbarRoot =
-        document.querySelector(rootSelector);
+  if (!navbarRoot) {
+    console.warn(`Navbar root was not found: ${rootSelector}`);
 
-    if (!navbarRoot) {
-        console.warn(
-            `Navbar root was not found: ${rootSelector}`
-        );
+    return false;
+  }
 
-        return false;
+  navbarRoot.innerHTML = createPublicNavbar();
+
+  const menuButton = navbarRoot.querySelector("#nav-menu-button");
+
+  const navigation = navbarRoot.querySelector("#nav-navigation");
+
+  const navigationLinks = [...navbarRoot.querySelectorAll(".nav-link")];
+
+  const mobileNavigationLinks = [
+    ...navbarRoot.querySelectorAll(".nav-link, .nav-login-mobile"),
+  ];
+
+  if (!menuButton || !navigation) {
+    console.error("Navbar controls could not be initialized.");
+
+    return false;
+  }
+
+  function closeMobileMenu() {
+    navigation.classList.remove("show");
+    menuButton.classList.remove("active");
+
+    menuButton.setAttribute("aria-expanded", "false");
+
+    menuButton.setAttribute("aria-label", "Open navigation menu");
+  }
+
+  function toggleMobileMenu() {
+    const isOpen = navigation.classList.toggle("show");
+
+    menuButton.classList.toggle("active", isOpen);
+
+    menuButton.setAttribute("aria-expanded", String(isOpen));
+
+    menuButton.setAttribute(
+      "aria-label",
+      isOpen ? "Close navigation menu" : "Open navigation menu",
+    );
+  }
+
+  setActiveLink(navigationLinks);
+
+  menuButton.addEventListener("click", toggleMobileMenu);
+
+  mobileNavigationLinks.forEach((link) => {
+    link.addEventListener("click", closeMobileMenu);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+      closeMobileMenu();
     }
+  });
 
-    navbarRoot.innerHTML =
-        createPublicNavbar();
-
-    const menuButton =
-        navbarRoot.querySelector(
-            "#nav-menu-button"
-        );
-
-    const navigation =
-        navbarRoot.querySelector(
-            "#nav-navigation"
-        );
-
-    const navigationLinks = [
-        ...navbarRoot.querySelectorAll(
-            ".nav-link"
-        )
-    ];
-
-    const mobileNavigationLinks = [
-        ...navbarRoot.querySelectorAll(
-            ".nav-link, .nav-login-mobile"
-        )
-    ];
-
-    if (!menuButton || !navigation) {
-        console.error(
-            "Navbar controls could not be initialized."
-        );
-
-        return false;
-    }
-
-   
-    function closeMobileMenu() {
-        navigation.classList.remove("show");
-        menuButton.classList.remove("active");
-
-        menuButton.setAttribute(
-            "aria-expanded",
-            "false"
-        );
-
-        menuButton.setAttribute(
-            "aria-label",
-            "Open navigation menu"
-        );
-    }
-
-    
-    function toggleMobileMenu() {
-        const isOpen =
-            navigation.classList.toggle(
-                "show"
-            );
-
-        menuButton.classList.toggle(
-            "active",
-            isOpen
-        );
-
-        menuButton.setAttribute(
-            "aria-expanded",
-            String(isOpen)
-        );
-
-        menuButton.setAttribute(
-            "aria-label",
-            isOpen
-                ? "Close navigation menu"
-                : "Open navigation menu"
-        );
-    }
-
+  window.addEventListener("hashchange", () => {
     setActiveLink(navigationLinks);
+  });
 
-    menuButton.addEventListener(
-        "click",
-        toggleMobileMenu
-    );
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMobileMenu();
+    }
+  });
 
-    mobileNavigationLinks.forEach(
-        (link) => {
-            link.addEventListener(
-                "click",
-                closeMobileMenu
-            );
-        }
-    );
+  document.addEventListener("click", (event) => {
+    const clickedInsideNavbar = navbarRoot.contains(event.target);
 
-    window.addEventListener(
-        "resize",
-        () => {
-            if (window.innerWidth > 768) {
-                closeMobileMenu();
-            }
-        }
-    );
+    if (!clickedInsideNavbar) {
+      closeMobileMenu();
+    }
+  });
 
-    window.addEventListener(
-        "hashchange",
-        () => {
-            setActiveLink(
-                navigationLinks
-            );
-        }
-    );
-
-    document.addEventListener(
-        "keydown",
-        (event) => {
-            if (event.key === "Escape") {
-                closeMobileMenu();
-            }
-        }
-    );
-
-    document.addEventListener(
-        "click",
-        (event) => {
-            const clickedInsideNavbar =
-                navbarRoot.contains(
-                    event.target
-                );
-
-            if (!clickedInsideNavbar) {
-                closeMobileMenu();
-            }
-        }
-    );
-
-    return true;
+  return true;
 }
-
 
 function initializePublicNavbar() {
-    renderPublicNavbar();
+  renderPublicNavbar();
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializePublicNavbar,
-        {
-            once: true
-        }
-    );
+  document.addEventListener("DOMContentLoaded", initializePublicNavbar, {
+    once: true,
+  });
 } else {
-    initializePublicNavbar();
+  initializePublicNavbar();
 }

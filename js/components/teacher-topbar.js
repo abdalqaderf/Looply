@@ -1,45 +1,37 @@
-import {
-    ROUTES,
-    USER_ROLES
-} from "../core/config.js";
+import { ROUTES, USER_ROLES } from "../core/config.js";
 
 import { getCurrentUser } from "../core/auth.js";
 import { getInitials, normalizeText } from "../core/utils.js";
 
-const LOGO_URL = new URL(
-    "../../icons/logo.svg",
-    import.meta.url
-).href;
+const LOGO_URL = new URL("../../icons/logo.svg", import.meta.url).href;
 
 function escapeHtml(value) {
-    return String(value ?? "").replace(
-        /[&<>"]/g,
-        (character) => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;"
-        })[character]
-    );
+  return String(value ?? "").replace(
+    /[&<>"]/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+      })[character],
+  );
 }
 
 function normalizeTeacher(user = {}) {
-    const fullName = normalizeText(
-        user.fullName ?? user.name
-    ) || "Teacher";
+  const fullName = normalizeText(user.fullName ?? user.name) || "Teacher";
 
-    return {
-        fullName,
-        initials: getInitials(fullName) || "TR",
-        roleLabel: "Teacher"
-    };
+  return {
+    fullName,
+    initials: getInitials(fullName) || "TR",
+    roleLabel: "Teacher",
+  };
 }
 
-
 export function createTeacherTopbar(user) {
-    const teacher = normalizeTeacher(user);
+  const teacher = normalizeTeacher(user);
 
-    return `
+  return `
         <nav
             class="teacher-topbar"
             aria-label="Teacher top navigation"
@@ -94,53 +86,43 @@ export function createTeacherTopbar(user) {
     `;
 }
 
-
 export function renderTeacherTopbar(user, options = {}) {
-    const {
-        rootSelector = "#teacher-topbar-root"
-    } = options;
+  const { rootSelector = "#teacher-topbar-root" } = options;
 
-    const topbarRoot = document.querySelector(rootSelector);
+  const topbarRoot = document.querySelector(rootSelector);
 
-    if (!topbarRoot) {
-        console.warn(
-            `Teacher topbar root was not found: ${rootSelector}`
-        );
+  if (!topbarRoot) {
+    console.warn(`Teacher topbar root was not found: ${rootSelector}`);
 
-        return false;
-    }
+    return false;
+  }
 
-    if (!user || user.role !== USER_ROLES.TEACHER) {
-        console.warn(
-            "A valid teacher user is required to render the topbar."
-        );
+  if (!user || user.role !== USER_ROLES.TEACHER) {
+    console.warn("A valid teacher user is required to render the topbar.");
 
-        return false;
-    }
+    return false;
+  }
 
-    topbarRoot.innerHTML = createTeacherTopbar(user);
-    topbarRoot.dataset.topbarInitialized = "true";
+  topbarRoot.innerHTML = createTeacherTopbar(user);
+  topbarRoot.dataset.topbarInitialized = "true";
 
-    return true;
+  return true;
 }
 
-
 export function initializeTeacherTopbar() {
-    const user = getCurrentUser();
+  const user = getCurrentUser();
 
-    if (!user || user.role !== USER_ROLES.TEACHER) {
-        return false;
-    }
+  if (!user || user.role !== USER_ROLES.TEACHER) {
+    return false;
+  }
 
-    return renderTeacherTopbar(user);
+  return renderTeacherTopbar(user);
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeTeacherTopbar,
-        { once: true }
-    );
+  document.addEventListener("DOMContentLoaded", initializeTeacherTopbar, {
+    once: true,
+  });
 } else {
-    initializeTeacherTopbar();
+  initializeTeacherTopbar();
 }
