@@ -1,6 +1,4 @@
-export function createPublicFooter(
-    year = new Date().getFullYear()
-) {
+export function createPublicFooter(year = new Date().getFullYear()) {
     return `
         <div class="container footer-content">
 
@@ -24,26 +22,18 @@ export function createPublicFooter(
     `;
 }
 
-export function renderPublicFooter(
-    rootSelector = "#footer-root"
-) {
-    const footerRoot =
-        document.querySelector(rootSelector);
+export function renderPublicFooter(rootSelector = "#footer-root") {
+    const footerRoot = document.querySelector(rootSelector);
 
     if (!footerRoot) {
-        console.warn(
-            `Footer root was not found: ${rootSelector}`
-        );
+        console.warn(`Footer root was not found: ${rootSelector}`);
 
         return false;
     }
 
-    footerRoot.classList.add(
-        "public-footer"
-    );
+    footerRoot.classList.add("public-footer");
 
-    footerRoot.innerHTML =
-        createPublicFooter();
+    footerRoot.innerHTML = createPublicFooter();
 
     return true;
 }
@@ -53,13 +43,9 @@ function initializePublicFooter() {
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializePublicFooter,
-        {
-            once: true
-        }
-    );
+    document.addEventListener("DOMContentLoaded", initializePublicFooter, {
+        once: true,
+    });
 } else {
     initializePublicFooter();
 }

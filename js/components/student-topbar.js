@@ -1,44 +1,37 @@
-import {
-    ROUTES,
-    USER_ROLES
-} from "../core/config.js";
+import { ROUTES, USER_ROLES } from "../core/config.js";
 
 import { getCurrentUser } from "../core/auth.js";
 import { getInitials, normalizeText } from "../core/utils.js";
 
-const LOGO_URL = new URL(
-    "../../icons/logo.svg",
-    import.meta.url
-).href;
+const LOGO_URL = new URL("../../icons/logo.svg", import.meta.url).href;
 
 function escapeHtml(value) {
-    return String(value ?? "").replace(
-        /[&<>"]/g,
-        (character) => ({
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&quot;"
-        })[character]
-    );
+  return String(value ?? "").replace(
+    /[&<>"]/g,
+    (character) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+      })[character],
+  );
 }
 
 function normalizeStudent(user = {}) {
-    const fullName = normalizeText(
-        user.fullName ?? user.name
-    ) || "Student";
+  const fullName = normalizeText(user.fullName ?? user.name) || "Student";
 
-    return {
-        fullName,
-        initials: getInitials(fullName) || "ST",
-        roleLabel: "Student"
-    };
+  return {
+    fullName,
+    initials: getInitials(fullName) || "ST",
+    roleLabel: "Student",
+  };
 }
 
 export function createStudentTopbar(user) {
-    const student = normalizeStudent(user);
+  const student = normalizeStudent(user);
 
-    return `
+  return `
         <nav
             class="student-topbar"
             aria-label="Student top navigation"
@@ -94,51 +87,42 @@ export function createStudentTopbar(user) {
 }
 
 export function renderStudentTopbar(user, options = {}) {
-    const {
-        rootSelector = "#student-topbar-root"
-    } = options;
+  const { rootSelector = "#student-topbar-root" } = options;
 
-    const topbarRoot = document.querySelector(rootSelector);
+  const topbarRoot = document.querySelector(rootSelector);
 
-    if (!topbarRoot) {
-        console.warn(
-            `Student topbar root was not found: ${rootSelector}`
-        );
+  if (!topbarRoot) {
+    console.warn(`Student topbar root was not found: ${rootSelector}`);
 
-        return false;
-    }
+    return false;
+  }
 
-    if (!user || user.role !== USER_ROLES.STUDENT) {
-        console.warn(
-            "A valid student user is required to render the topbar."
-        );
+  if (!user || user.role !== USER_ROLES.STUDENT) {
+    console.warn("A valid student user is required to render the topbar.");
 
-        return false;
-    }
+    return false;
+  }
 
-    topbarRoot.innerHTML = createStudentTopbar(user);
-    topbarRoot.dataset.topbarInitialized = "true";
+  topbarRoot.innerHTML = createStudentTopbar(user);
+  topbarRoot.dataset.topbarInitialized = "true";
 
-    return true;
+  return true;
 }
 
 export function initializeStudentTopbar() {
-    const user = getCurrentUser();
+  const user = getCurrentUser();
 
-    if (!user || user.role !== USER_ROLES.STUDENT) {
-        return false;
-    }
+  if (!user || user.role !== USER_ROLES.STUDENT) {
+    return false;
+  }
 
-    return renderStudentTopbar(user);
+  return renderStudentTopbar(user);
 }
 
 if (document.readyState === "loading") {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeStudentTopbar,
-        { once: true }
-    );
+  document.addEventListener("DOMContentLoaded", initializeStudentTopbar, {
+    once: true,
+  });
 } else {
-    initializeStudentTopbar();
+  initializeStudentTopbar();
 }
-

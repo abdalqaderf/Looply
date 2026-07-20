@@ -1,711 +1,434 @@
 import {
-    APP_CONFIG,
-    ATTEMPT_STATUS,
-    ROUTES,
-    USER_ROLES
+  APP_CONFIG,
+  ATTEMPT_STATUS,
+  ROUTES,
+  USER_ROLES,
 } from "../core/config.js";
 
-import {
-    requireRole
-} from "../core/auth.js";
+import { requireRole } from "../core/auth.js";
 
 import {
-    clearElement,
-    createElement,
-    getElement,
-    setText
+  clearElement,
+  createElement,
+  getElement,
+  setText,
 } from "../core/dom.js";
 
-import {
-    showErrorToast
-} from "../core/alerts.js";
+import { showErrorToast } from "../core/alerts.js";
+
+import { formatDate } from "../core/utils.js";
 
 import {
-    formatDate
-} from "../core/utils.js";
-
-import {
-    getActiveExams,
-    getExamTotalPoints
+  getActiveExams,
+  getExamTotalPoints,
 } from "../services/exams-service.js";
 
-import {
-    getAttemptsByStudent
-} from "../services/attempts-service.js";
+import { getAttemptsByStudent } from "../services/attempts-service.js";
 
-const LOCALE =
-    APP_CONFIG.defaultLocale;
+const LOCALE = APP_CONFIG.defaultLocale;
 
-function node(
-    tag,
-    options = {},
-    children = []
-) {
-    const element =
-        createElement(
-            tag,
-            options
-        );
+function node(tag, options = {}, children = []) {
+  const element = createElement(tag, options);
 
-    element.append(...children);
+  element.append(...children);
 
-    return element;
+  return element;
 }
 
 function icon(name) {
-    return node("i", {
-        className: `bi ${name}`,
+  return node("i", {
+    className: `bi ${name}`,
 
-        attributes: {
-            "aria-hidden": "true"
-        }
-    });
+    attributes: {
+      "aria-hidden": "true",
+    },
+  });
 }
 
 function getElements() {
-    return {
-        count:
-            getElement(
-                "#student-exams-count"
-            ),
+  return {
+    count: getElement("#student-exams-count"),
 
-        list:
-            getElement(
-                "#student-exams-list"
-            )
-    };
+    list: getElement("#student-exams-list"),
+  };
 }
 
 function routeToExam(examId) {
-    const url = new URL(
-        ROUTES.STUDENT_TAKE_EXAM
-    );
+  const url = new URL(ROUTES.STUDENT_TAKE_EXAM);
 
-    url.searchParams.set(
-        "examId",
-        examId
-    );
+  url.searchParams.set("examId", examId);
 
-    return url.href;
+  return url.href;
 }
 
 function formatTime(value) {
-    const date = new Date(value);
+  const date = new Date(value);
 
-    if (
-        Number.isNaN(
-            date.getTime()
-        )
-    ) {
-        return "Invalid time";
-    }
+  if (Number.isNaN(date.getTime())) {
+    return "Invalid time";
+  }
 
-    return new Intl.DateTimeFormat(
-        LOCALE,
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    ).format(date);
+  return new Intl.DateTimeFormat(LOCALE, {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
 }
 
-function detail(
-    iconName,
-    label,
-    value,
-    extra = ""
-) {
-    const copy = node(
-        "div",
-        {},
-        [
-            node("small", {
-                text: label
-            }),
+function detail(iconName, label, value, extra = "") {
+  const copy = node("div", {}, [
+    node("small", {
+      text: label,
+    }),
 
-            node("strong", {
-                text: value
-            })
-        ]
+    node("strong", {
+      text: value,
+    }),
+  ]);
+
+  if (extra) {
+    copy.append(
+      node("span", {
+        text: extra,
+      }),
     );
+  }
 
-    if (extra) {
-        copy.append(
-            node("span", {
-                text: extra
-            })
-        );
-    }
-
-    return node(
-        "div",
+  return node(
+    "div",
+    {
+      className: "student-exam-detail",
+    },
+    [
+      node(
+        "span",
         {
-            className:
-                "student-exam-detail"
+          className: "student-exam-detail-icon",
         },
-        [
-            node(
-                "span",
-                {
-                    className:
-                        "student-exam-detail-icon"
-                },
-                [
-                    icon(iconName)
-                ]
-            ),
+        [icon(iconName)],
+      ),
 
-            copy
-        ]
-    );
+      copy,
+    ],
+  );
 }
 
 function availableExams(attempts) {
-    const submittedExamIds =
-        new Set(
-            attempts
-                .filter(
-                    (attempt) =>
-                        attempt.status ===
-                        ATTEMPT_STATUS.SUBMITTED
-                )
-                .map(
-                    (attempt) =>
-                        attempt.examId
-                )
-        );
+  const submittedExamIds = new Set(
+    attempts
+      .filter((attempt) => attempt.status === ATTEMPT_STATUS.SUBMITTED)
+      .map((attempt) => attempt.examId),
+  );
 
-    const now = Date.now();
+  const now = Date.now();
 
-    return getActiveExams()
-        .filter((exam) => {
-            const start =
-                new Date(
-                    exam.startAt
-                ).getTime();
+  return getActiveExams()
+    .filter((exam) => {
+      const start = new Date(exam.startAt).getTime();
 
-            const end =
-                new Date(
-                    exam.endAt
-                ).getTime();
+      const end = new Date(exam.endAt).getTime();
 
-            return (
-                Number.isFinite(start) &&
-                Number.isFinite(end) &&
-                start <= now &&
-                end >= now &&
-                Array.isArray(
-                    exam.questions
-                ) &&
-                exam.questions.length > 0 &&
-                !submittedExamIds.has(
-                    exam.id
-                )
-            );
-        })
-        .sort(
-            (
-                firstExam,
-                secondExam
-            ) => (
-                new Date(
-                    firstExam.endAt
-                ).getTime() -
-                new Date(
-                    secondExam.endAt
-                ).getTime()
-            )
-        );
+      return (
+        Number.isFinite(start) &&
+        Number.isFinite(end) &&
+        start <= now &&
+        end >= now &&
+        Array.isArray(exam.questions) &&
+        exam.questions.length > 0 &&
+        !submittedExamIds.has(exam.id)
+      );
+    })
+    .sort(
+      (firstExam, secondExam) =>
+        new Date(firstExam.endAt).getTime() -
+        new Date(secondExam.endAt).getTime(),
+    );
 }
 
 function attemptMap(attempts) {
-    const map = new Map();
+  const map = new Map();
 
-    attempts.forEach((attempt) => {
-        if (
-            !map.has(
-                attempt.examId
-            )
-        ) {
-            map.set(
-                attempt.examId,
-                attempt
-            );
-        }
-    });
+  attempts.forEach((attempt) => {
+    if (!map.has(attempt.examId)) {
+      map.set(attempt.examId, attempt);
+    }
+  });
 
-    return map;
+  return map;
 }
 
-function examCard(
-    exam,
-    attempt
-) {
-    const inProgress =
-        attempt?.status ===
-        ATTEMPT_STATUS.IN_PROGRESS;
+function cardTitle(title, description, badge = "") {
+  const titleRow = node(
+    "div",
+    {
+      className: "student-exam-title-row",
+    },
+    [
+      node("h3", {
+        text: title,
+      }),
+    ],
+  );
 
-    const questionCount =
-        exam.questions.length;
+  if (badge) {
+    titleRow.append(
+      node("span", {
+        className: "student-exam-available",
 
-    const title = node(
-        "div",
-        {
-            className:
-                "student-exam-card-title"
-        },
-        [
-            node(
-                "div",
-                {
-                    className:
-                        "student-exam-title-row"
-                },
-                [
-                    node("h3", {
-                        text:
-                            exam.title ||
-                            "Untitled exam"
-                    }),
-
-                    node("span", {
-                        className:
-                            "student-exam-available",
-
-                        text:
-                            inProgress
-                                ? "In Progress"
-                                : "Available"
-                    })
-                ]
-            ),
-
-            node("p", {
-                text:
-                    exam.description ||
-                    "No description is available for this exam."
-            })
-        ]
+        text: badge,
+      }),
     );
+  }
 
-    const details = node(
-        "div",
-        {
-            className:
-                "student-exam-details",
+  return node(
+    "div",
+    {
+      className: "student-exam-card-title",
+    },
+    [
+      titleRow,
 
-            attributes: {
-                "aria-label":
-                    `${
-                        exam.title ||
-                        "Exam"
-                    } information`
-            }
-        },
-        [
-            detail(
-                "bi-list-ol",
-                "Questions",
-                `${questionCount} ${
-                    questionCount === 1
-                        ? "question"
-                        : "questions"
-                }`
-            ),
-
-            detail(
-                "bi-clock",
-                "Duration",
-                `${
-                    Number(
-                        exam.durationMinutes
-                    ) || 0
-                } minutes`
-            ),
-
-            detail(
-                "bi-calendar-event",
-                "Available Until",
-                formatDate(
-                    exam.endAt,
-                    LOCALE
-                ),
-                formatTime(
-                    exam.endAt
-                )
-            ),
-
-            detail(
-                "bi-award",
-                "Total Score",
-                `${
-                    getExamTotalPoints(
-                        exam
-                    )
-                } points`
-            )
-        ]
-    );
-
-    const main = node(
-        "div",
-        {
-            className:
-                "student-exam-card-main"
-        },
-        [
-            node(
-                "div",
-                {
-                    className:
-                        "student-exam-card-heading"
-                },
-                [
-                    node(
-                        "span",
-                        {
-                            className:
-                                "student-exam-card-icon"
-                        },
-                        [
-                            icon(
-                                "bi-journal-code"
-                            )
-                        ]
-                    ),
-
-                    title
-                ]
-            ),
-
-            details
-        ]
-    );
-
-    const action = node(
-        "a",
-        {
-            className:
-                "student-exam-start-btn",
-
-            attributes: {
-                href:
-                    routeToExam(
-                        exam.id
-                    ),
-
-                "aria-label":
-                    `${
-                        inProgress
-                            ? "Continue"
-                            : "Start"
-                    } ${
-                        exam.title ||
-                        "exam"
-                    }`
-            }
-        },
-        [
-            node("span", {
-                text:
-                    inProgress
-                        ? "Continue Exam"
-                        : "Start Exam"
-            }),
-
-            icon(
-                "bi-arrow-right"
-            )
-        ]
-    );
-
-    const actions = node(
-        "div",
-        {
-            className:
-                "student-exam-card-actions"
-        },
-        [
-            node(
-                "div",
-                {
-                    className:
-                        "student-exam-card-note"
-                },
-                [
-                    icon(
-                        "bi-info-circle"
-                    ),
-
-                    node("p", {
-                        text:
-                            inProgress
-                                ? "Your saved attempt is still in progress."
-                                : "The timer begins when you start the exam."
-                    })
-                ]
-            ),
-
-            action
-        ]
-    );
-
-    return node(
-        "article",
-        {
-            className:
-                "student-exam-card"
-        },
-        [
-            main,
-            actions
-        ]
-    );
+      node("p", {
+        text: description,
+      }),
+    ],
+  );
 }
 
-function stateCard(
+function card(iconName, title, description, note, options = {}) {
+  const { action = null, badge = "", details = null } = options;
+
+  const heading = node(
+    "div",
+    {
+      className: "student-exam-card-heading",
+    },
+    [
+      node(
+        "span",
+        {
+          className: "student-exam-card-icon",
+        },
+        [icon(iconName)],
+      ),
+
+      cardTitle(title, description, badge),
+    ],
+  );
+
+  const mainChildren = [heading];
+
+  if (details) {
+    mainChildren.push(details);
+  }
+
+  const actionChildren = [
+    node(
+      "div",
+      {
+        className: "student-exam-card-note",
+      },
+      [
+        icon("bi-info-circle"),
+
+        node("p", {
+          text: note,
+        }),
+      ],
+    ),
+  ];
+
+  if (action) {
+    actionChildren.push(action);
+  }
+
+  return node(
+    "article",
+    {
+      className: "student-exam-card",
+    },
+    [
+      node(
+        "div",
+        {
+          className: "student-exam-card-main",
+        },
+        mainChildren,
+      ),
+
+      node(
+        "div",
+        {
+          className: "student-exam-card-actions",
+        },
+        actionChildren,
+      ),
+    ],
+  );
+}
+
+function examCard(exam, attempt) {
+  const inProgress = attempt?.status === ATTEMPT_STATUS.IN_PROGRESS;
+
+  const questionCount = exam.questions.length;
+  const title = exam.title || "Untitled exam";
+
+  const details = node(
+    "div",
+    {
+      className: "student-exam-details",
+
+      attributes: {
+        "aria-label": `${exam.title || "Exam"} information`,
+      },
+    },
+    [
+      detail(
+        "bi-list-ol",
+        "Questions",
+        `${questionCount} ${questionCount === 1 ? "question" : "questions"}`,
+      ),
+
+      detail(
+        "bi-clock",
+        "Duration",
+        `${Number(exam.durationMinutes) || 0} minutes`,
+      ),
+
+      detail(
+        "bi-calendar-event",
+        "Available Until",
+        formatDate(exam.endAt, LOCALE),
+        formatTime(exam.endAt),
+      ),
+
+      detail("bi-award", "Total Score", `${getExamTotalPoints(exam)} points`),
+    ],
+  );
+
+  const action = node(
+    "a",
+    {
+      className: "student-exam-start-btn",
+
+      attributes: {
+        href: routeToExam(exam.id),
+
+        "aria-label": `${inProgress ? "Continue" : "Start"} ${
+          exam.title || "exam"
+        }`,
+      },
+    },
+    [
+      node("span", {
+        text: inProgress ? "Continue Exam" : "Start Exam",
+      }),
+
+      icon("bi-arrow-right"),
+    ],
+  );
+
+  return card(
+    "bi-journal-code",
+    title,
+    exam.description || "No description is available for this exam.",
+    inProgress
+      ? "Your saved attempt is still in progress."
+      : "The timer begins when you start the exam.",
+    {
+      badge: inProgress ? "In Progress" : "Available",
+      details,
+      action,
+    },
+  );
+}
+
+function stateCard(iconName, title, message) {
+  return card(
     iconName,
     title,
-    message
-) {
-    return node(
-        "article",
-        {
-            className:
-                "student-exam-card"
-        },
-        [
-            node(
-                "div",
-                {
-                    className:
-                        "student-exam-card-main"
-                },
-                [
-                    node(
-                        "div",
-                        {
-                            className:
-                                "student-exam-card-heading"
-                        },
-                        [
-                            node(
-                                "span",
-                                {
-                                    className:
-                                        "student-exam-card-icon"
-                                },
-                                [
-                                    icon(
-                                        iconName
-                                    )
-                                ]
-                            ),
-
-                            node(
-                                "div",
-                                {
-                                    className:
-                                        "student-exam-card-title"
-                                },
-                                [
-                                    node(
-                                        "div",
-                                        {
-                                            className:
-                                                "student-exam-title-row"
-                                        },
-                                        [
-                                            node(
-                                                "h3",
-                                                {
-                                                    text:
-                                                        title
-                                                }
-                                            )
-                                        ]
-                                    ),
-
-                                    node("p", {
-                                        text:
-                                            message
-                                    })
-                                ]
-                            )
-                        ]
-                    )
-                ]
-            ),
-
-            node(
-                "div",
-                {
-                    className:
-                        "student-exam-card-actions"
-                },
-                [
-                    node(
-                        "div",
-                        {
-                            className:
-                                "student-exam-card-note"
-                        },
-                        [
-                            icon(
-                                "bi-info-circle"
-                            ),
-
-                            node("p", {
-                                text:
-                                    "Use Exam History to review submitted attempts."
-                            })
-                        ]
-                    )
-                ]
-            )
-        ]
-    );
+    message,
+    "Use Exam History to review submitted attempts.",
+  );
 }
 
-function setCount(
-    element,
-    count
-) {
-    setText(
-        element,
-        `${count} ${
-            count === 1
-                ? "exam"
-                : "exams"
-        }`
-    );
+function resetExamList(elements, count) {
+  setText(
+    elements.count,
+    typeof count === "number"
+      ? `${count} ${count === 1 ? "exam" : "exams"}`
+      : count,
+  );
+
+  clearElement(elements.list);
 }
 
-function render(
-    elements,
-    exams,
-    attemptsByExam
-) {
-    setCount(
-        elements.count,
-        exams.length
+function showState(elements, iconName, title, message) {
+  resetExamList(elements, "-- exams");
+  elements.list.append(stateCard(iconName, title, message));
+}
+
+function render(elements, exams, attemptsByExam) {
+  resetExamList(elements, exams.length);
+
+  if (exams.length === 0) {
+    elements.list.append(
+      stateCard(
+        "bi-calendar-check",
+        "No exams are available right now.",
+        "New active exams will appear here when their start time arrives.",
+      ),
     );
 
-    clearElement(
-        elements.list
-    );
+    return;
+  }
 
-    if (exams.length === 0) {
-        elements.list.append(
-            stateCard(
-                "bi-calendar-check",
-                "No exams are available right now.",
-                "New active exams will appear here when their start time arrives."
-            )
-        );
-
-        return;
-    }
-
-    exams.forEach((exam) => {
-        elements.list.append(
-            examCard(
-                exam,
-                attemptsByExam.get(
-                    exam.id
-                ) ?? null
-            )
-        );
-    });
+  exams.forEach((exam) => {
+    elements.list.append(examCard(exam, attemptsByExam.get(exam.id) ?? null));
+  });
 }
 
 function initializeStudentExams() {
-    const student = requireRole(
-        USER_ROLES.STUDENT
+  const student = requireRole(USER_ROLES.STUDENT);
+
+  if (!student) {
+    return;
+  }
+
+  let elements;
+
+  try {
+    elements = getElements();
+
+    showState(
+      elements,
+      "bi-hourglass-split",
+      "Loading available exams...",
+      "Your active exams are being prepared.",
     );
 
-    if (!student) {
-        return;
+    const attempts = getAttemptsByStudent(student.id);
+
+    render(elements, availableExams(attempts), attemptMap(attempts));
+  } catch (error) {
+    console.error("Unable to load available exams.", error);
+
+    if (elements) {
+      showState(
+        elements,
+        "bi-exclamation-triangle",
+        "Unable to load exams.",
+        "Refresh the page and try again.",
+      );
     }
 
-    let elements;
-
-    try {
-        elements = getElements();
-
-        setText(
-            elements.count,
-            "-- exams"
-        );
-
-        clearElement(
-            elements.list
-        );
-
-        elements.list.append(
-            stateCard(
-                "bi-hourglass-split",
-                "Loading available exams...",
-                "Your active exams are being prepared."
-            )
-        );
-
-        const attempts =
-            getAttemptsByStudent(
-                student.id
-            );
-
-        render(
-            elements,
-            availableExams(
-                attempts
-            ),
-            attemptMap(
-                attempts
-            )
-        );
-    } catch (error) {
-        console.error(
-            "Unable to load available exams.",
-            error
-        );
-
-        if (elements) {
-            setText(
-                elements.count,
-                "-- exams"
-            );
-
-            clearElement(
-                elements.list
-            );
-
-            elements.list.append(
-                stateCard(
-                    "bi-exclamation-triangle",
-                    "Unable to load exams.",
-                    "Refresh the page and try again."
-                )
-            );
-        }
-
-        showErrorToast(
-            "Unable to load available exams."
-        );
-    }
+    showErrorToast("Unable to load available exams.");
+  }
 }
 
-if (
-    document.readyState ===
-    "loading"
-) {
-    document.addEventListener(
-        "DOMContentLoaded",
-        initializeStudentExams,
-        {
-            once: true
-        }
-    );
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeStudentExams, {
+    once: true,
+  });
 } else {
-    initializeStudentExams();
+  initializeStudentExams();
 }

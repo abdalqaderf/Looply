@@ -7,10 +7,20 @@ import { generateId, normalizeText } from "../core/utils.js";
 const ALLOWED_EXAM_STATUSES = new Set(Object.values(EXAM_STATUS));
 
 const ALLOWED_QUESTION_TYPES = new Set(Object.values(QUESTION_TYPES));
+const QUESTION_TYPE_LABELS = Object.freeze({
+  [QUESTION_TYPES.MULTIPLE_CHOICE]: "Multiple Choice",
+  [QUESTION_TYPES.TRUE_FALSE]: "True or False",
+  [QUESTION_TYPES.SHORT_ANSWER]: "Short Answer",
+  [QUESTION_TYPES.CODE_OUTPUT]: "Code Output",
+});
 const LEGACY_EXAM_STATUSES = Object.freeze({
   draft: EXAM_STATUS.INACTIVE,
   closed: EXAM_STATUS.END,
 });
+
+export function getQuestionTypeLabel(type) {
+  return QUESTION_TYPE_LABELS[type] ?? "Question";
+}
 
 function migrateStoredExamStatus(exam) {
   const currentStatus = normalizeText(exam?.status).toLowerCase();
