@@ -96,7 +96,7 @@ function createMeta(iconClass, text) {
   return item;
 }
 
-function createStateRow(iconClass, title, detail = "") {
+function createExamRow(iconClass, title) {
   const row = createElement("article", {
     className: "student-available-exam",
   });
@@ -121,55 +121,39 @@ function createStateRow(iconClass, title, detail = "") {
     }),
   );
 
+  identity.append(icon, copy);
+  row.append(identity);
+
+  return { row, copy };
+}
+
+function createStateRow(iconClass, title, detail = "") {
+  const { row, copy } = createExamRow(iconClass, title);
+
   if (detail) {
     const meta = createElement("div", {
       className: "student-exam-meta",
     });
 
     meta.append(createMeta("bi-info-circle", detail));
-
     copy.append(meta);
   }
-
-  identity.append(icon, copy);
-
-  row.append(identity);
 
   return row;
 }
 
 function createExamCard(exam, attempt) {
-  const row = createElement("article", {
-    className: "student-available-exam",
-  });
-
-  const identity = createElement("div", {
-    className: "student-exam-identity",
-  });
-
-  const icon = createElement("span", {
-    className: "student-exam-icon",
-  });
-
-  const copy = createElement("div", {
-    className: "student-exam-copy",
-  });
+  const { row, copy } = createExamRow(
+    "bi-braces",
+    exam.title || "Untitled exam",
+  );
 
   const meta = createElement("div", {
     className: "student-exam-meta",
   });
 
   const questionCount = exam.questions.length;
-
   const questionWord = questionCount === 1 ? "question" : "questions";
-
-  icon.append(createIcon("bi-braces"));
-
-  copy.append(
-    createElement("h3", {
-      text: exam.title || "Untitled exam",
-    }),
-  );
 
   meta.append(
     createMeta("bi-list-ol", `${questionCount} ${questionWord}`),
@@ -180,8 +164,6 @@ function createExamCard(exam, attempt) {
   );
 
   copy.append(meta);
-
-  identity.append(icon, copy);
 
   const isInProgress = attempt?.status === ATTEMPT_STATUS.IN_PROGRESS;
 
@@ -205,29 +187,21 @@ function createExamCard(exam, attempt) {
     createIcon("bi-arrow-right"),
   );
 
-  row.append(identity, link);
+  row.append(link);
 
   return row;
+}
+
+function getAttemptTime(attempt) {
+  const time = new Date(attempt.submittedAt ?? attempt.updatedAt).getTime();
+
+  return Number.isFinite(time) ? time : 0;
 }
 
 function getSubmittedAttempts(attempts) {
   return attempts
     .filter((attempt) => attempt.status === ATTEMPT_STATUS.SUBMITTED)
-    .sort((first, second) => {
-      const firstTime = new Date(
-        first.submittedAt ?? first.updatedAt,
-      ).getTime();
-
-      const secondTime = new Date(
-        second.submittedAt ?? second.updatedAt,
-      ).getTime();
-
-      const safeFirstTime = Number.isFinite(firstTime) ? firstTime : 0;
-
-      const safeSecondTime = Number.isFinite(secondTime) ? secondTime : 0;
-
-      return safeSecondTime - safeFirstTime;
-    });
+    .sort((first, second) => getAttemptTime(second) - getAttemptTime(first));
 }
 
 function getAvailableExams(attempts) {
@@ -260,33 +234,31 @@ function getAvailableExams(attempts) {
 }
 
 function getAttemptsByExam(attempts) {
-  const attemptsByExam = new Map();
-
-  attempts.forEach((attempt) => {
+  return attempts.reduce((attemptsByExam, attempt) => {
     if (!attemptsByExam.has(attempt.examId)) {
       attemptsByExam.set(attempt.examId, attempt);
     }
-  });
 
-  return attemptsByExam;
+    return attemptsByExam;
+  }, new Map());
 }
 
-function renderLoading(elements) {
+function renderDashboardState(
+  elements,
+  iconClass,
+  title,
+  detail,
+  resultMessage,
+) {
   setText(elements.availableCount, "--");
-
   setText(elements.completedCount, "--");
-
   clearElement(elements.availableList);
 
-  elements.availableList.append(
-    createStateRow("bi-hourglass-split", "Loading available exams..."),
-  );
+  elements.availableList.append(createStateRow(iconClass, title, detail));
 
   hideElement(elements.latestResult);
-
   showElement(elements.latestEmpty);
-
-  setText(elements.latestEmptyMessage, "Loading your latest result...");
+  setText(elements.latestEmptyMessage, resultMessage);
 }
 
 function renderAvailableExams(elements, exams, attemptsByExam) {
@@ -378,28 +350,6 @@ function renderLatestResult(elements, attempt) {
   showElement(elements.latestResult);
 }
 
-function renderError(elements) {
-  setText(elements.availableCount, "--");
-
-  setText(elements.completedCount, "--");
-
-  clearElement(elements.availableList);
-
-  elements.availableList.append(
-    createStateRow(
-      "bi-exclamation-triangle",
-      "Unable to load available exams.",
-      "Refresh the page and try again.",
-    ),
-  );
-
-  hideElement(elements.latestResult);
-
-  showElement(elements.latestEmpty);
-
-  setText(elements.latestEmptyMessage, "Unable to load your latest result.");
-}
-
 function initializeStudentDashboard() {
   const user = requireRole(USER_ROLES.STUDENT, {
     redirect: true,
@@ -414,7 +364,13 @@ function initializeStudentDashboard() {
   try {
     elements = getDashboardElements();
 
-    renderLoading(elements);
+    renderDashboardState(
+      elements,
+      "bi-hourglass-split",
+      "Loading available exams...",
+      "",
+      "Loading your latest result...",
+    );
 
     const firstName = normalizeText(user.fullName).split(/\s+/)[0] || "Student";
 
@@ -437,7 +393,13 @@ function initializeStudentDashboard() {
     console.error("Unable to load the student dashboard.", error);
 
     if (elements) {
-      renderError(elements);
+      renderDashboardState(
+        elements,
+        "bi-exclamation-triangle",
+        "Unable to load available exams.",
+        "Refresh the page and try again.",
+        "Unable to load your latest result.",
+      );
     }
 
     try {

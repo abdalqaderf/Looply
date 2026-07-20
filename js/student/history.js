@@ -47,6 +47,45 @@ function icon(name) {
   });
 }
 
+function examSummary(iconName, title, message, attributes) {
+  const options = {
+    className: "student-history-exam",
+  };
+
+  if (attributes) {
+    options.attributes = attributes;
+  }
+
+  return make(
+    "div",
+    options,
+
+    make(
+      "span",
+      {
+        className: "student-history-exam-icon",
+      },
+
+      icon(iconName),
+    ),
+
+    make(
+      "div",
+      {
+        className: "student-history-exam-copy",
+      },
+
+      make("h3", {
+        text: title,
+      }),
+
+      make("p", {
+        text: message,
+      }),
+    ),
+  );
+}
+
 function getPageElements() {
   return {
     count: getElement("#history-total-count"),
@@ -74,28 +113,23 @@ function dateParts(value) {
     };
   }
 
+  const format = (options) =>
+    new Intl.DateTimeFormat(LOCALE, options).format(date);
+
   return {
-    date: new Intl.DateTimeFormat(
-      LOCALE,
+    date: format({
+      year: "numeric",
 
-      {
-        year: "numeric",
+      month: "short",
 
-        month: "short",
+      day: "numeric",
+    }),
 
-        day: "numeric",
-      },
-    ).format(date),
+    time: format({
+      hour: "2-digit",
 
-    time: new Intl.DateTimeFormat(
-      LOCALE,
-
-      {
-        hour: "2-digit",
-
-        minute: "2-digit",
-      },
-    ).format(date),
+      minute: "2-digit",
+    }),
   };
 }
 
@@ -179,37 +213,12 @@ function historyItem(attempt) {
       className: "student-history-item",
     },
 
-    make(
-      "div",
-      {
-        className: "student-history-exam",
-      },
+    examSummary(
+      "bi-journal-check",
 
-      make(
-        "span",
-        {
-          className: "student-history-exam-icon",
-        },
+      title,
 
-        icon("bi-journal-check"),
-      ),
-
-      make(
-        "div",
-        {
-          className: "student-history-exam-copy",
-        },
-
-        make("h3", {
-          text: title,
-        }),
-
-        make("p", {
-          text: exam?.isDeleted
-            ? "Archived exam"
-            : "Completed programming exam",
-        }),
-      ),
+      exam?.isDeleted ? "Archived exam" : "Completed programming exam",
     ),
 
     detail("Completed", submitted.date, submitted.time),
@@ -291,72 +300,36 @@ function stateItem(iconName, title, message) {
       className: "student-history-item",
     },
 
-    make(
-      "div",
-      {
-        className: "student-history-exam",
-
-        attributes: {
-          style: "grid-column: 1 / -1;",
-        },
-      },
-
-      make(
-        "span",
-        {
-          className: "student-history-exam-icon",
-        },
-
-        icon(iconName),
-      ),
-
-      make(
-        "div",
-        {
-          className: "student-history-exam-copy",
-        },
-
-        make("h3", {
-          text: title,
-        }),
-
-        make("p", {
-          text: message,
-        }),
-      ),
-    ),
+    examSummary(iconName, title, message, {
+      style: "grid-column: 1 / -1;",
+    }),
   );
 }
 
-function setCount(element, count) {
-  setText(
-    element,
+function submissionTime(attempt) {
+  const value = new Date(attempt.submittedAt ?? attempt.updatedAt).getTime();
 
-    `${count} ${count === 1 ? "exam" : "exams"}`,
-  );
+  return Number.isFinite(value) ? value : 0;
 }
 
 function submittedAttempts(studentId) {
   return getAttemptsByStudent(studentId)
     .filter((attempt) => attempt.status === ATTEMPT_STATUS.SUBMITTED)
     .sort((first, second) => {
-      const firstTime = new Date(
-        first.submittedAt ?? first.updatedAt,
-      ).getTime();
+      const firstTime = submissionTime(first);
 
-      const secondTime = new Date(
-        second.submittedAt ?? second.updatedAt,
-      ).getTime();
+      const secondTime = submissionTime(second);
 
-      return (
-        (Number.isFinite(secondTime) ? secondTime : 0) -
-        (Number.isFinite(firstTime) ? firstTime : 0)
-      );
+      return secondTime - firstTime;
     });
 }
 
 function render(elements, attempts) {
-  setCount(elements.count, attempts.length);
+  setText(
+    elements.count,
+
+    `${attempts.length} ${attempts.length === 1 ? "exam" : "exams"}`,
+  );
 
   clearElement(elements.container);
 
@@ -379,6 +352,14 @@ function render(elements, attempts) {
   });
 }
 
+function renderState(elements, iconName, title, message) {
+  setText(elements.count, "-- exams");
+
+  clearElement(elements.container);
+
+  elements.container.append(stateItem(iconName, title, message));
+}
+
 function initializeStudentHistory() {
   const student = requireRole(USER_ROLES.STUDENT);
 
@@ -391,18 +372,14 @@ function initializeStudentHistory() {
   try {
     elements = getPageElements();
 
-    setText(elements.count, "-- exams");
+    renderState(
+      elements,
 
-    clearElement(elements.container);
+      "bi-hourglass-split",
 
-    elements.container.append(
-      stateItem(
-        "bi-hourglass-split",
+      "Loading exam history...",
 
-        "Loading exam history...",
-
-        "Your submitted results are being prepared.",
-      ),
+      "Your submitted results are being prepared.",
     );
 
     render(
@@ -414,18 +391,14 @@ function initializeStudentHistory() {
     console.error("Unable to load exam history.", error);
 
     if (elements) {
-      setText(elements.count, "-- exams");
+      renderState(
+        elements,
 
-      clearElement(elements.container);
+        "bi-exclamation-triangle",
 
-      elements.container.append(
-        stateItem(
-          "bi-exclamation-triangle",
+        "Unable to load exam history.",
 
-          "Unable to load exam history.",
-
-          "Refresh the page and try again.",
-        ),
+        "Refresh the page and try again.",
       );
     }
 

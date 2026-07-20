@@ -4,68 +4,69 @@ import { readStorage, writeStorage } from "../core/storage.js";
 
 import { generateId, normalizeText } from "../core/utils.js";
 
+const STUDENT_FIELD_NORMALIZERS = Object.freeze({
+  fullName: normalizeText,
+  username: (value) => normalizeText(value).toLowerCase(),
+  password: (value) => String(value ?? ""),
+  gender: (value) => normalizeText(value).toLowerCase(),
+  nationalId: normalizeText,
+  phone: normalizeText,
+});
+
 export function getAllUsers() {
   const users = readStorage(STORAGE_KEYS.USERS, []);
 
   return Array.isArray(users) ? users : [];
 }
 
+function findUser(matches, includeDeleted) {
+  return (
+    getAllUsers().find(
+      (user) => matches(user) && (includeDeleted || user.isDeleted !== true),
+    ) ?? null
+  );
+}
+
 export function getUserById(userId, { includeDeleted = true } = {}) {
   const normalizedId = normalizeText(userId);
 
-  if (!normalizedId) {
-    return null;
-  }
-
-  return (
-    getAllUsers().find((user) => {
-      const matchesId = user.id === normalizedId;
-      const canReturnDeleted = includeDeleted || user.isDeleted !== true;
-
-      return matchesId && canReturnDeleted;
-    }) ?? null
-  );
+  return normalizedId
+    ? findUser((user) => user.id === normalizedId, includeDeleted)
+    : null;
 }
 
 export function getUserByUsername(username, { includeDeleted = true } = {}) {
   const normalizedUsername = normalizeText(username).toLowerCase();
 
-  if (!normalizedUsername) {
-    return null;
-  }
+  return normalizedUsername
+    ? findUser(
+        (user) =>
+          normalizeText(user.username).toLowerCase() === normalizedUsername,
+        includeDeleted,
+      )
+    : null;
+}
 
-  return (
-    getAllUsers().find((user) => {
-      const storedUsername = normalizeText(user.username).toLowerCase();
-      const canReturnDeleted = includeDeleted || user.isDeleted !== true;
-
-      return storedUsername === normalizedUsername && canReturnDeleted;
-    }) ?? null
-  );
+function getStudentsByDeletedState(isDeleted) {
+  return getAllUsers()
+    .filter(
+      (user) =>
+        user.role === USER_ROLES.STUDENT &&
+        (isDeleted ? user.isDeleted === true : user.isDeleted !== true),
+    )
+    .sort((firstUser, secondUser) =>
+      normalizeText(firstUser.fullName).localeCompare(
+        normalizeText(secondUser.fullName),
+      ),
+    );
 }
 
 export function getActiveStudents() {
-  return getAllUsers()
-    .filter(
-      (user) => user.role === USER_ROLES.STUDENT && user.isDeleted !== true,
-    )
-    .sort((firstUser, secondUser) =>
-      normalizeText(firstUser.fullName).localeCompare(
-        normalizeText(secondUser.fullName),
-      ),
-    );
+  return getStudentsByDeletedState(false);
 }
 
 export function getDeletedStudents() {
-  return getAllUsers()
-    .filter(
-      (user) => user.role === USER_ROLES.STUDENT && user.isDeleted === true,
-    )
-    .sort((firstUser, secondUser) =>
-      normalizeText(firstUser.fullName).localeCompare(
-        normalizeText(secondUser.fullName),
-      ),
-    );
+  return getStudentsByDeletedState(true);
 }
 
 function assertUniqueStudentFields(users, studentData, ignoredUserId = null) {
@@ -94,15 +95,12 @@ function assertUniqueStudentFields(users, studentData, ignoredUserId = null) {
   }
 }
 
-function normalizeStudentInput(data = {}) {
-  return {
-    fullName: normalizeText(data.fullName),
-    username: normalizeText(data.username).toLowerCase(),
-    password: String(data.password ?? ""),
-    gender: normalizeText(data.gender).toLowerCase(),
-    nationalId: normalizeText(data.nationalId),
-    phone: normalizeText(data.phone),
-  };
+function normalizeStudentFields(data, onlyDefined = false) {
+  return Object.fromEntries(
+    Object.entries(STUDENT_FIELD_NORMALIZERS)
+      .filter(([field]) => !onlyDefined || data[field] !== undefined)
+      .map(([field, normalize]) => [field, normalize(data[field])]),
+  );
 }
 
 function validateStudentData(student, { passwordRequired = true } = {}) {
@@ -123,9 +121,16 @@ function validateStudentData(student, { passwordRequired = true } = {}) {
   }
 }
 
+function saveUser(users, userIndex, user) {
+  users[userIndex] = user;
+  writeStorage(STORAGE_KEYS.USERS, users);
+
+  return user;
+}
+
 export function createStudent(data = {}) {
   const users = getAllUsers();
-  const studentData = normalizeStudentInput(data);
+  const studentData = normalizeStudentFields(data);
 
   validateStudentData(studentData);
   assertUniqueStudentFields(users, studentData);
@@ -176,30 +181,15 @@ export function updateUser(userId, changes = {}) {
     currentUser.id,
   );
 
-  const allowedChanges = {};
+  const allowedChanges = normalizeStudentFields(changes, true);
 
-  if (changes.fullName !== undefined) {
-    allowedChanges.fullName = normalizeText(changes.fullName);
-  }
+  if (changes.password !== undefined) {
+    const password = allowedChanges.password;
+    delete allowedChanges.password;
 
-  if (changes.username !== undefined) {
-    allowedChanges.username = nextUsername;
-  }
-
-  if (changes.gender !== undefined) {
-    allowedChanges.gender = normalizeText(changes.gender).toLowerCase();
-  }
-
-  if (changes.nationalId !== undefined) {
-    allowedChanges.nationalId = nextNationalId;
-  }
-
-  if (changes.phone !== undefined) {
-    allowedChanges.phone = normalizeText(changes.phone);
-  }
-
-  if (normalizeText(changes.password)) {
-    allowedChanges.password = String(changes.password);
+    if (normalizeText(changes.password)) {
+      allowedChanges.password = password;
+    }
   }
 
   const updatedUser = {
@@ -212,10 +202,7 @@ export function updateUser(userId, changes = {}) {
     throw new Error("Full name and username are required.");
   }
 
-  users[userIndex] = updatedUser;
-  writeStorage(STORAGE_KEYS.USERS, users);
-
-  return updatedUser;
+  return saveUser(users, userIndex, updatedUser);
 }
 
 export function updateStudent(studentId, changes = {}) {
@@ -228,7 +215,7 @@ export function updateStudent(studentId, changes = {}) {
   return updateUser(studentId, changes);
 }
 
-export function softDeleteStudent(studentId) {
+function changeStudentDeletedState(studentId, isDeleted) {
   const users = getAllUsers();
   const studentIndex = users.findIndex(
     (user) => user.id === studentId && user.role === USER_ROLES.STUDENT,
@@ -238,48 +225,31 @@ export function softDeleteStudent(studentId) {
     throw new Error("Student was not found.");
   }
 
-  if (users[studentIndex].isDeleted === true) {
+  const student = users[studentIndex];
+
+  if (isDeleted && student.isDeleted === true) {
     throw new Error("Student is already deleted.");
   }
 
-  const timestamp = new Date().toISOString();
+  if (!isDeleted && student.isDeleted !== true) {
+    return student;
+  }
 
-  const deletedStudent = {
-    ...users[studentIndex],
-    isDeleted: true,
-    deletedAt: timestamp,
+  const timestamp = new Date().toISOString();
+  const updatedStudent = {
+    ...student,
+    isDeleted,
+    deletedAt: isDeleted ? timestamp : null,
     updatedAt: timestamp,
   };
 
-  users[studentIndex] = deletedStudent;
-  writeStorage(STORAGE_KEYS.USERS, users);
+  return saveUser(users, studentIndex, updatedStudent);
+}
 
-  return deletedStudent;
+export function softDeleteStudent(studentId) {
+  return changeStudentDeletedState(studentId, true);
 }
 
 export function restoreStudent(studentId) {
-  const users = getAllUsers();
-  const studentIndex = users.findIndex(
-    (user) => user.id === studentId && user.role === USER_ROLES.STUDENT,
-  );
-
-  if (studentIndex === -1) {
-    throw new Error("Student was not found.");
-  }
-
-  if (users[studentIndex].isDeleted !== true) {
-    return users[studentIndex];
-  }
-
-  const restoredStudent = {
-    ...users[studentIndex],
-    isDeleted: false,
-    deletedAt: null,
-    updatedAt: new Date().toISOString(),
-  };
-
-  users[studentIndex] = restoredStudent;
-  writeStorage(STORAGE_KEYS.USERS, users);
-
-  return restoredStudent;
+  return changeStudentDeletedState(studentId, false);
 }

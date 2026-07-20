@@ -40,6 +40,13 @@ import { getUserById } from "../services/users-service.js";
 
 const LOCALE = APP_CONFIG.defaultLocale;
 
+const QUESTION_TYPE_LABELS = {
+  [QUESTION_TYPES.MULTIPLE_CHOICE]: "Multiple Choice",
+  [QUESTION_TYPES.TRUE_FALSE]: "True or False",
+  [QUESTION_TYPES.SHORT_ANSWER]: "Short Answer",
+  [QUESTION_TYPES.CODE_OUTPUT]: "Code Output",
+};
+
 let currentExam = null;
 
 function make(tag, options = {}, ...children) {
@@ -115,26 +122,19 @@ function routeWithExamId(route, examId) {
 }
 
 function questionTypeLabel(type) {
-  const labels = {
-    [QUESTION_TYPES.MULTIPLE_CHOICE]: "Multiple Choice",
+  return QUESTION_TYPE_LABELS[type] ?? "Question";
+}
 
-    [QUESTION_TYPES.TRUE_FALSE]: "True or False",
-
-    [QUESTION_TYPES.SHORT_ANSWER]: "Short Answer",
-
-    [QUESTION_TYPES.CODE_OUTPUT]: "Code Output",
-  };
-
-  return labels[type] ?? "Question";
+function isChoiceQuestion(type) {
+  return (
+    type === QUESTION_TYPES.MULTIPLE_CHOICE ||
+    type === QUESTION_TYPES.TRUE_FALSE
+  );
 }
 
 function effectiveStatus(exam) {
-  if (exam.status === EXAM_STATUS.INACTIVE) {
-    return EXAM_STATUS.INACTIVE;
-  }
-
-  if (exam.status === EXAM_STATUS.END) {
-    return EXAM_STATUS.END;
+  if ([EXAM_STATUS.INACTIVE, EXAM_STATUS.END].includes(exam.status)) {
+    return exam.status;
   }
 
   const endTime = new Date(exam.endAt).getTime();
@@ -150,31 +150,22 @@ function statusLabel(status) {
   return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
-function dateParts(value) {
+function formatDate(value, options, fallback = "—") {
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return {
-      date: "Invalid date",
+  return Number.isNaN(date.getTime())
+    ? fallback
+    : new Intl.DateTimeFormat(LOCALE, options).format(date);
+}
 
-      time: "",
-    };
-  }
-
+function dateParts(value) {
   return {
-    date: new Intl.DateTimeFormat(LOCALE, {
-      year: "numeric",
-
-      month: "long",
-
-      day: "numeric",
-    }).format(date),
-
-    time: new Intl.DateTimeFormat(LOCALE, {
-      hour: "2-digit",
-
-      minute: "2-digit",
-    }).format(date),
+    date: formatDate(
+      value,
+      { year: "numeric", month: "long", day: "numeric" },
+      "Invalid date",
+    ),
+    time: formatDate(value, { hour: "2-digit", minute: "2-digit" }, ""),
   };
 }
 
@@ -185,10 +176,7 @@ function setInformationCard(card, value, detail) {
 }
 
 function answerText(question) {
-  if (
-    question.type === QUESTION_TYPES.MULTIPLE_CHOICE ||
-    question.type === QUESTION_TYPES.TRUE_FALSE
-  ) {
+  if (isChoiceQuestion(question.type)) {
     return (
       (question.options ?? []).find(
         (option) =>
@@ -259,10 +247,7 @@ function createQuestionCard(question, index) {
     );
   }
 
-  if (
-    question.type === QUESTION_TYPES.MULTIPLE_CHOICE ||
-    question.type === QUESTION_TYPES.TRUE_FALSE
-  ) {
+  if (isChoiceQuestion(question.type)) {
     body.append(createQuestionOptions(question));
   }
 
@@ -342,6 +327,18 @@ function createQuestionCard(question, index) {
   );
 }
 
+function createQuestionStateCard(message) {
+  return make(
+    "article",
+    { className: "exam-question-card" },
+    make(
+      "div",
+      { className: "exam-question-body" },
+      make("h3", { text: message }),
+    ),
+  );
+}
+
 function renderInstructions(elements, instructions) {
   clearElement(elements.instructions);
 
@@ -353,13 +350,9 @@ function renderInstructions(elements, instructions) {
   const items =
     lines.length > 0 ? lines : ["No student instructions were provided."];
 
-  items.forEach((line) => {
-    elements.instructions.append(
-      make("li", {
-        text: line,
-      }),
-    );
-  });
+  elements.instructions.append(
+    ...items.map((line) => make("li", { text: line })),
+  );
 }
 
 function configureStatus(elements, exam) {
@@ -418,47 +411,25 @@ function renderQuestions(elements, exam) {
 
   if (questions.length === 0) {
     elements.questionList.append(
-      make(
-        "article",
-        {
-          className: "exam-question-card",
-        },
-
-        make(
-          "div",
-          {
-            className: "exam-question-body",
-          },
-
-          make("h3", {
-            text: "This exam does not contain any questions yet.",
-          }),
-        ),
-      ),
+      createQuestionStateCard("This exam does not contain any questions yet."),
     );
 
     return;
   }
 
-  questions.forEach((question, index) => {
-    elements.questionList.append(createQuestionCard(question, index));
-  });
+  elements.questionList.append(
+    ...questions.map((question, index) => createQuestionCard(question, index)),
+  );
 }
 
 function formatResultDate(value) {
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return "—";
-  }
-
-  return new Intl.DateTimeFormat(LOCALE, {
+  return formatDate(value, {
     year: "numeric",
     month: "short",
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  }).format(date);
+  });
 }
 
 function createResultStateRow(message) {
@@ -508,10 +479,28 @@ function renderStudentResults(elements, exam, attempts) {
     const student = getUserById(attempt.studentId, { includeDeleted: true });
 
     const submitted = attempt.status === ATTEMPT_STATUS.SUBMITTED;
-
     const score = Number(attempt.score);
     const totalPoints = Number(attempt.totalPoints);
     const percentage = Number(attempt.percentage);
+    const display = submitted
+      ? {
+          score: `${Number.isFinite(score) ? score : 0} / ${
+            Number.isFinite(totalPoints) ? totalPoints : maximumScore
+          }`,
+          percentage: `${
+            Number.isFinite(percentage) ? Math.round(percentage) : 0
+          }%`,
+          status: "Submitted",
+          modifier: "submitted",
+          submittedAt: formatResultDate(attempt.submittedAt),
+        }
+      : {
+          score: "—",
+          percentage: "—",
+          status: "In progress",
+          modifier: "progress",
+          submittedAt: "—",
+        };
 
     const studentName =
       normalizeText(student?.fullName) || "Deleted or unknown student";
@@ -545,31 +534,23 @@ function renderStudentResults(elements, exam, attempts) {
       make("td", { text: username }),
       make("td", {
         className: submitted ? "exam-result-score" : "exam-results-muted",
-        text: submitted
-          ? `${Number.isFinite(score) ? score : 0} / ${
-              Number.isFinite(totalPoints) ? totalPoints : maximumScore
-            }`
-          : "—",
+        text: display.score,
       }),
       make("td", {
         className: submitted ? "exam-result-percentage" : "exam-results-muted",
-        text: submitted
-          ? `${Number.isFinite(percentage) ? Math.round(percentage) : 0}%`
-          : "—",
+        text: display.percentage,
       }),
       make(
         "td",
         {},
         make("span", {
-          className: submitted
-            ? "exam-result-attempt-status exam-result-attempt-status--submitted"
-            : "exam-result-attempt-status exam-result-attempt-status--progress",
-          text: submitted ? "Submitted" : "In progress",
+          className: `exam-result-attempt-status exam-result-attempt-status--${display.modifier}`,
+          text: display.status,
         }),
       ),
       make("td", {
         className: "exam-result-date",
-        text: submitted ? formatResultDate(attempt.submittedAt) : "—",
+        text: display.submittedAt,
       }),
     );
 
@@ -590,45 +571,24 @@ function renderExam(elements, exam) {
 
   setText(elements.title, exam.title || "Untitled exam");
 
-  setText(
-    elements.description,
+  const description =
+    exam.description || "No description was provided for this exam.";
 
-    exam.description || "No description was provided for this exam.",
-  );
+  setText(elements.description, description);
+  setText(elements.overviewDescription, description);
 
-  setInformationCard(elements.informationCards[0], start.date, start.time);
-
-  setInformationCard(elements.informationCards[1], end.date, end.time);
-
-  setInformationCard(
-    elements.informationCards[2],
-
-    `${Number(exam.durationMinutes) || 0} minutes`,
-
-    "Exam time limit",
-  );
-
-  setInformationCard(
-    elements.informationCards[3],
-
-    `${questions.length} ${questions.length === 1 ? "question" : "questions"}`,
-
-    "All questions required",
-  );
-
-  setInformationCard(
-    elements.informationCards[4],
-
-    `${getExamTotalPoints(exam)} points`,
-
-    "Maximum score",
-  );
-
-  setText(
-    elements.overviewDescription,
-
-    exam.description || "No description was provided for this exam.",
-  );
+  [
+    [start.date, start.time],
+    [end.date, end.time],
+    [`${Number(exam.durationMinutes) || 0} minutes`, "Exam time limit"],
+    [
+      `${questions.length} ${questions.length === 1 ? "question" : "questions"}`,
+      "All questions required",
+    ],
+    [`${getExamTotalPoints(exam)} points`, "Maximum score"],
+  ].forEach((values, index) => {
+    setInformationCard(elements.informationCards[index], ...values);
+  });
 
   renderInstructions(elements, exam.instructions);
 
@@ -638,12 +598,10 @@ function renderExam(elements, exam) {
 
   configureStatus(elements, exam);
 
-  elements.editLink.href = routeWithExamId(ROUTES.TEACHER_EXAM_FORM, exam.id);
+  const editUrl = routeWithExamId(ROUTES.TEACHER_EXAM_FORM, exam.id);
 
-  elements.editQuestionsLink.href = routeWithExamId(
-    ROUTES.TEACHER_EXAM_FORM,
-    exam.id,
-  );
+  elements.editLink.href = editUrl;
+  elements.editQuestionsLink.href = editUrl;
 
   elements.backLink.href = ROUTES.TEACHER_EXAMS;
 
@@ -773,25 +731,7 @@ function renderLoading(elements) {
     createResultStateRow("Loading student results..."),
   );
 
-  elements.questionList.append(
-    make(
-      "article",
-      {
-        className: "exam-question-card",
-      },
-
-      make(
-        "div",
-        {
-          className: "exam-question-body",
-        },
-
-        make("h3", {
-          text: "Loading questions...",
-        }),
-      ),
-    ),
-  );
+  elements.questionList.append(createQuestionStateCard("Loading questions..."));
 }
 
 async function initializeExamDetails() {

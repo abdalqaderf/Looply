@@ -156,40 +156,121 @@ function attemptMap(attempts) {
   return map;
 }
 
-function examCard(exam, attempt) {
-  const inProgress = attempt?.status === ATTEMPT_STATUS.IN_PROGRESS;
+function cardTitle(title, description, badge = "") {
+  const titleRow = node(
+    "div",
+    {
+      className: "student-exam-title-row",
+    },
+    [
+      node("h3", {
+        text: title,
+      }),
+    ],
+  );
 
-  const questionCount = exam.questions.length;
+  if (badge) {
+    titleRow.append(
+      node("span", {
+        className: "student-exam-available",
 
-  const title = node(
+        text: badge,
+      }),
+    );
+  }
+
+  return node(
     "div",
     {
       className: "student-exam-card-title",
     },
     [
-      node(
-        "div",
-        {
-          className: "student-exam-title-row",
-        },
-        [
-          node("h3", {
-            text: exam.title || "Untitled exam",
-          }),
-
-          node("span", {
-            className: "student-exam-available",
-
-            text: inProgress ? "In Progress" : "Available",
-          }),
-        ],
-      ),
+      titleRow,
 
       node("p", {
-        text: exam.description || "No description is available for this exam.",
+        text: description,
       }),
     ],
   );
+}
+
+function card(iconName, title, description, note, options = {}) {
+  const { action = null, badge = "", details = null } = options;
+
+  const heading = node(
+    "div",
+    {
+      className: "student-exam-card-heading",
+    },
+    [
+      node(
+        "span",
+        {
+          className: "student-exam-card-icon",
+        },
+        [icon(iconName)],
+      ),
+
+      cardTitle(title, description, badge),
+    ],
+  );
+
+  const mainChildren = [heading];
+
+  if (details) {
+    mainChildren.push(details);
+  }
+
+  const actionChildren = [
+    node(
+      "div",
+      {
+        className: "student-exam-card-note",
+      },
+      [
+        icon("bi-info-circle"),
+
+        node("p", {
+          text: note,
+        }),
+      ],
+    ),
+  ];
+
+  if (action) {
+    actionChildren.push(action);
+  }
+
+  return node(
+    "article",
+    {
+      className: "student-exam-card",
+    },
+    [
+      node(
+        "div",
+        {
+          className: "student-exam-card-main",
+        },
+        mainChildren,
+      ),
+
+      node(
+        "div",
+        {
+          className: "student-exam-card-actions",
+        },
+        actionChildren,
+      ),
+    ],
+  );
+}
+
+function examCard(exam, attempt) {
+  const inProgress = attempt?.status === ATTEMPT_STATUS.IN_PROGRESS;
+
+  const questionCount = exam.questions.length;
+  const title = exam.title || "Untitled exam";
 
   const details = node(
     "div",
@@ -224,34 +305,6 @@ function examCard(exam, attempt) {
     ],
   );
 
-  const main = node(
-    "div",
-    {
-      className: "student-exam-card-main",
-    },
-    [
-      node(
-        "div",
-        {
-          className: "student-exam-card-heading",
-        },
-        [
-          node(
-            "span",
-            {
-              className: "student-exam-card-icon",
-            },
-            [icon("bi-journal-code")],
-          ),
-
-          title,
-        ],
-      ),
-
-      details,
-    ],
-  );
-
   const action = node(
     "a",
     {
@@ -274,129 +327,48 @@ function examCard(exam, attempt) {
     ],
   );
 
-  const actions = node(
-    "div",
+  return card(
+    "bi-journal-code",
+    title,
+    exam.description || "No description is available for this exam.",
+    inProgress
+      ? "Your saved attempt is still in progress."
+      : "The timer begins when you start the exam.",
     {
-      className: "student-exam-card-actions",
-    },
-    [
-      node(
-        "div",
-        {
-          className: "student-exam-card-note",
-        },
-        [
-          icon("bi-info-circle"),
-
-          node("p", {
-            text: inProgress
-              ? "Your saved attempt is still in progress."
-              : "The timer begins when you start the exam.",
-          }),
-        ],
-      ),
-
+      badge: inProgress ? "In Progress" : "Available",
+      details,
       action,
-    ],
-  );
-
-  return node(
-    "article",
-    {
-      className: "student-exam-card",
     },
-    [main, actions],
   );
 }
 
 function stateCard(iconName, title, message) {
-  return node(
-    "article",
-    {
-      className: "student-exam-card",
-    },
-    [
-      node(
-        "div",
-        {
-          className: "student-exam-card-main",
-        },
-        [
-          node(
-            "div",
-            {
-              className: "student-exam-card-heading",
-            },
-            [
-              node(
-                "span",
-                {
-                  className: "student-exam-card-icon",
-                },
-                [icon(iconName)],
-              ),
-
-              node(
-                "div",
-                {
-                  className: "student-exam-card-title",
-                },
-                [
-                  node(
-                    "div",
-                    {
-                      className: "student-exam-title-row",
-                    },
-                    [
-                      node("h3", {
-                        text: title,
-                      }),
-                    ],
-                  ),
-
-                  node("p", {
-                    text: message,
-                  }),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-
-      node(
-        "div",
-        {
-          className: "student-exam-card-actions",
-        },
-        [
-          node(
-            "div",
-            {
-              className: "student-exam-card-note",
-            },
-            [
-              icon("bi-info-circle"),
-
-              node("p", {
-                text: "Use Exam History to review submitted attempts.",
-              }),
-            ],
-          ),
-        ],
-      ),
-    ],
+  return card(
+    iconName,
+    title,
+    message,
+    "Use Exam History to review submitted attempts.",
   );
 }
 
-function setCount(element, count) {
-  setText(element, `${count} ${count === 1 ? "exam" : "exams"}`);
+function resetExamList(elements, count) {
+  setText(
+    elements.count,
+    typeof count === "number"
+      ? `${count} ${count === 1 ? "exam" : "exams"}`
+      : count,
+  );
+
+  clearElement(elements.list);
+}
+
+function showState(elements, iconName, title, message) {
+  resetExamList(elements, "-- exams");
+  elements.list.append(stateCard(iconName, title, message));
 }
 
 function render(elements, exams, attemptsByExam) {
-  setCount(elements.count, exams.length);
-
-  clearElement(elements.list);
+  resetExamList(elements, exams.length);
 
   if (exams.length === 0) {
     elements.list.append(
@@ -427,16 +399,11 @@ function initializeStudentExams() {
   try {
     elements = getElements();
 
-    setText(elements.count, "-- exams");
-
-    clearElement(elements.list);
-
-    elements.list.append(
-      stateCard(
-        "bi-hourglass-split",
-        "Loading available exams...",
-        "Your active exams are being prepared.",
-      ),
+    showState(
+      elements,
+      "bi-hourglass-split",
+      "Loading available exams...",
+      "Your active exams are being prepared.",
     );
 
     const attempts = getAttemptsByStudent(student.id);
@@ -446,16 +413,11 @@ function initializeStudentExams() {
     console.error("Unable to load available exams.", error);
 
     if (elements) {
-      setText(elements.count, "-- exams");
-
-      clearElement(elements.list);
-
-      elements.list.append(
-        stateCard(
-          "bi-exclamation-triangle",
-          "Unable to load exams.",
-          "Refresh the page and try again.",
-        ),
+      showState(
+        elements,
+        "bi-exclamation-triangle",
+        "Unable to load exams.",
+        "Refresh the page and try again.",
       );
     }
 

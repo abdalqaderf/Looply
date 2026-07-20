@@ -3,8 +3,30 @@ import { EXAM_STATUS, QUESTION_TYPES } from "./config.js";
 import { normalizeText } from "./utils.js";
 
 const ALLOWED_EXAM_STATUSES = new Set(Object.values(EXAM_STATUS));
-
 const ALLOWED_QUESTION_TYPES = new Set(Object.values(QUESTION_TYPES));
+
+const REQUIRED_MESSAGES = Object.freeze({
+  username: "Username is required.",
+  password: "Password is required.",
+  firstName: "First name is required.",
+  lastName: "Last name is required.",
+  email: "Email is required.",
+  message: "Message is required.",
+  fullName: "Full name is required.",
+  phone: "Phone number is required.",
+  nationalId: "National ID is required.",
+  title: "Exam title is required.",
+  description: "Exam description is required.",
+  instructions: "Exam instructions are required.",
+  text: "Question text is required.",
+});
+
+const INVALID_USERNAME =
+  "Username must contain 3 to 20 letters, numbers, or underscores.";
+const INVALID_PASSWORD = "Password must contain at least 6 characters.";
+const INVALID_EMAIL = "Enter a valid email address.";
+const INVALID_PHONE = "Phone number must start with 07 and contain 10 digits.";
+const INVALID_NATIONAL_ID = "National ID must contain exactly 10 digits.";
 
 function createValidationResult(errors) {
   return {
@@ -13,14 +35,46 @@ function createValidationResult(errors) {
   };
 }
 
+function validateField(errors, field, value, validator, invalidMessage) {
+  if (!isRequired(value)) {
+    errors[field] = REQUIRED_MESSAGES[field];
+  } else if (validator && !validator(value)) {
+    errors[field] = invalidMessage;
+  }
+}
+
+function validateMinimumLength(errors, field, value, label, minimum) {
+  validateField(
+    errors,
+    field,
+    value,
+    (text) => text.length >= minimum,
+    `${label} must contain at least ${minimum} characters.`,
+  );
+}
+
+function normalizeQuestionOption(option, index) {
+  const isText = typeof option === "string";
+  const text = normalizeText(isText ? option : option?.text);
+
+  if (!text) {
+    return null;
+  }
+
+  return {
+    id: isText
+      ? String(index + 1)
+      : normalizeText(option?.id) || String(index + 1),
+    text,
+  };
+}
+
 export function isRequired(value) {
   return normalizeText(value) !== "";
 }
 
 export function isValidUsername(username) {
-  const normalizedUsername = normalizeText(username);
-
-  return /^[a-zA-Z0-9_]{3,20}$/.test(normalizedUsername);
+  return /^[a-zA-Z0-9_]{3,20}$/.test(normalizeText(username));
 }
 
 export function isValidPassword(password) {
@@ -28,21 +82,15 @@ export function isValidPassword(password) {
 }
 
 export function isValidEmail(email) {
-  const normalizedEmail = normalizeText(email);
-
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizeText(email));
 }
 
 export function isValidPhone(phone) {
-  const normalizedPhone = normalizeText(phone).replace(/\s+/g, "");
-
-  return /^07\d{8}$/.test(normalizedPhone);
+  return /^07\d{8}$/.test(normalizeText(phone).replace(/\s+/g, ""));
 }
 
 export function isValidNationalId(nationalId) {
-  const normalizedNationalId = normalizeText(nationalId);
-
-  return /^\d{10}$/.test(normalizedNationalId);
+  return /^\d{10}$/.test(normalizeText(nationalId));
 }
 
 export function isPositiveNumber(value) {
@@ -62,9 +110,7 @@ export function isValidDate(value) {
     return false;
   }
 
-  const date = new Date(value);
-
-  return !Number.isNaN(date.getTime());
+  return !Number.isNaN(new Date(value).getTime());
 }
 
 export function isEndDateAfterStartDate(startDate, endDate) {
@@ -80,16 +126,14 @@ export function validateLoginForm(data = {}) {
   const username = normalizeText(data.username);
   const password = String(data.password ?? "");
 
-  if (!isRequired(username)) {
-    errors.username = "Username is required.";
-  } else if (!isValidUsername(username)) {
-    errors.username =
-      "Username must contain 3 to 20 letters, numbers, or underscores.";
-  }
-
-  if (!isRequired(password)) {
-    errors.password = "Password is required.";
-  }
+  validateField(
+    errors,
+    "username",
+    username,
+    isValidUsername,
+    INVALID_USERNAME,
+  );
+  validateField(errors, "password", password);
 
   return createValidationResult(errors);
 }
@@ -101,29 +145,10 @@ export function validateContactForm(data = {}) {
   const email = normalizeText(data.email);
   const message = normalizeText(data.message);
 
-  if (!isRequired(firstName)) {
-    errors.firstName = "First name is required.";
-  } else if (firstName.length < 2) {
-    errors.firstName = "First name must contain at least 2 characters.";
-  }
-
-  if (!isRequired(lastName)) {
-    errors.lastName = "Last name is required.";
-  } else if (lastName.length < 2) {
-    errors.lastName = "Last name must contain at least 2 characters.";
-  }
-
-  if (!isRequired(email)) {
-    errors.email = "Email is required.";
-  } else if (!isValidEmail(email)) {
-    errors.email = "Enter a valid email address.";
-  }
-
-  if (!isRequired(message)) {
-    errors.message = "Message is required.";
-  } else if (message.length < 10) {
-    errors.message = "Message must contain at least 10 characters.";
-  }
+  validateMinimumLength(errors, "firstName", firstName, "First name", 2);
+  validateMinimumLength(errors, "lastName", lastName, "Last name", 2);
+  validateField(errors, "email", email, isValidEmail, INVALID_EMAIL);
+  validateMinimumLength(errors, "message", message, "Message", 10);
 
   return createValidationResult(errors);
 }
@@ -137,36 +162,29 @@ export function validateStudentForm(data = {}) {
   const nationalId = normalizeText(data.nationalId);
   const gender = normalizeText(data.gender);
 
-  if (!isRequired(fullName)) {
-    errors.fullName = "Full name is required.";
-  } else if (fullName.length < 3) {
-    errors.fullName = "Full name must contain at least 3 characters.";
-  }
-
-  if (!isRequired(username)) {
-    errors.username = "Username is required.";
-  } else if (!isValidUsername(username)) {
-    errors.username =
-      "Username must contain 3 to 20 letters, numbers, or underscores.";
-  }
-
-  if (!isRequired(password)) {
-    errors.password = "Password is required.";
-  } else if (!isValidPassword(password)) {
-    errors.password = "Password must contain at least 6 characters.";
-  }
-
-  if (!isRequired(phone)) {
-    errors.phone = "Phone number is required.";
-  } else if (!isValidPhone(phone)) {
-    errors.phone = "Phone number must start with 07 and contain 10 digits.";
-  }
-
-  if (!isRequired(nationalId)) {
-    errors.nationalId = "National ID is required.";
-  } else if (!isValidNationalId(nationalId)) {
-    errors.nationalId = "National ID must contain exactly 10 digits.";
-  }
+  validateMinimumLength(errors, "fullName", fullName, "Full name", 3);
+  validateField(
+    errors,
+    "username",
+    username,
+    isValidUsername,
+    INVALID_USERNAME,
+  );
+  validateField(
+    errors,
+    "password",
+    password,
+    isValidPassword,
+    INVALID_PASSWORD,
+  );
+  validateField(errors, "phone", phone, isValidPhone, INVALID_PHONE);
+  validateField(
+    errors,
+    "nationalId",
+    nationalId,
+    isValidNationalId,
+    INVALID_NATIONAL_ID,
+  );
 
   if (!["male", "female"].includes(gender.toLowerCase())) {
     errors.gender = "Select a valid gender.";
@@ -181,20 +199,11 @@ export function validateProfileForm(data = {}) {
   const phone = normalizeText(data.phone);
   const password = String(data.password ?? "");
 
-  if (!isRequired(fullName)) {
-    errors.fullName = "Full name is required.";
-  } else if (fullName.length < 3) {
-    errors.fullName = "Full name must contain at least 3 characters.";
-  }
-
-  if (!isRequired(phone)) {
-    errors.phone = "Phone number is required.";
-  } else if (!isValidPhone(phone)) {
-    errors.phone = "Phone number must start with 07 and contain 10 digits.";
-  }
+  validateMinimumLength(errors, "fullName", fullName, "Full name", 3);
+  validateField(errors, "phone", phone, isValidPhone, INVALID_PHONE);
 
   if (password && !isValidPassword(password)) {
-    errors.password = "Password must contain at least 6 characters.";
+    errors.password = INVALID_PASSWORD;
   }
 
   return createValidationResult(errors);
@@ -210,22 +219,15 @@ export function validateExamForm(data = {}) {
   const durationMinutes = data.durationMinutes;
   const status = normalizeText(data.status).toLowerCase();
 
-  if (!isRequired(title)) {
-    errors.title = "Exam title is required.";
-  } else if (title.length < 3) {
-    errors.title = "Exam title must contain at least 3 characters.";
-  }
-
-  if (!isRequired(description)) {
-    errors.description = "Exam description is required.";
-  } else if (description.length < 10) {
-    errors.description =
-      "Exam description must contain at least 10 characters.";
-  }
-
-  if (!isRequired(instructions)) {
-    errors.instructions = "Exam instructions are required.";
-  }
+  validateMinimumLength(errors, "title", title, "Exam title", 3);
+  validateMinimumLength(
+    errors,
+    "description",
+    description,
+    "Exam description",
+    10,
+  );
+  validateField(errors, "instructions", instructions);
 
   if (!isValidDate(startAt)) {
     errors.startAt = "Select a valid start date.";
@@ -246,9 +248,11 @@ export function validateExamForm(data = {}) {
   if (!isPositiveInteger(durationMinutes)) {
     errors.durationMinutes = "Exam duration must be a positive whole number.";
   }
+
   if (!ALLOWED_EXAM_STATUSES.has(status)) {
     errors.status = "Select a valid exam status.";
   }
+
   return createValidationResult(errors);
 }
 
@@ -260,9 +264,7 @@ export function validateQuestionForm(data = {}) {
   const options = Array.isArray(data.options) ? data.options : [];
   const correctAnswer = normalizeText(data.correctAnswer);
 
-  if (!isRequired(text)) {
-    errors.text = "Question text is required.";
-  }
+  validateField(errors, "text", text);
 
   if (!ALLOWED_QUESTION_TYPES.has(type)) {
     errors.type = "Select a valid question type.";
@@ -273,31 +275,7 @@ export function validateQuestionForm(data = {}) {
   }
 
   if (type === QUESTION_TYPES.MULTIPLE_CHOICE) {
-    const validOptions = options
-      .map((option, index) => {
-        if (typeof option === "string") {
-          const optionText = normalizeText(option);
-
-          return optionText
-            ? {
-                id: String(index + 1),
-                text: optionText,
-              }
-            : null;
-        }
-
-        const optionText = normalizeText(option?.text);
-
-        if (!optionText) {
-          return null;
-        }
-
-        return {
-          id: normalizeText(option?.id) || String(index + 1),
-          text: optionText,
-        };
-      })
-      .filter(Boolean);
+    const validOptions = options.map(normalizeQuestionOption).filter(Boolean);
 
     if (validOptions.length < 2) {
       errors.options = "A multiple-choice question needs at least two options.";

@@ -44,6 +44,19 @@ const FILTERS = Object.freeze([
   },
 ]);
 
+const FIELD_SELECTORS = Object.freeze({
+  fullName: "#student-full-name",
+  gender: "#student-gender",
+  nationalId: "#student-national-id",
+  phone: "#student-phone",
+  username: "#student-username",
+  password: "#student-password",
+});
+
+const EDITABLE_FIELDS = Object.freeze(
+  Object.keys(FIELD_SELECTORS).filter((name) => name !== "password"),
+);
+
 let students = [];
 let editingStudentId = null;
 let filterIndex = 0;
@@ -103,27 +116,19 @@ function getElements() {
 
     passwordToggle: getElement("#student-password-toggle"),
 
-    fields: {
-      fullName: getElement("#student-full-name"),
-
-      gender: getElement("#student-gender"),
-
-      nationalId: getElement("#student-national-id"),
-
-      phone: getElement("#student-phone"),
-
-      username: getElement("#student-username"),
-
-      password: getElement("#student-password"),
-    },
+    fields: Object.fromEntries(
+      Object.entries(FIELD_SELECTORS).map(([name, selector]) => [
+        name,
+        getElement(selector),
+      ]),
+    ),
   };
 }
 
 function getModalFocusableElements(modal) {
   return [...modal.querySelectorAll(MODAL_FOCUSABLE_SELECTOR)].filter(
-    (element) => {
-      return !element.hidden && element.getAttribute("aria-hidden") !== "true";
-    },
+    (element) =>
+      !element.hidden && element.getAttribute("aria-hidden") !== "true",
   );
 }
 
@@ -149,7 +154,7 @@ function closeModal(elements, { restoreFocus = true } = {}) {
 
   document.body.classList.remove("modal-open");
 
-  resetForm(elements);
+  configureForm(elements);
 
   if (restoreFocus && modalReturnFocus?.isConnected) {
     modalReturnFocus.focus();
@@ -194,7 +199,7 @@ function titleCase(value) {
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : "—";
 }
 
-function actionButton(action, student, iconName) {
+function actionButton(action, student) {
   const isDelete = action === "delete";
 
   const label = `${isDelete ? "Delete" : "Edit"} ${student.fullName}`;
@@ -215,7 +220,7 @@ function actionButton(action, student, iconName) {
         studentId: student.id,
       },
     },
-    [icon(iconName)],
+    [icon(isDelete ? "bi-trash3" : "bi-pencil")],
   );
 }
 
@@ -250,30 +255,18 @@ function studentRow(student) {
 
   const actions = node(
     "div",
-    {
-      className: "student-actions",
-    },
-    [
-      actionButton("edit", student, "bi-pencil"),
+    { className: "student-actions" },
+    ["edit", "delete"].map((action) => actionButton(action, student)),
+  );
 
-      actionButton("delete", student, "bi-trash3"),
-    ],
+  const detailCells = ["username", "nationalId", "phone"].map((name) =>
+    node("td", { text: student[name] || "—" }),
   );
 
   return node("tr", {}, [
     node("td", {}, [identity]),
 
-    node("td", {
-      text: student.username || "—",
-    }),
-
-    node("td", {
-      text: student.nationalId || "—",
-    }),
-
-    node("td", {
-      text: student.phone || "—",
-    }),
+    ...detailCells,
 
     node("td", {}, [
       node("span", {
@@ -301,6 +294,13 @@ function emptyRow(message) {
   ]);
 }
 
+function showTableMessage(elements, summary, message = summary) {
+  setText(elements.badge, "-- students");
+  setText(elements.summary, summary);
+  clearElement(elements.tableBody);
+  elements.tableBody.append(emptyRow(message));
+}
+
 function filteredStudents(elements) {
   const query = normalizeText(elements.search.value).toLowerCase();
 
@@ -311,23 +311,14 @@ function filteredStudents(elements) {
       gender === "all" ||
       normalizeText(student.gender).toLowerCase() === gender;
 
-    if (!matchesGender) {
-      return false;
-    }
-
-    if (!query) {
-      return true;
-    }
-
-    return [
-      student.fullName,
-      student.username,
-      student.nationalId,
-      student.phone,
-    ]
-      .map((value) => normalizeText(value).toLowerCase())
-      .join(" ")
-      .includes(query);
+    return (
+      matchesGender &&
+      (!query ||
+        [student.fullName, student.username, student.nationalId, student.phone]
+          .map((value) => normalizeText(value).toLowerCase())
+          .join(" ")
+          .includes(query))
+    );
   });
 }
 
@@ -374,9 +365,7 @@ function renderStudents(elements) {
     return;
   }
 
-  visible.forEach((student) => {
-    elements.tableBody.append(studentRow(student));
-  });
+  elements.tableBody.append(...visible.map(studentRow));
 }
 
 function reloadStudents(elements) {
@@ -391,20 +380,18 @@ function formData(elements) {
   );
 }
 
-function clearErrors(elements) {
-  Object.values(elements.fields).forEach((field) => {
-    field.classList.remove("is-invalid");
+function setFieldError(field, invalid = false) {
+  field.classList.toggle("is-invalid", invalid);
 
+  if (invalid) {
+    field.setAttribute("aria-invalid", "true");
+  } else {
     field.removeAttribute("aria-invalid");
-  });
+  }
 }
 
-function markErrors(elements, errors) {
-  Object.keys(errors).forEach((name) => {
-    elements.fields[name]?.classList.add("is-invalid");
-
-    elements.fields[name]?.setAttribute("aria-invalid", "true");
-  });
+function clearErrors(elements) {
+  Object.values(elements.fields).forEach((field) => setFieldError(field));
 }
 
 function setPasswordVisible(elements, visible) {
@@ -427,31 +414,42 @@ function setSaving(elements, saving) {
 
   const label = getOptionalElement("span", elements.saveButton);
 
-  if (!label) {
-    return;
+  if (label) {
+    setText(
+      label,
+      saving
+        ? "Saving..."
+        : editingStudentId
+          ? "Update Student"
+          : "Save Student",
+    );
   }
-
-  setText(
-    label,
-    saving ? "Saving..." : editingStudentId ? "Update Student" : "Save Student",
-  );
 }
 
-function resetForm(elements) {
-  editingStudentId = null;
+function configureForm(elements, student = null) {
+  const isEditing = student !== null;
 
-  elements.form.reset();
+  editingStudentId = student?.id ?? null;
+
+  if (isEditing) {
+    EDITABLE_FIELDS.forEach((name) => {
+      elements.fields[name].value = student[name] ?? "";
+    });
+
+    elements.fields.password.value = "";
+  } else {
+    elements.form.reset();
+    setPasswordVisible(elements, false);
+  }
 
   clearErrors(elements);
 
-  setPasswordVisible(elements, false);
+  elements.fields.password.required = !isEditing;
+  elements.fields.password.placeholder = isEditing
+    ? "Leave blank to keep current password"
+    : "Create a password";
 
-  setText(elements.modalTitle, "Add New Student");
-
-  elements.fields.password.required = true;
-
-  elements.fields.password.placeholder = "Create a password";
-
+  setText(elements.modalTitle, isEditing ? "Edit Student" : "Add New Student");
   setSaving(elements, false);
 }
 
@@ -462,63 +460,33 @@ function openEditor(elements, studentId) {
     throw new Error("Student was not found.");
   }
 
-  editingStudentId = student.id;
-
-  clearErrors(elements);
-
-  for (const name of [
-    "fullName",
-    "gender",
-    "nationalId",
-    "phone",
-    "username",
-  ]) {
-    elements.fields[name].value = student[name] ?? "";
-  }
-
-  elements.fields.password.value = "";
-
-  elements.fields.password.required = false;
-
-  elements.fields.password.placeholder = "Leave blank to keep current password";
-
-  setText(elements.modalTitle, "Edit Student");
-
-  setSaving(elements, false);
-
+  configureForm(elements, student);
   openModal(elements);
 }
 
 async function validateForm(elements, data) {
-  const currentStudent = editingStudentId
-    ? students.find((student) => student.id === editingStudentId)
-    : null;
 
-  /*
-   * validateStudentForm requires a
-   * password. During editing, the
-   * stored password is used only for
-   * validation when the teacher leaves
-   * the password field empty.
-   */
-  const result = validateStudentForm({
-    ...data,
+  const password =
+    editingStudentId && !data.password
+      ? (students.find((student) => student.id === editingStudentId)
+          ?.password ?? "")
+      : data.password;
 
-    password:
-      editingStudentId && !data.password
-        ? (currentStudent?.password ?? "")
-        : data.password,
-  });
+  const result = validateStudentForm({ ...data, password });
 
   if (result.isValid) {
     return true;
   }
 
-  markErrors(elements, result.errors);
+  const invalidFields = Object.keys(result.errors);
 
-  const firstErrorField = Object.keys(result.errors)[0];
+  invalidFields.forEach((name) => {
+    const field = elements.fields[name];
 
-  elements.fields[firstErrorField]?.focus();
+    if (field) setFieldError(field, true);
+  });
+
+  elements.fields[invalidFields[0]]?.focus();
 
   await showError("Invalid student information", getFirstError(result.errors));
 
@@ -547,30 +515,20 @@ async function submitForm(event, elements) {
 
     try {
       if (editingStudentId) {
-        const changes = {
-          fullName: data.fullName,
+        const { password, ...changes } = data;
 
-          gender: data.gender,
-
-          nationalId: data.nationalId,
-
-          phone: data.phone,
-
-          username: data.username,
-        };
-
-        if (normalizeText(data.password)) {
-          changes.password = data.password;
+        if (normalizeText(password)) {
+          changes.password = password;
         }
 
         updateStudent(editingStudentId, changes);
-
-        showSuccessToast("Student updated successfully.");
       } else {
         createStudent(data);
-
-        showSuccessToast("Student created successfully.");
       }
+
+      showSuccessToast(
+        `Student ${editingStudentId ? "updated" : "created"} successfully.`,
+      );
 
       closeModal(elements, {
         restoreFocus: false,
@@ -694,7 +652,7 @@ function bindEvents(elements) {
   });
 
   elements.addButton.addEventListener("click", () => {
-    resetForm(elements);
+    configureForm(elements);
 
     openModal(elements, elements.addButton);
   });
@@ -705,11 +663,7 @@ function bindEvents(elements) {
 
   Object.values(elements.fields).forEach((field) => {
     for (const eventName of ["input", "change"]) {
-      field.addEventListener(eventName, () => {
-        field.classList.remove("is-invalid");
-
-        field.removeAttribute("aria-invalid");
-      });
+      field.addEventListener(eventName, () => setFieldError(field));
     }
   });
 
@@ -741,17 +695,11 @@ function initializeStudentsPage() {
 
     elements.form.noValidate = true;
 
-    setText(elements.badge, "-- students");
-
-    setText(elements.summary, "Loading students...");
-
-    clearElement(elements.tableBody);
-
-    elements.tableBody.append(emptyRow("Loading students..."));
+    showTableMessage(elements, "Loading students...");
 
     updateFilterButton(elements);
 
-    resetForm(elements);
+    configureForm(elements);
 
     bindEvents(elements);
 
@@ -760,14 +708,10 @@ function initializeStudentsPage() {
     console.error("Unable to initialize the students page.", error);
 
     if (elements) {
-      setText(elements.badge, "-- students");
-
-      setText(elements.summary, "Unable to load students.");
-
-      clearElement(elements.tableBody);
-
-      elements.tableBody.append(
-        emptyRow("Unable to load students. Refresh the page."),
+      showTableMessage(
+        elements,
+        "Unable to load students.",
+        "Unable to load students. Refresh the page.",
       );
     }
 
